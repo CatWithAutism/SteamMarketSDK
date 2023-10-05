@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace SteamWebWrapper.Core.Entities.Auth;
 
-public class AuthRsaKey
+public class AuthRsaData
 {
     [JsonPropertyName("success")]
     public required bool Success { get; set; }

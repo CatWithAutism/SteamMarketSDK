@@ -5,9 +5,9 @@ namespace SteamWebWrapper.Core.Entities.Auth;
 [SecuritySafeCritical]
 public class SteamAuthData
 {
-    public required SecureString Login { get; set; }
+    public required string Login { get; set; }
     
-    public required SecureString Password { get; set; }
+    public required string Password { get; set; }
 
-    public SecureString? TwoFactor { get; set; }
+    public string? TwoFactor { get; set; }
 }
