@@ -6,6 +6,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E8A13556
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8847C7F4-B9FE-4337-9E2B-94C4900A09FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebWrapper.Core", "src\SteamWebWrapper.Core\SteamWebWrapper.Core.csproj", "{EE6EBB8B-317B-4CF1-84C7-5711884D7D9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,8 +18,13 @@ Global
 		{C0302976-1936-4C5B-B26C-93C81F23113B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0302976-1936-4C5B-B26C-93C81F23113B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0302976-1936-4C5B-B26C-93C81F23113B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE6EBB8B-317B-4CF1-84C7-5711884D7D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE6EBB8B-317B-4CF1-84C7-5711884D7D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE6EBB8B-317B-4CF1-84C7-5711884D7D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE6EBB8B-317B-4CF1-84C7-5711884D7D9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C0302976-1936-4C5B-B26C-93C81F23113B} = {8847C7F4-B9FE-4337-9E2B-94C4900A09FD}
+		{EE6EBB8B-317B-4CF1-84C7-5711884D7D9F} = {8847C7F4-B9FE-4337-9E2B-94C4900A09FD}
 	EndGlobalSection
 EndGlobal
