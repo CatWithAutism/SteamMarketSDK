@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+
+
+
+
+    <ItemGroup>
+      <Folder Include="Entities\Account\" />
+    </ItemGroup>
+
+
+
+
+
+    <ItemGroup>
+      <Reference Include="JetBrains.ReSharper.TestRunner.Abstractions">
+        <HintPath>..\..\..\..\..\Library\Application Support\JetBrains\Toolbox\apps\Rider\ch-0\232.9921.83\Rider.app\Contents\lib\ReSharperHost\TestRunner\netcoreapp3.0\JetBrains.ReSharper.TestRunner.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+
+
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj" />
+    </ItemGroup>
+
+
+
+
+
+
+</Project>
