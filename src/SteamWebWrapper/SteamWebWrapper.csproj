@@ -18,4 +18,8 @@
       <Folder Include="Utils\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SteamWebWrapper.Core\SteamWebWrapper.Core.csproj" />
+    </ItemGroup>
+
 </Project>

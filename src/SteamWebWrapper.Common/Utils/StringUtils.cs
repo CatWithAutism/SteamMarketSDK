@@ -1,4 +1,4 @@
-namespace SteamWebWrapper.Core.Utils;
+namespace SteamWebWrapper.Common.Utils;
 
 public static class StringUtils
 {

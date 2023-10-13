@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
-namespace SteamWebWrapper.Core.Entities.Auth;
+namespace SteamWebWrapper.Core.Entities.Authorization;
 
 public class AuthRsaData
 {

@@ -1,10 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
-using SteamWebWrapper.Core.Entities.Auth;
 
-namespace SteamWebWrapper.Core.Utils;
+namespace SteamWebWrapper.Common.Utils;
 
-internal static class CryptoUtils
+public static class CryptoUtils
 {
     public static byte[] HexToByteArray(string hex) 
     {
@@ -14,14 +13,14 @@ internal static class CryptoUtils
             .ToArray();
     }
     
-    public static byte[] GetRsaEncryptedPassword(AuthRsaData authRsaData, string password) 
+    public static byte[] GetRsaEncryptedPassword(string publicKeyExp, string publicKeyMod, string password) 
     {
         // RSA Encryption.
         var rsa = new RSACryptoServiceProvider();
         var rsaParameters = new RSAParameters
         {
-            Exponent = CryptoUtils.HexToByteArray(authRsaData.PublicKeyExp!),
-            Modulus = CryptoUtils.HexToByteArray(authRsaData.PublicKeyMod!)
+            Exponent = CryptoUtils.HexToByteArray(publicKeyExp),
+            Modulus = CryptoUtils.HexToByteArray(publicKeyMod)
         };
 
         rsa.ImportParameters(rsaParameters);
