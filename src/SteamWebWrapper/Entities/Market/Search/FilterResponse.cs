@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SteamWebWrapper.Entities.Market;
+namespace SteamWebWrapper.Entities.Market.Search;
 
 public class FilterResponse
 {
