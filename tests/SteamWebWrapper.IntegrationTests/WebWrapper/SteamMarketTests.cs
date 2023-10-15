@@ -8,11 +8,11 @@ namespace SteamWebWrapper.IntegrationTests.WebWrapper;
 
 public class SteamMarketTests : IClassFixture<SteamHttpClientFixture>
 {
-    private readonly IMarketWrapper _marketWrapper;
+    private IMarketWrapper MarketWrapper { get; set; }
 
-    public SteamMarketTests(SteamHttpClientFixture marketWrapper)
+    public SteamMarketTests(SteamHttpClientFixture steamHttpClientFixture)
     {
-        _marketWrapper = new MarketWrapper(marketWrapper.SteamHttpClient);
+        MarketWrapper = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public class SteamMarketTests : IClassFixture<SteamHttpClientFixture>
     {
         const long offset = 0;
         const long count = 150;
-        var marketHistory = await _marketWrapper.GetMarketHistoryAsync(offset, count);
+        var marketHistory = await MarketWrapper.GetMarketHistoryAsync(offset, count);
         
         marketHistory.Should().NotBeNull();
         marketHistory.Assets.Should().NotBeNullOrEmpty();

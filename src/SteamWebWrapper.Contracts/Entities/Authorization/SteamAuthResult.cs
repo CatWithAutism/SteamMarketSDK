@@ -7,15 +7,15 @@ public class SteamAuthResult
     public required bool Success { get; set; }
 
     [JsonPropertyName("requires_twofactor")]
-    public bool RequiresTwoFactor { get; set; }
+    public required bool RequiresTwoFactor { get; set; }
 
     [JsonPropertyName("login_complete")]
-    public required bool LoginComplete { get; set; }
+    public bool? LoginComplete { get; set; }
 
     [JsonPropertyName("transfer_urls")]
-    public List<string> TransferUrls { get; set; }
+    public List<string>? TransferUrls { get; set; }
 
     [JsonPropertyName("transfer_parameters")]
-    public TransferParameters TransferParameters { get; set; }
+    public TransferParameters? TransferParameters { get; set; }
 }
 
