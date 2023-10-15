@@ -13,7 +13,7 @@ public interface ISteamHttpClient
     /// <param name="credentials">Your steam credentials.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A bool containing a value, if the login was successful.</returns>
-    Task<SteamAuthResult> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken);
+    Task<SteamAuthResponse> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken);
 
     HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken);
     HttpResponseMessage Send(HttpRequestMessage request);

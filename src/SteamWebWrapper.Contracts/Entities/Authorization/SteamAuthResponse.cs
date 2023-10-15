@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 
 namespace SteamWebWrapper.Contracts.Entities.Authorization;
-public class SteamAuthResult
+public class SteamAuthResponse
 {
     [JsonPropertyName("success")]
     public required bool Success { get; set; }

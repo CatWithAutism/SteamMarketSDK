@@ -41,7 +41,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>This data should be valid about 1 hour.</returns>
     /// <exception cref="GetRsaKeyException">Will throw when cannot get RSA data.</exception>
-    private async Task<AuthRsaData> GetAuthRsaData(string username, CancellationToken cancellationToken)
+    private async Task<RsaDataResponse> GetAuthRsaData(string username, CancellationToken cancellationToken)
     {
         const string getRsaDataPath ="/login/getrsakey";
         
@@ -49,7 +49,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         data.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
         
         var response = await PostAsync(getRsaDataPath, data, cancellationToken);
-        var rsaJson = await response.Content.ReadFromJsonAsync<AuthRsaData>(JsonSerializerOptions.Default, cancellationToken);
+        var rsaJson = await response.Content.ReadFromJsonAsync<RsaDataResponse>(JsonSerializerOptions.Default, cancellationToken);
         
         if (rsaJson is not { Success: true } || rsaJson.PublicKeyExp.IsNullOrEmpty() || rsaJson.PublicKeyMod.IsNullOrEmpty())
         {
@@ -67,7 +67,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     /// <param name="credentials">Your steam credentials.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A bool containing a value, if the login was successful.</returns>
-    public async Task<SteamAuthResult> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken)
+    public async Task<SteamAuthResponse> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken)
     {
         const string doLoginUrl = "/login/dologin/";
         
@@ -102,7 +102,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         authResponse.EnsureSuccessStatusCode();
         
         var authJsonResponse = await authResponse.Content.ReadAsStringAsync(cancellationToken);
-        var authResult = JsonSerializer.Deserialize<SteamAuthResult>(authJsonResponse);
+        var authResult = JsonSerializer.Deserialize<SteamAuthResponse>(authJsonResponse);
         if (authResult == null)
         {
             throw new SteamAuthorizationException($"We cannot deserialize this data - {authJsonResponse}");

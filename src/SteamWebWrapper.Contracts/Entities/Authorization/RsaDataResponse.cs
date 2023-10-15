@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace SteamWebWrapper.Contracts.Entities.Authorization;
 
-public class AuthRsaData
+public class RsaDataResponse
 {
     [JsonPropertyName("success")]
     public required bool Success { get; set; }
