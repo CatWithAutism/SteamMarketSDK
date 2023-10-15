@@ -1,4 +1,3 @@
-using System.Configuration;
 using System.Net;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;

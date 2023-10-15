@@ -1,7 +1,5 @@
-using System.Net.Http.Json;
 using System.Text.Json;
 using SteamWebWrapper.Contracts.Entities.Inventory;
-using SteamWebWrapper.Contracts.Entities.Market.History;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Interfaces;
 

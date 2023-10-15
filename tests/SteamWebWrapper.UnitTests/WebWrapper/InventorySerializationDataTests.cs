@@ -1,7 +1,6 @@
 using System.Text.Json;
 using FluentAssertions;
 using SteamWebWrapper.Contracts.Entities.Inventory;
-using SteamWebWrapper.Contracts.Entities.Market.History;
 using Xunit;
 
 namespace SteamWebWrapper.UnitTests.WebWrapper;

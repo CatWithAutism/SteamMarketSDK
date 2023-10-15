@@ -1,6 +1,4 @@
 using FluentAssertions;
-using Newtonsoft.Json;
-using SteamWebWrapper.Core.Implementations;
 using SteamWebWrapper.Implementations;
 using SteamWebWrapper.IntegrationTests.Fixtures;
 using SteamWebWrapper.Interfaces;
@@ -8,11 +6,11 @@ using Xunit;
 
 namespace SteamWebWrapper.IntegrationTests.WebWrapper;
 
-public class SteamAuthorizationTests : IClassFixture<SteamHttpClientFixture>
+public class SteamMarketTests : IClassFixture<SteamHttpClientFixture>
 {
     private readonly IMarketWrapper _marketWrapper;
 
-    public SteamAuthorizationTests(SteamHttpClientFixture marketWrapper)
+    public SteamMarketTests(SteamHttpClientFixture marketWrapper)
     {
         _marketWrapper = new MarketWrapper(marketWrapper.SteamHttpClient);
     }
