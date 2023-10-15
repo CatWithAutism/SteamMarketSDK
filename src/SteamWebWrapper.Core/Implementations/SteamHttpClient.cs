@@ -1,9 +1,8 @@
-using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using SteamWebWrapper.Common.Utils;
-using SteamWebWrapper.Core.Entities.Authorization;
+using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Exceptions;
 using SteamWebWrapper.Core.Interfaces;
 
@@ -11,57 +10,46 @@ namespace SteamWebWrapper.Core.Implementations;
 
 public class SteamHttpClient : HttpClient, ISteamHttpClient
 {
-    private readonly HttpClient _httpClient;
+    public string? SteamId { get; private set; }
 
-    public SteamHttpClient()
+    public SteamHttpClient(string baseUrl, HttpMessageHandler clientHandler) : base(clientHandler)
     {
-        _httpClient = SetupHttpClient(null);
+        SetupHttpClient(baseUrl);
     }
 
-    public SteamHttpClient(CookieCollection cookieCollection)
-    {
-        _httpClient = SetupHttpClient(cookieCollection);
-    }
+    #region Private
     
-    private static HttpClient SetupHttpClient(CookieCollection? cookieCollection)
+    private void SetupHttpClient(string baseUrl)
     {
-        var cookieContainer = new CookieContainer();
-        if (cookieCollection != null) cookieContainer.Add(cookieCollection);
-        
-        var httpClientHandler = new HttpClientHandler()
+        if (baseUrl.IsNullOrEmpty())
         {
-            CookieContainer = cookieContainer,
-            UseCookies = true,
-            AutomaticDecompression = DecompressionMethods.All,
-        };
-        var httpClient = new HttpClient(httpClientHandler);
+            throw new ArgumentNullException(nameof(baseUrl));
+        }
         
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
-        httpClient.DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
-        httpClient.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
-        httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-        httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-
-        return httpClient;
+        BaseAddress = new Uri(baseUrl);
+        DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
+        DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
+        DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+        DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+        DefaultRequestHeaders.Add("Connection", "keep-alive");
     }
-    
+
     /// <summary>
     /// Fetch RSA Key from steam server for specified username.
     /// </summary>
-    /// <param name="httpClient">Your http client</param>
     /// <param name="username">Steam username</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>This data should be valid about 1 hour.</returns>
     /// <exception cref="GetRsaKeyException">Will throw when cannot get RSA data.</exception>
-    private static async Task<AuthRsaData> GetAuthRsaData(HttpClient httpClient, string username, CancellationToken cancellationToken)
+    private async Task<RsaDataResponse> GetAuthRsaData(string username, CancellationToken cancellationToken)
     {
-        const string getRsaDataPath ="https://steamcommunity.com/login/getrsakey";
+        const string getRsaDataPath ="/login/getrsakey";
         
         var data = new StringContent($"username={username}");
         data.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
         
-        var response = await httpClient.PostAsync(getRsaDataPath, data, cancellationToken);
-        var rsaJson = await response.Content.ReadFromJsonAsync<AuthRsaData>(JsonSerializerOptions.Default, cancellationToken);
+        var response = await PostAsync(getRsaDataPath, data, cancellationToken);
+        var rsaJson = await response.Content.ReadFromJsonAsync<RsaDataResponse>(JsonSerializerOptions.Default, cancellationToken);
         
         if (rsaJson is not { Success: true } || rsaJson.PublicKeyExp.IsNullOrEmpty() || rsaJson.PublicKeyMod.IsNullOrEmpty())
         {
@@ -70,6 +58,8 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
 
         return rsaJson;
     }
+    #endregion
+
 
     /// <summary>
     /// Executes the login by using the Steam Website.
@@ -77,11 +67,11 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     /// <param name="credentials">Your steam credentials.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A bool containing a value, if the login was successful.</returns>
-    public async Task<SteamAuthResult> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken)
+    public async Task<SteamAuthResponse> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken)
     {
-        const string doLoginUrl = "https://steamcommunity.com/login/dologin/";
+        const string doLoginUrl = "/login/dologin/";
         
-        var authRsaData = await GetAuthRsaData(_httpClient, credentials.Login, cancellationToken);
+        var authRsaData = await GetAuthRsaData(credentials.Login, cancellationToken);
         if (authRsaData.PublicKeyMod.IsNullOrEmpty() || authRsaData.PublicKeyExp.IsNullOrEmpty())
         {
             throw new SteamAuthorizationException($"We cannot get PublicKeyMod or PublicKeyExp. {Environment.NewLine}" +
@@ -108,14 +98,19 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
             { new StringContent(rsaTimestamp), "rsatimestamp" }
         };
         
-        var authResponse = await _httpClient.PostAsync(doLoginUrl, data, cancellationToken);
+        var authResponse = await PostAsync(doLoginUrl, data, cancellationToken);
         authResponse.EnsureSuccessStatusCode();
         
         var authJsonResponse = await authResponse.Content.ReadAsStringAsync(cancellationToken);
-        var authResult = JsonSerializer.Deserialize<SteamAuthResult>(authJsonResponse);
+        var authResult = JsonSerializer.Deserialize<SteamAuthResponse>(authJsonResponse);
         if (authResult == null)
         {
             throw new SteamAuthorizationException($"We cannot deserialize this data - {authJsonResponse}");
+        }
+
+        if (authResult is { Success: true, LoginComplete: true })
+        {
+            SteamId = authResult.TransferParameters.SteamId;
         }
         
         return authResult;
