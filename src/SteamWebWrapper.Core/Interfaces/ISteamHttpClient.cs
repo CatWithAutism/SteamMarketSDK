@@ -1,10 +1,12 @@
 using System.Net.Http.Headers;
-using SteamWebWrapper.Core.Entities.Authorization;
+using SteamWebWrapper.Contracts.Entities.Authorization;
 
 namespace SteamWebWrapper.Core.Interfaces;
 
 public interface ISteamHttpClient
 {
+    public string SteamId { get; }
+    
     /// <summary>
     /// Executes the login by using the Steam Website.
     /// </summary>
