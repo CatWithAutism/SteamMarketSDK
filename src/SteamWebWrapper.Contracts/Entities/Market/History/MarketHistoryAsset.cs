@@ -53,8 +53,7 @@ public class MarketHistoryAsset
     public List<ItemDescription> Descriptions { get; set; }
 
     [JsonPropertyName("tradable")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool Tradable { get; set; }
+    public long Tradable { get; set; }
 
     [JsonPropertyName("actions")]
     public List<SubjectAction> Actions { get; set; }
@@ -84,8 +83,7 @@ public class MarketHistoryAsset
     public long MarketTradableRestriction { get; set; }
 
     [JsonPropertyName("marketable")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool Marketable { get; set; }
+    public long Marketable { get; set; }
 
     [JsonPropertyName("app_icon")]
     public string AppIcon { get; set; }

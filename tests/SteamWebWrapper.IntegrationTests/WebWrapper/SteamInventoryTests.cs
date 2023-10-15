@@ -26,7 +26,7 @@ public class SteamInventoryTests : IClassFixture<SteamHttpClientFixture>
         var inventory = await InventoryWrapper.GetInventory(SteamHttpClient.SteamId!, 730, 2, "english", 100);
         
         inventory.Should().NotBeNull();
-        inventory.Success.Should().BeTrue();
+        inventory.Success.Should().Be(1);
         inventory.Assets.Should().NotBeNullOrEmpty();
         inventory.Descriptions.Should().NotBeNullOrEmpty();
     }

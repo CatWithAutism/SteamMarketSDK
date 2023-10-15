@@ -33,8 +33,7 @@ public class InventoryAssetDescription
     public List<OwnerDescriptionDetails> Descriptions { get; set; }
 
     [JsonPropertyName("tradable")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool Tradable { get; set; }
+    public long Tradable { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("actions")]
@@ -70,8 +69,7 @@ public class InventoryAssetDescription
     public long MarketTradableRestriction { get; set; }
 
     [JsonPropertyName("marketable")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool Marketable { get; set; }
+    public long Marketable { get; set; }
 
     [JsonPropertyName("tags")]
     public List<Tag> Tags { get; set; }

@@ -108,7 +108,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
             throw new SteamAuthorizationException($"We cannot deserialize this data - {authJsonResponse}");
         }
 
-        if (authResult is { Success: true, LoginComplete: true })
+        if (authResult is { Success: true, LoginComplete: true, TransferParameters: not null })
         {
             SteamId = authResult.TransferParameters.SteamId;
         }

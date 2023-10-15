@@ -22,8 +22,7 @@ namespace SteamWebWrapper.Contracts.Entities.Inventory
         public long TotalInventoryCount { get; set; }
 
         [JsonPropertyName("success")]
-        [JsonConverter(typeof(BoolConverter))]
-        public bool Success { get; set; }
+        public long Success { get; set; }
 
         [JsonPropertyName("rwgrsn")]
         public long Rwgrsn { get; set; }
