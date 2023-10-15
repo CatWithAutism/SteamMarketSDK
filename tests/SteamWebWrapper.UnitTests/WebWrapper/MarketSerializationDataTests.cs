@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SteamWebWrapper.UnitTests.WebWrapper;
 
-public class SerializationDataTests
+public class MarketSerializationDataTests
 {
     [Fact]
     public async Task DeserializeMarketHistoryResponseTest()

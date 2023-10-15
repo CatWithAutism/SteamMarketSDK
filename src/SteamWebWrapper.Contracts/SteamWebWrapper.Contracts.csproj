@@ -10,8 +10,4 @@
       <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Entities\Account\Inventory\" />
-    </ItemGroup>
-
 </Project>

@@ -35,6 +35,9 @@
       <None Update="Data\MarketHistoryResponseTestData.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Data\InventoryItemsResponseTestData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 

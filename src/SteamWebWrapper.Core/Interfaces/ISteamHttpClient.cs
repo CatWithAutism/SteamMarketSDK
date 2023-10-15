@@ -5,7 +5,7 @@ namespace SteamWebWrapper.Core.Interfaces;
 
 public interface ISteamHttpClient
 {
-    public string SteamId { get; }
+    public string? SteamId { get; }
     
     /// <summary>
     /// Executes the login by using the Steam Website.

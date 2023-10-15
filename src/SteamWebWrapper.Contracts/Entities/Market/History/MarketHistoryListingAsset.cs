@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using SteamWebWrapper.Contracts.Entities.Market.Common;
+using SteamWebWrapper.Contracts.Entities.Common;
 
 namespace SteamWebWrapper.Contracts.Entities.Market.History;
 

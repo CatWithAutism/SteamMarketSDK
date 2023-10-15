@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SteamWebWrapper.Contracts.Entities.Market.Common;
+namespace SteamWebWrapper.Contracts.Entities.Common;
 
 public class SubjectAction
 {

@@ -1,4 +1,4 @@
-namespace SteamWebWrapper.Contracts.Entities.Account.Privacy;
+namespace SteamWebWrapper.Contracts.Entities.Privacy;
 
 public enum PrivacyStatus
 {

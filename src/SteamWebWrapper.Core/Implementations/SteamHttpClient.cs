@@ -12,7 +12,7 @@ namespace SteamWebWrapper.Core.Implementations;
 
 public class SteamHttpClient : HttpClient, ISteamHttpClient
 {
-    public string SteamId { get; private set; }
+    public string? SteamId { get; private set; }
 
     public SteamHttpClient(string baseUrl, HttpMessageHandler clientHandler) : base(clientHandler)
     {

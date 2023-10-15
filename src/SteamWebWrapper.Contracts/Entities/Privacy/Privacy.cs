@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SteamWebWrapper.Contracts.Entities.Account.Privacy;
+namespace SteamWebWrapper.Contracts.Entities.Privacy;
 
 public class Privacy
 {

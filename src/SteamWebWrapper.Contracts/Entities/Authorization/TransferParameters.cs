@@ -5,7 +5,7 @@ namespace SteamWebWrapper.Contracts.Entities.Authorization;
 public class TransferParameters
 {
     [JsonPropertyName("steamid")]
-    public string SteamId { get; set; }
+    public string? SteamId { get; set; }
 
     [JsonPropertyName("token_secure")]
     public string TokenSecure { get; set; }
