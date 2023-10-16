@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using SteamWebWrapper.Contracts.Converters;
 
 namespace SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 

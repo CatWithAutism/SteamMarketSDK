@@ -1,12 +1,11 @@
 using System.Net.Http.Headers;
+using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 
 namespace SteamWebWrapper.Core.Interfaces;
 
 public interface ISteamHttpClient
 {
-    public string? SteamId { get; }
-    
     /// <summary>
     /// Executes the login by using the Steam Website.
     /// </summary>
@@ -14,6 +13,8 @@ public interface ISteamHttpClient
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A bool containing a value, if the login was successful.</returns>
     Task<SteamAuthResponse> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken);
+    
+    Task<AccountInfo?> GetAccountInfoAsync(CancellationToken cancellationToken);
 
     HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken);
     HttpResponseMessage Send(HttpRequestMessage request);

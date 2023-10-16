@@ -28,9 +28,19 @@ public class MarketWrapper : IMarketWrapper
     
     private async Task<CreateBuyOrderResponse> CreateBuyOrderAsync(CreateBuyOrderRequest request)
     {
-        /*const string getRsaDataPath ="/login/getrsakey";
+        throw new NotImplementedException();
+        const string createBuyOrderPath ="/market/createbuyorder/";
+
+        var data = new StringContent($"sessionid={""}&" +
+                                     $"currency={request.Currency}&" +
+                                     $"appid={request.AppId}&" +
+                                     $"market_hash_name={request.MarketHashName}&" +
+                                     $"price_total={request.TotalPrice}&" +
+                                     $"quantity={request.Quantity}&" +
+                                     $"billing_state=0&" +
+                                     $"save_my_address=0");
         
-        var data = new StringContent($"username={username}");
+        /*var data = new StringContent($"username={username}");
         data.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
         
         var response = await PostAsync(getRsaDataPath, data, cancellationToken);

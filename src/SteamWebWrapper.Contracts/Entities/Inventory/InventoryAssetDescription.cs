@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using SteamWebWrapper.Contracts.Converters;
 using SteamWebWrapper.Contracts.Entities.Common;
 
 namespace SteamWebWrapper.Contracts.Entities.Inventory;
