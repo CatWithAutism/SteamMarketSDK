@@ -20,12 +20,10 @@ public class MarketHistoryPurchase
     public long SteamIdPurchaser { get; set; }
 
     [JsonPropertyName("needs_rollback")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool NeedsRollback { get; set; }
+    public long NeedsRollback { get; set; }
 
     [JsonPropertyName("failed")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool Failed { get; set; }
+    public long Failed { get; set; }
 
     [JsonPropertyName("asset")]
     public MarketHistoryPurchaseAsset Asset { get; set; }
@@ -67,9 +65,8 @@ public class MarketHistoryPurchase
     public string PersonaActor { get; set; }
     
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonConverter(typeof(BoolConverter))]
     [JsonPropertyName("funds_held")]
-    public bool? FundsHeld { get; set; }
+    public long? FundsHeld { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("time_funds_held_until")]
@@ -78,6 +75,5 @@ public class MarketHistoryPurchase
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("funds_revoked")]
-    [JsonConverter(typeof(BoolConverter))]
-    public bool? FundsRevoked { get; set; }
+    public long? FundsRevoked { get; set; }
 }

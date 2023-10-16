@@ -1,7 +1,9 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using SteamWebWrapper.Common.Utils;
+using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Exceptions;
 using SteamWebWrapper.Core.Interfaces;
@@ -10,29 +12,26 @@ namespace SteamWebWrapper.Core.Implementations;
 
 public class SteamHttpClient : HttpClient, ISteamHttpClient
 {
-    public string? SteamId { get; private set; }
+    private SteamHttpClientHandler SteamHttpClientHandler { get; set; }
 
-    public SteamHttpClient(string baseUrl, HttpMessageHandler clientHandler) : base(clientHandler)
+    public SteamHttpClient(string baseUrl, SteamHttpClientHandler steamHttpClientHandler) : base(steamHttpClientHandler)
     {
-        SetupHttpClient(baseUrl);
-    }
-
-    #region Private
-    
-    private void SetupHttpClient(string baseUrl)
-    {
+        SteamHttpClientHandler = steamHttpClientHandler;
+        
         if (baseUrl.IsNullOrEmpty())
         {
             throw new ArgumentNullException(nameof(baseUrl));
         }
-        
         BaseAddress = new Uri(baseUrl);
+        
         DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
         DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
         DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
         DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
         DefaultRequestHeaders.Add("Connection", "keep-alive");
     }
+
+    #region Private
 
     /// <summary>
     /// Fetch RSA Key from steam server for specified username.
@@ -103,16 +102,53 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         
         var authJsonResponse = await authResponse.Content.ReadAsStringAsync(cancellationToken);
         var authResult = JsonSerializer.Deserialize<SteamAuthResponse>(authJsonResponse);
-        if (authResult == null)
+        if (authResult is not { Success: true, LoginComplete: true})
         {
             throw new SteamAuthorizationException($"We cannot deserialize this data - {authJsonResponse}");
         }
 
-        if (authResult is { Success: true, LoginComplete: true })
+        return authResult;
+    }
+
+    public async Task<AccountInfo?> GetAccountInfoAsync(CancellationToken cancellationToken)
+    {
+        const string infoPage = "/market/#";
+        
+        var response = await GetAsync(infoPage, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var webPage = await response.Content.ReadAsStringAsync(cancellationToken);
+        var match = Regex.Match(webPage, @"{\s*\""wallet_currency\""[A-Za-z0-9:\.\s,\""\\_\-]+}");
+        
+        var accountInfo = JsonSerializer.Deserialize<AccountInfo>(match.Value);
+        if (accountInfo == null)
         {
-            SteamId = authResult.TransferParameters.SteamId;
+            return null;
+        }
+
+        var matches = Regex.Matches(webPage, "(g_sessionID|g_steamID|g_strLanguage)[\\s=]+\"(.+?)\"");
+        foreach (Match additionalData in matches)
+        {
+            if (!additionalData.Success)
+            {
+                continue;
+            }
+            
+            switch (additionalData.Groups[1].Value)
+            {
+                case "g_sessionID": accountInfo.SessionId = additionalData.Groups[2].Value;
+                    break;
+                case "g_steamID": accountInfo.SteamId = additionalData.Groups[2].Value;
+                    break;
+                case "g_strLanguage": accountInfo.AccountLanguage = additionalData.Groups[2].Value;
+                    break;
+            }
         }
         
-        return authResult;
+        accountInfo.SessionId = SteamHttpClientHandler.SessionId;
+        accountInfo.BrowserId = SteamHttpClientHandler.BrowserId;
+        accountInfo.SteamLoginSecure = SteamHttpClientHandler.SteamLoginSecure;
+
+        return match.Success ? accountInfo : null;
     }
 }

@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using SteamWebWrapper.Contracts.Entities.Authorization;
@@ -18,7 +19,14 @@ public class SteamHttpClientFixture : IDisposable
         const string baseUrl = "https://steamcommunity.com/";
         
         var cookieContainer = new CookieContainer();
-
+        
+        if (bool.TryParse(Configuration["useCookie"], out var useCookie) && useCookie)
+        {
+            var serializedCookieCollection = Configuration["cookieCollection"] ?? throw new InvalidOperationException();
+            var cookieCollection = JsonSerializer.Deserialize<CookieCollection>(serializedCookieCollection) ?? throw new InvalidOperationException();
+            cookieContainer.Add(cookieCollection);
+        }
+        
         var httpClientHandler = new HttpClientHandler
         {
             CookieContainer = cookieContainer,
@@ -26,7 +34,15 @@ public class SteamHttpClientFixture : IDisposable
             AutomaticDecompression = DecompressionMethods.All,
         };
 
-        var steamHttpClient = new SteamHttpClient(baseUrl, httpClientHandler);
+        var steamHttpClientHandler = new SteamHttpClientHandler(httpClientHandler);
+        
+        if (useCookie)
+        {
+            SteamHttpClient = new SteamHttpClient(baseUrl, steamHttpClientHandler);
+            return;
+        }
+
+        var steamHttpClient = new SteamHttpClient(baseUrl, steamHttpClientHandler);
         var steamAuthCredentials = new SteamAuthCredentials()
         {
             Login = Configuration["username"] ?? throw new InvalidOperationException(),
