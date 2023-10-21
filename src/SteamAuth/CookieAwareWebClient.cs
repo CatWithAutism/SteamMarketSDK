@@ -18,7 +18,7 @@ namespace SteamAuth
         protected override WebResponse GetWebResponse(WebRequest request)
         {
             var response = (HttpWebResponse)base.GetWebResponse(request);
-            this.ResponseCookies = response.Cookies;
+            ResponseCookies = response.Cookies;
             return response;
         }
     }

@@ -1,4 +1,6 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.History;
 using SteamWebWrapper.Core.Interfaces;
@@ -17,13 +19,26 @@ public class MarketWrapper : IMarketWrapper
     
     public async Task<MarketHistoryResponse?> GetMarketHistoryAsync(long offset, long count)
     {
-        var requestUri = $"/market/myhistory/?query=&count={count}&start={offset}&norender=true";
+        var requestUri = $"https://steamcommunity.com/market/myhistory/?query=&count={count}&start={offset}&norender=true";
         
         var response = await _steamHttpClient.GetAsync(requestUri);
         response.EnsureSuccessStatusCode();
 
         var stringResponse = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<MarketHistoryResponse>(stringResponse);
+    }
+    
+    public async Task<AccountInfo?> GetMarketInfoAsync(CancellationToken cancellationToken)
+    {
+        const string infoPage = "https://steamcommunity.com/market/#";
+        
+        var response = await _steamHttpClient.GetAsync(infoPage, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var webPage = await response.Content.ReadAsStringAsync(cancellationToken);
+        var match = Regex.Match(webPage, @"{\s*\""wallet_currency\""[A-Za-z0-9:\.\s,\""\\_\-]+}");
+
+        return JsonSerializer.Deserialize<AccountInfo>(match.Value);
     }
     
     private async Task<CreateBuyOrderResponse> CreateBuyOrderAsync(CreateBuyOrderRequest request)

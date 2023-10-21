@@ -2,6 +2,9 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using SteamKit2;
+using SteamKit2.Authentication;
+using SteamKit2.Internal;
 using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Authorization;
@@ -12,17 +15,19 @@ namespace SteamWebWrapper.Core.Implementations;
 
 public class SteamHttpClient : HttpClient, ISteamHttpClient
 {
+    public string? AccessToken { get; private set; }
+    public string? RefreshToken { get; private set; }
+    public SteamID? SteamId { get; private set; }
+    public string? SessionId => SteamHttpClientHandler.SessionId;
+    public string? SteamLoginSecure => SteamHttpClientHandler.SteamLoginSecure;
+    public string? SteamCountry => SteamHttpClientHandler.SteamCountry;
+    
     private SteamHttpClientHandler SteamHttpClientHandler { get; set; }
+    private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }
 
-    public SteamHttpClient(string baseUrl, SteamHttpClientHandler steamHttpClientHandler) : base(steamHttpClientHandler)
+    public SteamHttpClient(SteamHttpClientHandler steamHttpClientHandler) : base(steamHttpClientHandler)
     {
         SteamHttpClientHandler = steamHttpClientHandler;
-        
-        if (baseUrl.IsNullOrEmpty())
-        {
-            throw new ArgumentNullException(nameof(baseUrl));
-        }
-        BaseAddress = new Uri(baseUrl);
         
         DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
         DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
@@ -57,98 +62,67 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
 
         return rsaJson;
     }
+
+    private async Task ApplyCookies()
+    {
+        const string finalizeAuthPath = "https://login.steampowered.com/jwt/finalizelogin";
+        
+        var sessionId = CryptoUtils.GetRandomHexNumber(12);
+
+        var postData = new MultipartFormDataContent();
+        postData.Add(new StringContent(RefreshToken ?? throw new InvalidOperationException($"We cannot get cookies when {RefreshToken} is null")), "nonce");
+        postData.Add(new StringContent(sessionId), "sessionid");
+        postData.Add(new StringContent("https://steamcommunity.com/login/home/?goto="), "redir");
+
+        var response = await PostAsync(finalizeAuthPath, postData);
+        response.EnsureSuccessStatusCode();
+            
+        var responseData = await response.Content.ReadAsStringAsync();
+        var finalizeResponse = JsonSerializer.Deserialize<FinalizeLoginResponse>(responseData) ?? throw new InvalidDataException($"We cannot deserialize response from {responseData}");
+        foreach (var info in finalizeResponse.TransferInfo)
+        {
+            postData = new MultipartFormDataContent();
+            postData.Add(new StringContent(info.Params.Nonce), "nonce");
+            postData.Add(new StringContent(info.Params.Auth), "auth");
+            postData.Add(new StringContent(finalizeResponse.SteamID), "steamID"); 
+                
+            response = await PostAsync(info.Url, postData);
+            response.EnsureSuccessStatusCode();
+        }
+    }
     #endregion
 
-
-    /// <summary>
-    /// Executes the login by using the Steam Website.
-    /// </summary>
-    /// <param name="credentials">Your steam credentials.</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>A bool containing a value, if the login was successful.</returns>
-    public async Task<SteamAuthResponse> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken)
+    public async Task AuthorizeViaOAuth(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken? cancellationToken)
     {
-        const string doLoginUrl = "/login/dologin/";
-        
-        var authRsaData = await GetAuthRsaData(credentials.Login, cancellationToken);
-        if (authRsaData.PublicKeyMod.IsNullOrEmpty() || authRsaData.PublicKeyExp.IsNullOrEmpty())
+        if (steamGuardAuthenticator != null)
         {
-            throw new SteamAuthorizationException($"We cannot get PublicKeyMod or PublicKeyExp. {Environment.NewLine}" +
-                                                  $"{nameof(authRsaData.PublicKeyExp)} {authRsaData.PublicKeyExp}{Environment.NewLine}" +
-                                                  $"{nameof(authRsaData.PublicKeyMod)} {authRsaData.PublicKeyMod}{Environment.NewLine}" +
-                                                  $"{nameof(authRsaData.Timestamp)} {authRsaData.Timestamp}{Environment.NewLine}" +
-                                                  $"Serialized value - {JsonSerializer.Serialize(authRsaData)}{Environment.NewLine}"); 
+            SteamGuardAuthenticator = steamGuardAuthenticator;
         }
         
-        var encryptedData = CryptoUtils.GetRsaEncryptedPassword(authRsaData.PublicKeyExp!, authRsaData.PublicKeyMod!, credentials.Password);
-        var encryptedBase64Password = CryptoUtils.ConvertToBase64String(encryptedData);
+        var steamClient = new SteamClient();
+        steamClient.Connect();
         
-        var rsaTimestamp = Uri.EscapeDataString(authRsaData.Timestamp!);
-        var unixTimeStamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-        
-        var data = new MultipartFormDataContent
+        //fuck that
+        while (!steamClient.IsConnected)
+            await Task.Delay(500);
+
+        var authSession = await steamClient.Authentication.BeginAuthSessionViaCredentialsAsync(new AuthSessionDetails()
         {
-            { new StringContent(encryptedBase64Password), "password" },
-            { new StringContent(credentials.Login), "username" },
-            { new StringContent(credentials.TwoFactor), "twofactorcode" },
-            { new StringContent(credentials.MachineName), "loginfriendlyname" },
-            { new StringContent("true"), "remember_login" },
-            { new StringContent(unixTimeStamp + "000"), "donotcache" },
-            { new StringContent(rsaTimestamp), "rsatimestamp" }
-        };
+            Username = credentials.Login,
+            Password = credentials.Password,
+            Authenticator = steamGuardAuthenticator,
+            PlatformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser,
+            IsPersistentSession = true,
+            DeviceFriendlyName = credentials.MachineName,
+            ClientOSType = EOSType.Macos1014,
+        });
         
-        var authResponse = await PostAsync(doLoginUrl, data, cancellationToken);
-        authResponse.EnsureSuccessStatusCode();
-        
-        var authJsonResponse = await authResponse.Content.ReadAsStringAsync(cancellationToken);
-        var authResult = JsonSerializer.Deserialize<SteamAuthResponse>(authJsonResponse);
-        if (authResult is not { Success: true, LoginComplete: true})
-        {
-            throw new SteamAuthorizationException($"We cannot deserialize this data - {authJsonResponse}");
-        }
+        var pollResponse = await authSession.PollingWaitForResultAsync();
 
-        return authResult;
-    }
+        AccessToken = pollResponse.AccessToken;
+        RefreshToken = pollResponse.RefreshToken;
+        SteamId = authSession.SteamID;
 
-    public async Task<AccountInfo?> GetAccountInfoAsync(CancellationToken cancellationToken)
-    {
-        const string infoPage = "/market/#";
-        
-        var response = await GetAsync(infoPage, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var webPage = await response.Content.ReadAsStringAsync(cancellationToken);
-        var match = Regex.Match(webPage, @"{\s*\""wallet_currency\""[A-Za-z0-9:\.\s,\""\\_\-]+}");
-        
-        var accountInfo = JsonSerializer.Deserialize<AccountInfo>(match.Value);
-        if (accountInfo == null)
-        {
-            return null;
-        }
-
-        var matches = Regex.Matches(webPage, "(g_sessionID|g_steamID|g_strLanguage)[\\s=]+\"(.+?)\"");
-        foreach (Match additionalData in matches)
-        {
-            if (!additionalData.Success)
-            {
-                continue;
-            }
-            
-            switch (additionalData.Groups[1].Value)
-            {
-                case "g_sessionID": accountInfo.SessionId = additionalData.Groups[2].Value;
-                    break;
-                case "g_steamID": accountInfo.SteamId = additionalData.Groups[2].Value;
-                    break;
-                case "g_strLanguage": accountInfo.AccountLanguage = additionalData.Groups[2].Value;
-                    break;
-            }
-        }
-        
-        accountInfo.SessionId = SteamHttpClientHandler.SessionId;
-        accountInfo.BrowserId = SteamHttpClientHandler.BrowserId;
-        accountInfo.SteamLoginSecure = SteamHttpClientHandler.SteamLoginSecure;
-
-        return match.Success ? accountInfo : null;
+        await ApplyCookies();
     }
 }

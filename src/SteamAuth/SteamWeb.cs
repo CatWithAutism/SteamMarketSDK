@@ -17,7 +17,7 @@ namespace SteamAuth
             {
                 wc.Encoding = Encoding.UTF8;
                 wc.CookieContainer = cookies;
-                wc.Headers[HttpRequestHeader.UserAgent] = SteamWeb.MOBILE_APP_USER_AGENT;
+                wc.Headers[HttpRequestHeader.UserAgent] = MOBILE_APP_USER_AGENT;
                 response = await wc.DownloadStringTaskAsync(url);
             }
             return response;
@@ -33,7 +33,7 @@ namespace SteamAuth
             {
                 wc.Encoding = Encoding.UTF8;
                 wc.CookieContainer = cookies;
-                wc.Headers[HttpRequestHeader.UserAgent] = SteamWeb.MOBILE_APP_USER_AGENT;
+                wc.Headers[HttpRequestHeader.UserAgent] = MOBILE_APP_USER_AGENT;
                 byte[] result = await wc.UploadValuesTaskAsync(new Uri(url), "POST", body);
                 response = Encoding.UTF8.GetString(result);
             }

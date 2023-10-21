@@ -46,19 +46,4 @@ public class AccountInfo
 
     [JsonPropertyName("rwgrsn")]
     public int Rwgrsn { get; set; }
-    
-    [JsonPropertyName("steam_id")]
-    public string SteamId { get; set; }
-    
-    [JsonPropertyName("session_id")]
-    public string? SessionId { get; set; }
-    
-    [JsonPropertyName("strlanguage")]
-    public string AccountLanguage { get; set; }
-    
-    [JsonPropertyName("browser_id")]
-    public string? BrowserId { get; set; }
-    
-    [JsonPropertyName("steam_login_secure")]
-    public string? SteamLoginSecure { get; set; }
 }

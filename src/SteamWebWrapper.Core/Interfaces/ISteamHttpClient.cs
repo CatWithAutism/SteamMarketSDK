@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using SteamKit2;
 using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 
@@ -10,12 +11,11 @@ public interface ISteamHttpClient
     /// Executes the login by using the Steam Website.
     /// </summary>
     /// <param name="credentials">Your steam credentials.</param>
+    /// <param name="steamGuardAuthenticator">Authenticator</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A bool containing a value, if the login was successful.</returns>
-    Task<SteamAuthResponse> Authorize(SteamAuthCredentials credentials, CancellationToken cancellationToken);
-    
-    Task<AccountInfo?> GetAccountInfoAsync(CancellationToken cancellationToken);
-
+    Task AuthorizeViaOAuth(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator,
+        CancellationToken? cancellationToken);
     HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken);
     HttpResponseMessage Send(HttpRequestMessage request);
     HttpResponseMessage Send(HttpRequestMessage request, HttpCompletionOption completionOption);
@@ -68,4 +68,10 @@ public interface ISteamHttpClient
     HttpVersionPolicy DefaultVersionPolicy { get; set; }
     long MaxResponseContentBufferSize { get; set; }
     TimeSpan Timeout { get; set; }
+    string? AccessToken { get; }
+    string? RefreshToken { get; }
+    SteamID? SteamId { get; }
+    string? SessionId { get; }
+    string? SteamLoginSecure { get; }
+    string? SteamCountry { get; }
 }
