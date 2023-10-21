@@ -9,14 +9,14 @@ public interface ISteamGuardAuthenticator : IAuthenticator
     string SharedSecret { get; set; }
     string SerialNumber { get; set; }
     string RevocationCode { get; set; }
-    string URI { get; set; }
+    string Uri { get; set; }
     long ServerTime { get; set; }
     string AccountName { get; set; }
-    string TokenGID { get; set; }
+    string TokenGid { get; set; }
     string IdentitySecret { get; set; }
     string Secret1 { get; set; }
     int Status { get; set; }
-    string DeviceID { get; set; }
+    string DeviceId { get; set; }
 
     /// <summary>
     /// Set to true if the authenticator has actually been applied to the account.
@@ -42,7 +42,7 @@ public interface ISteamGuardAuthenticator : IAuthenticator
     Task<bool> DenyMultipleConfirmations(Confirmation[] confs);
     Task<bool> AcceptConfirmation(Confirmation conf);
     Task<bool> DenyConfirmation(Confirmation conf);
-    string GenerateConfirmationURL(string tag = "conf");
+    string GenerateConfirmationUrl(string tag = "conf");
     string GenerateConfirmationQueryParams(string tag);
-    NameValueCollection GenerateConfirmationQueryParamsAsNVC(string tag);
+    NameValueCollection GenerateConfirmationQueryParamsAsNvc(string tag);
 }

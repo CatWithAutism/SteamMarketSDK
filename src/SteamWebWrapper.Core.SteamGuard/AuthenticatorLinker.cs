@@ -15,7 +15,7 @@ namespace SteamWebWrapper.SteamGuard
         /// <summary>
         /// Session data containing an access token for a steam account generated with k_EAuthTokenPlatformType_MobileApp
         /// </summary>
-        private SessionData Session;
+        private SessionData _session;
 
         /// <summary>
         /// Set to register a new phone number when linking. If a phone number is not set on the account, this must be set. If a phone number is set on the account, this must be null.
@@ -26,7 +26,7 @@ namespace SteamWebWrapper.SteamGuard
         /// <summary>
         /// Randomly-generated device ID. Should only be generated once per linker.
         /// </summary>
-        public string DeviceID { get; private set; }
+        public string DeviceId { get; private set; }
 
         /// <summary>
         /// After the initial link step, if successful, this will be the SteamGuard data for the account. PLEASE save this somewhere after generating it; it's vital data.
@@ -41,7 +41,7 @@ namespace SteamWebWrapper.SteamGuard
         /// <summary>
         /// Set when the confirmation email to set a phone number is set
         /// </summary>
-        private bool ConfirmationEmailSent;
+        private bool _confirmationEmailSent;
 
         /// <summary>
         /// Email address the confirmation email was sent to when adding a phone number
@@ -55,8 +55,8 @@ namespace SteamWebWrapper.SteamGuard
         /// <param name="steamid">64 bit formatted steamid for the account</param>
         public AuthenticatorLinker(SessionData sessionData)
         {
-            Session = sessionData;
-            DeviceID = GenerateDeviceID();
+            _session = sessionData;
+            DeviceId = GenerateDeviceId();
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SteamWebWrapper.SteamGuard
         public async Task<LinkResult> AddAuthenticator()
         {
             // This method will be called again once the user confirms their phone number email
-            if (ConfirmationEmailSent)
+            if (_confirmationEmailSent)
             {
                 // Check if email was confirmed
                 bool isStillWaiting = await _isAccountWaitingForEmailConfirmation();
@@ -83,12 +83,12 @@ namespace SteamWebWrapper.SteamGuard
 
             // Make request to ITwoFactorService/AddAuthenticator
             NameValueCollection addAuthenticatorBody = new NameValueCollection();
-            addAuthenticatorBody.Add("steamid", Session.SteamID.ToString());
+            addAuthenticatorBody.Add("steamid", _session.SteamId.ToString());
             addAuthenticatorBody.Add("authenticator_time", (await TimeAligner.GetSteamTimeAsync()).ToString());
             addAuthenticatorBody.Add("authenticator_type", "1");
-            addAuthenticatorBody.Add("device_identifier", DeviceID);
+            addAuthenticatorBody.Add("device_identifier", DeviceId);
             addAuthenticatorBody.Add("sms_phone_id", "1");
-            string addAuthenticatorResponseStr = await SteamWeb.POSTRequest("https://api.steampowered.com/ITwoFactorService/AddAuthenticator/v1/?access_token=" + Session.AccessToken, null, addAuthenticatorBody);
+            string addAuthenticatorResponseStr = await SteamWeb.PostRequest("https://api.steampowered.com/ITwoFactorService/AddAuthenticator/v1/?access_token=" + _session.AccessToken, null, addAuthenticatorBody);
 
             // Parse response json to object
             var addAuthenticatorResponse = JsonConvert.DeserializeObject<AddAuthenticatorResponse>(addAuthenticatorResponseStr);
@@ -111,7 +111,7 @@ namespace SteamWebWrapper.SteamGuard
                 // If given country code is null, use the one from the Steam account
                 if (string.IsNullOrEmpty(countryCode))
                 {
-                    countryCode = await getUserCountry();
+                    countryCode = await GetUserCountry();
                 }
 
                 // Set the phone number
@@ -121,7 +121,7 @@ namespace SteamWebWrapper.SteamGuard
                 if (res != null && res.Response.ConfirmationEmailAddress != null)
                 {
                     ConfirmationEmailAddress = res.Response.ConfirmationEmailAddress;
-                    ConfirmationEmailSent = true;
+                    _confirmationEmailSent = true;
                     return LinkResult.MustConfirmEmail;
                 }
 
@@ -137,8 +137,8 @@ namespace SteamWebWrapper.SteamGuard
 
             // Setup this.LinkedAccount
             LinkedAccount = addAuthenticatorResponse.Response;
-            LinkedAccount.DeviceID = DeviceID;
-            LinkedAccount.Session = Session;
+            LinkedAccount.DeviceId = DeviceId;
+            LinkedAccount.Session = _session;
 
             return LinkResult.AwaitingFinalization;
         }
@@ -149,7 +149,7 @@ namespace SteamWebWrapper.SteamGuard
             while (tries <= 10)
             {
                 NameValueCollection finalizeAuthenticatorValues = new NameValueCollection();
-                finalizeAuthenticatorValues.Add("steamid", Session.SteamID.ToString());
+                finalizeAuthenticatorValues.Add("steamid", _session.SteamId.ToString());
                 finalizeAuthenticatorValues.Add("authenticator_code", LinkedAccount.GenerateSteamGuardCode());
                 finalizeAuthenticatorValues.Add("authenticator_time", TimeAligner.GetSteamTime().ToString());
                 finalizeAuthenticatorValues.Add("activation_code", smsCode);
@@ -159,8 +159,8 @@ namespace SteamWebWrapper.SteamGuard
                 using (WebClient wc = new WebClient())
                 {
                     wc.Encoding = Encoding.UTF8;
-                    wc.Headers[HttpRequestHeader.UserAgent] = SteamWeb.MOBILE_APP_USER_AGENT;
-                    byte[] finalizeAuthenticatorResult = await wc.UploadValuesTaskAsync(new Uri("https://api.steampowered.com/ITwoFactorService/FinalizeAddAuthenticator/v1/?access_token=" + Session.AccessToken), "POST", finalizeAuthenticatorValues);
+                    wc.Headers[HttpRequestHeader.UserAgent] = SteamWeb.MobileAppUserAgent;
+                    byte[] finalizeAuthenticatorResult = await wc.UploadValuesTaskAsync(new Uri("https://api.steampowered.com/ITwoFactorService/FinalizeAddAuthenticator/v1/?access_token=" + _session.AccessToken), "POST", finalizeAuthenticatorValues);
                     finalizeAuthenticatorResultStr = Encoding.UTF8.GetString(finalizeAuthenticatorResult);
                 }
 
@@ -173,7 +173,7 @@ namespace SteamWebWrapper.SteamGuard
 
                 if (finalizeAuthenticatorResponse.Response.Status == 89)
                 {
-                    return FinalizeResult.BadSMSCode;
+                    return FinalizeResult.BadSmsCode;
                 }
 
                 if (finalizeAuthenticatorResponse.Response.Status == 88)
@@ -202,11 +202,11 @@ namespace SteamWebWrapper.SteamGuard
             return FinalizeResult.GeneralFailure;
         }
 
-        private async Task<string> getUserCountry()
+        private async Task<string> GetUserCountry()
         {
             NameValueCollection getCountryBody = new NameValueCollection();
-            getCountryBody.Add("steamid", Session.SteamID.ToString());
-            string getCountryResponseStr = await SteamWeb.POSTRequest("https://api.steampowered.com/IUserAccountService/GetUserCountry/v1?access_token=" + Session.AccessToken, null, getCountryBody);
+            getCountryBody.Add("steamid", _session.SteamId.ToString());
+            string getCountryResponseStr = await SteamWeb.PostRequest("https://api.steampowered.com/IUserAccountService/GetUserCountry/v1?access_token=" + _session.AccessToken, null, getCountryBody);
 
             // Parse response json to object
             GetUserCountryResponse response = JsonConvert.DeserializeObject<GetUserCountryResponse>(getCountryResponseStr);
@@ -218,13 +218,13 @@ namespace SteamWebWrapper.SteamGuard
             NameValueCollection setPhoneBody = new NameValueCollection();
             setPhoneBody.Add("phone_number", phoneNumber);
             setPhoneBody.Add("phone_country_code", countryCode);
-            string getCountryResponseStr = await SteamWeb.POSTRequest("https://api.steampowered.com/IPhoneService/SetAccountPhoneNumber/v1?access_token=" + Session.AccessToken, null, setPhoneBody);
+            string getCountryResponseStr = await SteamWeb.PostRequest("https://api.steampowered.com/IPhoneService/SetAccountPhoneNumber/v1?access_token=" + _session.AccessToken, null, setPhoneBody);
             return JsonConvert.DeserializeObject<SetAccountPhoneNumberResponse>(getCountryResponseStr);
         }
 
         private async Task<bool> _isAccountWaitingForEmailConfirmation()
         {
-            string waitingForEmailResponse = await SteamWeb.POSTRequest("https://api.steampowered.com/IPhoneService/IsAccountWaitingForEmailConfirmation/v1?access_token=" + Session.AccessToken, null, null);
+            string waitingForEmailResponse = await SteamWeb.PostRequest("https://api.steampowered.com/IPhoneService/IsAccountWaitingForEmailConfirmation/v1?access_token=" + _session.AccessToken, null, null);
 
             // Parse response json to object
             var response = JsonConvert.DeserializeObject<IsAccountWaitingForEmailConfirmationResponse>(waitingForEmailResponse);
@@ -233,7 +233,7 @@ namespace SteamWebWrapper.SteamGuard
 
         private async Task<bool> _sendPhoneVerificationCode()
         {
-            await SteamWeb.POSTRequest("https://api.steampowered.com/IPhoneService/SendPhoneVerificationCode/v1?access_token=" + Session.AccessToken, null, null);
+            await SteamWeb.PostRequest("https://api.steampowered.com/IPhoneService/SendPhoneVerificationCode/v1?access_token=" + _session.AccessToken, null, null);
             return true;
         }
 
@@ -250,7 +250,7 @@ namespace SteamWebWrapper.SteamGuard
 
         public enum FinalizeResult
         {
-            BadSMSCode,
+            BadSmsCode,
             UnableToGenerateCorrectCodes,
             Success,
             GeneralFailure
@@ -325,7 +325,7 @@ namespace SteamWebWrapper.SteamGuard
             }
         }
 
-        public static string GenerateDeviceID()
+        public static string GenerateDeviceId()
         {
             return "android:" + Guid.NewGuid();
         }

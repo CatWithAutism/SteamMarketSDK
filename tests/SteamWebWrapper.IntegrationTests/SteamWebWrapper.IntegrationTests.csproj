@@ -30,7 +30,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\SteamWebWrapper.SteamGuard\SteamWebWrapper.SteamGuard.csproj" />
+      <ProjectReference Include="..\..\src\SteamWebWrapper.Core.SteamGuard\SteamWebWrapper.Core.SteamGuard.csproj" />
       <ProjectReference Include="..\..\src\SteamWebWrapper.Core\SteamWebWrapper.Core.csproj" />
       <ProjectReference Include="..\..\src\SteamWebWrapper\SteamWebWrapper.csproj" />
     </ItemGroup>

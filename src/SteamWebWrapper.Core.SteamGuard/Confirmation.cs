@@ -8,7 +8,7 @@ namespace SteamWebWrapper.SteamGuard
     public class Confirmation
     {
         [JsonProperty(PropertyName = "id")]
-        public ulong ID { get; set; }
+        public ulong Id { get; set; }
 
         [JsonProperty(PropertyName = "nonce")]
         public ulong Key { get; set; }

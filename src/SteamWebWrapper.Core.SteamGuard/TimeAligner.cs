@@ -41,7 +41,7 @@ namespace SteamWebWrapper.SteamGuard
                 client.Encoding = Encoding.UTF8;
                 try
                 {
-                    string response = client.UploadString(APIEndpoints.TWO_FACTOR_TIME_QUERY, "steamid=0");
+                    string response = client.UploadString(ApiEndpoints.TwoFactorTimeQuery, "steamid=0");
                     TimeQuery query = JsonConvert.DeserializeObject<TimeQuery>(response);
                     _timeDifference = (int)(query.Response.ServerTime - currentTime);
                     _aligned = true;
@@ -59,7 +59,7 @@ namespace SteamWebWrapper.SteamGuard
             try
             {
                 client.Encoding = Encoding.UTF8;
-                string response = await client.UploadStringTaskAsync(new Uri(APIEndpoints.TWO_FACTOR_TIME_QUERY), "steamid=0");
+                string response = await client.UploadStringTaskAsync(new Uri(ApiEndpoints.TwoFactorTimeQuery), "steamid=0");
                 TimeQuery query = JsonConvert.DeserializeObject<TimeQuery>(response);
                 _timeDifference = (int)(query.Response.ServerTime - currentTime);
                 _aligned = true;

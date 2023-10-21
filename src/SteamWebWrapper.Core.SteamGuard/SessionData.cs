@@ -10,13 +10,13 @@ namespace SteamWebWrapper.SteamGuard
 {
     public class SessionData
     {
-        public ulong SteamID { get; set; }
+        public ulong SteamId { get; set; }
 
         public string AccessToken { get; set; }
 
         public string RefreshToken { get; set; }
 
-        public string SessionID { get; set; }
+        public string SessionId { get; set; }
 
         public async Task RefreshAccessToken()
         {
@@ -31,8 +31,8 @@ namespace SteamWebWrapper.SteamGuard
             {
                 var postData = new NameValueCollection();
                 postData.Add("refresh_token", RefreshToken);
-                postData.Add("steamid", SteamID.ToString());
-                responseStr = await SteamWeb.POSTRequest("https://api.steampowered.com/IAuthenticationService/GenerateAccessTokenForApp/v1/", null, postData);
+                postData.Add("steamid", SteamId.ToString());
+                responseStr = await SteamWeb.PostRequest("https://api.steampowered.com/IAuthenticationService/GenerateAccessTokenForApp/v1/", null, postData);
             }
             catch (Exception ex)
             {
@@ -74,19 +74,19 @@ namespace SteamWebWrapper.SteamGuard
             var jwt = JsonConvert.DeserializeObject<SteamAccessToken>(Encoding.UTF8.GetString(payloadBytes));
 
             // Compare expire time of the token to the current time
-            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() > jwt.exp;
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() > jwt.Exp;
         }
 
         public CookieContainer GetCookies()
         {
-            if (SessionID == null)
-                SessionID = GenerateSessionID();
+            if (SessionId == null)
+                SessionId = GenerateSessionId();
 
             var cookies = new CookieContainer();
             foreach (string domain in new[] { "steamcommunity.com", "store.steampowered.com" })
             {
                 cookies.Add(new Cookie("steamLoginSecure", GetSteamLoginSecure(), "/", domain));
-                cookies.Add(new Cookie("sessionid", SessionID, "/", domain));
+                cookies.Add(new Cookie("sessionid", SessionId, "/", domain));
                 cookies.Add(new Cookie("mobileClient", "android", "/", domain));
                 cookies.Add(new Cookie("mobileClientVersion", "777777 3.6.4", "/", domain));
             }
@@ -95,10 +95,10 @@ namespace SteamWebWrapper.SteamGuard
 
         private string GetSteamLoginSecure()
         {
-            return SteamID + "%7C%7C" + AccessToken;
+            return SteamId + "%7C%7C" + AccessToken;
         }
 
-        private static string GenerateSessionID()
+        private static string GenerateSessionId()
         {
             return GetRandomHexNumber(32);
         }
@@ -116,7 +116,7 @@ namespace SteamWebWrapper.SteamGuard
 
         private class SteamAccessToken
         {
-            public long exp { get; set; }
+            public long Exp { get; set; }
         }
 
         private class GenerateAccessTokenForAppResponse
