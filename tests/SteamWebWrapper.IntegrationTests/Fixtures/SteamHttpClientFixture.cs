@@ -16,12 +16,12 @@ public class SteamHttpClientFixture : IDisposable
     
     private IConfiguration Configuration { get; } = new ConfigurationBuilder()
         .AddUserSecrets<SteamHttpClientFixture>()
+        .AddEnvironmentVariables()
         .Build();
     
     public SteamHttpClientFixture()
     {
         var serializedSteamGuard = Configuration["steamGuard"];
-        Console.WriteLine(serializedSteamGuard);
         ISteamGuardAuthenticator? steamGuardAuthenticator = JsonSerializer.Deserialize<SteamGuardAuthenticator>(serializedSteamGuard) ?? null;
         
         var httpClientHandler = new HttpClientHandler

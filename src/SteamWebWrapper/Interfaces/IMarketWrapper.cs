@@ -6,5 +6,5 @@ namespace SteamWebWrapper.Interfaces;
 public interface IMarketWrapper : IDisposable
 {
     Task<MarketHistoryResponse?> GetMarketHistoryAsync(long offset, long count);
-    Task<AccountInfo?> GetMarketInfoAsync(CancellationToken cancellationToken);
+    Task<AccountInfo?> GetMarketAccountInfo(CancellationToken cancellationToken);
 }

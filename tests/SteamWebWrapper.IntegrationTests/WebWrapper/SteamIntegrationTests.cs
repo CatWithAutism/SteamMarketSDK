@@ -25,9 +25,9 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
     }
 
     [Fact]
-    public async Task GetAccountInfoTest()
+    public async Task GetMarketAccountInfo()
     {
-        AccountInfo = await MarketWrapper.GetMarketInfoAsync(CancellationToken.None);
+        AccountInfo = await MarketWrapper.GetMarketAccountInfo(CancellationToken.None);
 
         AccountInfo.Should().NotBeNull();
         AccountInfo.Success.Should().Be(1);

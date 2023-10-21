@@ -28,7 +28,7 @@ public class MarketWrapper : IMarketWrapper
         return JsonSerializer.Deserialize<MarketHistoryResponse>(stringResponse);
     }
     
-    public async Task<AccountInfo?> GetMarketInfoAsync(CancellationToken cancellationToken)
+    public async Task<AccountInfo?> GetMarketAccountInfo(CancellationToken cancellationToken)
     {
         const string infoPage = "https://steamcommunity.com/market/#";
         
