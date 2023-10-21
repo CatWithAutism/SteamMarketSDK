@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebWrapper.Integration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebWrapper", "src\SteamWebWrapper\SteamWebWrapper.csproj", "{C675FEF1-699A-4F15-9420-63B67DC66A1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamAuth", "src\SteamAuth\SteamAuth.csproj", "{5AD0934E-F6C4-4AE5-83AF-C788313B2A87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebWrapper.SteamGuard", "src\SteamWebWrapper.SteamGuard\SteamWebWrapper.SteamGuard.csproj", "{5AD0934E-F6C4-4AE5-83AF-C788313B2A87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebWrapper.Common", "src\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj", "{0A197008-ABE4-4FAB-BF4D-8366B4586425}"
 EndProject

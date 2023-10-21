@@ -1,4 +1,4 @@
-﻿namespace SteamAuth
+﻿namespace SteamWebWrapper.SteamGuard
 {
     public static class APIEndpoints
     {

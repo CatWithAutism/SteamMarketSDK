@@ -22,7 +22,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\SteamAuth\SteamAuth.csproj" />
+      <ProjectReference Include="..\SteamWebWrapper.SteamGuard\SteamWebWrapper.SteamGuard.csproj" />
       <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj" />
       <ProjectReference Include="..\SteamWebWrapper.Contracts\SteamWebWrapper.Contracts.csproj" />
     </ItemGroup>

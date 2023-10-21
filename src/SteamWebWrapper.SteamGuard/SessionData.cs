@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SteamAuth
+namespace SteamWebWrapper.SteamGuard
 {
     public class SessionData
     {

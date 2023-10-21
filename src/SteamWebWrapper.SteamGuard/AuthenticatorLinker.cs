@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SteamAuth
+namespace SteamWebWrapper.SteamGuard
 {
     /// <summary>
     /// Handles the linking process for a new mobile authenticator.

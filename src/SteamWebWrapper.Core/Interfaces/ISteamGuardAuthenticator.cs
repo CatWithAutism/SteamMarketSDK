@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
-using SteamAuth;
 using SteamKit2.Authentication;
+using SteamWebWrapper.SteamGuard;
 
 namespace SteamWebWrapper.Core.Interfaces;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace SteamAuth
+namespace SteamWebWrapper.SteamGuard
 {
     public class CookieAwareWebClient : WebClient
     {
