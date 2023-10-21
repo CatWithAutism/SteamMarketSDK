@@ -20,8 +20,9 @@ public class SteamHttpClientFixture : IDisposable
     
     public SteamHttpClientFixture()
     {
-        var serializedCookieCollection = Configuration["steamGuard"];
-        ISteamGuardAuthenticator? steamGuardAuthenticator = JsonSerializer.Deserialize<SteamGuardAuthenticator>(serializedCookieCollection) ?? null;
+        var serializedSteamGuard = Configuration["steamGuard"];
+        Console.WriteLine(serializedSteamGuard);
+        ISteamGuardAuthenticator? steamGuardAuthenticator = JsonSerializer.Deserialize<SteamGuardAuthenticator>(serializedSteamGuard) ?? null;
         
         var httpClientHandler = new HttpClientHandler
         {
