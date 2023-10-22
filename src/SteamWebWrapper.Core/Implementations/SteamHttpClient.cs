@@ -84,7 +84,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
             postData = new MultipartFormDataContent();
             postData.Add(new StringContent(info.Params.Nonce), "nonce");
             postData.Add(new StringContent(info.Params.Auth), "auth");
-            postData.Add(new StringContent(finalizeResponse.SteamID), "steamID"); 
+            postData.Add(new StringContent(finalizeResponse.SteamId.ToString()), "steamID"); 
                 
             response = await PostAsync(info.Url, postData);
             response.EnsureSuccessStatusCode();

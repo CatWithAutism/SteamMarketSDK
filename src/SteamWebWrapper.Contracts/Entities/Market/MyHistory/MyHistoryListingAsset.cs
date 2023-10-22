@@ -1,22 +1,22 @@
 using System.Text.Json.Serialization;
 using SteamWebWrapper.Contracts.Entities.Common;
 
-namespace SteamWebWrapper.Contracts.Entities.Market.History;
+namespace SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class MarketHistoryListingAsset
+public class MyHistoryListingAsset
 {
     [JsonPropertyName("currency")]
     public long Currency { get; set; }
 
     [JsonPropertyName("appid")]
-    public long Appid { get; set; }
+    public long AppId { get; set; }
 
     [JsonPropertyName("contextid")]
     public long ContextId { get; set; }
 
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public long Id { get; set; }
 
     [JsonPropertyName("amount")]
     public long Amount { get; set; }

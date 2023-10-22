@@ -2,7 +2,8 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
-using SteamWebWrapper.Contracts.Entities.Market.History;
+using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
+using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Interfaces;
 
@@ -17,18 +18,18 @@ public class MarketWrapper : IMarketWrapper
         _steamHttpClient = steamHttpClient;
     }
     
-    public async Task<MarketHistoryResponse?> GetMarketHistoryAsync(long offset, long count)
+    public async Task<MyHistoryResponse?> GetMarketHistoryAsync(long offset, long count, CancellationToken cancellationToken)
     {
         var requestUri = $"https://steamcommunity.com/market/myhistory/?query=&count={count}&start={offset}&norender=true";
         
-        var response = await _steamHttpClient.GetAsync(requestUri);
+        var response = await _steamHttpClient.GetAsync(requestUri, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var stringResponse = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<MarketHistoryResponse>(stringResponse);
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<MyHistoryResponse>(stringResponse);
     }
     
-    public async Task<AccountInfo?> GetMarketAccountInfo(CancellationToken cancellationToken)
+    public async Task<AccountInfo?> CollectMarketAccountInfo(CancellationToken cancellationToken)
     {
         const string infoPage = "https://steamcommunity.com/market/#";
         
@@ -40,35 +41,23 @@ public class MarketWrapper : IMarketWrapper
 
         return JsonSerializer.Deserialize<AccountInfo>(match.Value);
     }
-    
-    private async Task<CreateBuyOrderResponse> CreateBuyOrderAsync(CreateBuyOrderRequest request)
+
+    /// <summary>
+    /// Returns current listings and buy orders.
+    /// </summary>
+    /// <param name="offset">Offset from zero element. Than more than older.</param>
+    /// <param name="count">Count of elements. Max size is 500</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns></returns>
+    public async Task<MyListingsResponse?> GetMyListings(long offset, long count, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
-        const string createBuyOrderPath ="/market/createbuyorder/";
-
-        var data = new StringContent($"sessionid={""}&" +
-                                     $"currency={request.Currency}&" +
-                                     $"appid={request.AppId}&" +
-                                     $"market_hash_name={request.MarketHashName}&" +
-                                     $"price_total={request.TotalPrice}&" +
-                                     $"quantity={request.Quantity}&" +
-                                     $"billing_state=0&" +
-                                     $"save_my_address=0");
+        string requestUri = $"https://steamcommunity.com/market/mylistings?count={count}&start={offset}&norender=true";
         
-        /*var data = new StringContent($"username={username}");
-        data.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-        
-        var response = await PostAsync(getRsaDataPath, data, cancellationToken);
-        var rsaJson = await response.Content.ReadFromJsonAsync<RsaDataResponse>(JsonSerializerOptions.Default, cancellationToken);
-        
-        if (rsaJson is not { Success: true } || rsaJson.PublicKeyExp.IsNullOrEmpty() || rsaJson.PublicKeyMod.IsNullOrEmpty())
-        {
-            throw new GetRsaKeyException($"We cannot get RSA Key for this account - {username}\n");
-        }
+        var response = await _steamHttpClient.GetAsync(requestUri, cancellationToken);
+        response.EnsureSuccessStatusCode();
 
-        return rsaJson;*/
-
-        return null;
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<MyListingsResponse>(stringResponse);
     }
 
     public void Dispose()

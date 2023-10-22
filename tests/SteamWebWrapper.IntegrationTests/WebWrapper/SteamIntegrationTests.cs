@@ -25,9 +25,9 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
     }
 
     [Fact]
-    public async Task GetMarketAccountInfo()
+    public async Task CollectMarketAccountInfoTest()
     {
-        AccountInfo = await MarketWrapper.GetMarketAccountInfo(CancellationToken.None);
+        AccountInfo = await MarketWrapper.CollectMarketAccountInfo(CancellationToken.None);
 
         AccountInfo.Should().NotBeNull();
         AccountInfo.Success.Should().Be(1);
@@ -49,7 +49,7 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
     {
         const long offset = 0;
         const long count = 150;
-        var marketHistory = await MarketWrapper.GetMarketHistoryAsync(offset, count);
+        var marketHistory = await MarketWrapper.GetMarketHistoryAsync(offset, count, CancellationToken.None);
         
         marketHistory.Should().NotBeNull();
         marketHistory.Assets.Should().NotBeNullOrEmpty();
@@ -57,5 +57,20 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
         marketHistory.Purchases.Should().NotBeNullOrEmpty();
         marketHistory.Listings.Should().NotBeNullOrEmpty();
         marketHistory.Events.Should().NotBeNullOrEmpty();
+    }
+    
+    [Fact]
+    public async Task GetMyListingsHistoryTest()
+    {
+        const long offset = 0;
+        const long count = 150;
+        var marketHistory = await MarketWrapper.GetMyListings(offset, count, CancellationToken.None);
+        
+        marketHistory.Should().NotBeNull();
+        marketHistory.Success.Should().BeTrue();
+        if (marketHistory.Listings.Count > 0)
+        {
+            marketHistory.Assets.Should().NotBeNullOrEmpty();
+        }
     }
 }

@@ -27,16 +27,13 @@
 
 
     <ItemGroup>
-      <Folder Include="Core\" />
-    </ItemGroup>
-
-
-
-    <ItemGroup>
-      <None Update="Data\MarketHistoryResponseTestData.json">
+      <None Update="Data\MarketHistoryResponse.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Data\InventoryItemsResponseTestData.json">
+      <None Update="Data\InventoryItemsResponse.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Data\MyListingsResponse.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

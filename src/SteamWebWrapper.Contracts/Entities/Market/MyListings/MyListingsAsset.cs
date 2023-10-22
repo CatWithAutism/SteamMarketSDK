@@ -1,28 +1,28 @@
 using System.Text.Json.Serialization;
 using SteamWebWrapper.Contracts.Entities.Common;
 
-namespace SteamWebWrapper.Contracts.Entities.Market.History;
+namespace SteamWebWrapper.Contracts.Entities.Market.MyListings;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class MarketHistoryAsset
+public class MyListingsAsset
 {
     [JsonPropertyName("currency")]
     public long Currency { get; set; }
 
     [JsonPropertyName("appid")]
-    public long Appid { get; set; }
+    public long AppId { get; set; }
 
     [JsonPropertyName("contextid")]
-    public long Contextid { get; set; }
+    public long ContextId { get; set; }
 
     [JsonPropertyName("id")]
     public long Id { get; set; }
 
     [JsonPropertyName("classid")]
-    public long Classid { get; set; }
+    public long ClassId { get; set; }
 
     [JsonPropertyName("instanceid")]
-    public long Instanceid { get; set; }
+    public long InstanceId { get; set; }
 
     [JsonPropertyName("amount")]
     public long Amount { get; set; }
@@ -37,7 +37,7 @@ public class MarketHistoryAsset
     public long UnownedId { get; set; }
 
     [JsonPropertyName("unowned_contextid")]
-    public long UnownedContextid { get; set; }
+    public long UnownedContextId { get; set; }
 
     [JsonPropertyName("background_color")]
     public string BackgroundColor { get; set; }
@@ -49,13 +49,16 @@ public class MarketHistoryAsset
     public string IconUrlLarge { get; set; }
 
     [JsonPropertyName("descriptions")]
-    public List<ItemDescription> Descriptions { get; set; }
+    public List<SubjectDescription> Descriptions { get; set; }
 
     [JsonPropertyName("tradable")]
     public long Tradable { get; set; }
 
     [JsonPropertyName("actions")]
     public List<SubjectAction> Actions { get; set; }
+
+    [JsonPropertyName("owner_descriptions")]
+    public List<SubjectDescription> OwnerDescriptions { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -83,10 +86,10 @@ public class MarketHistoryAsset
 
     [JsonPropertyName("marketable")]
     public long Marketable { get; set; }
-
+    
     [JsonPropertyName("app_icon")]
-    public string AppIcon { get; set; }
-
+    public Uri AppIcon { get; set; }
+    
     [JsonPropertyName("owner")]
-    public long Owner { get; set; }
+    public long? Owner { get; set; }
 }

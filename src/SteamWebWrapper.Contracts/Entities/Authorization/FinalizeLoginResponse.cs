@@ -2,10 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace SteamWebWrapper.Contracts.Entities.Authorization;
 
+[JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
 public class FinalizeLoginResponse
 {
     [JsonPropertyName("steamID")]
-    public string SteamID { get; set; }
+    public long SteamId { get; set; }
 
     [JsonPropertyName("redir")]
     public string Redir { get; set; }

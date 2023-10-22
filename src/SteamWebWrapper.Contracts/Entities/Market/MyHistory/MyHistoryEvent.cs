@@ -1,16 +1,16 @@
 using System.Text.Json.Serialization;
 using SteamWebWrapper.Contracts.Converters;
 
-namespace SteamWebWrapper.Contracts.Entities.Market.History;
+namespace SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class MarketHistoryEvent
+public class MyHistoryEvent
 {
     [JsonPropertyName("listingid")]
     public long ListingId { get; set; }
 
     [JsonPropertyName("event_type")]
-    public MarketHistoryEventType EventType { get; set; }
+    public MyHistoryEventType EventType { get; set; }
 
     [JsonPropertyName("time_event")]
     [JsonConverter(typeof(DateTimeConverter))]

@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 
-namespace SteamWebWrapper.Contracts.Entities.Market.History;
+namespace SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class MarketHistoryListing
+public class MyHistoryListing
 {
     [JsonPropertyName("listingid")]
     public long ListingId { get; set; }
@@ -24,7 +24,7 @@ public class MarketHistoryListing
     public long CurrencyId { get; set; }
 
     [JsonPropertyName("asset")]
-    public MarketHistoryListingAsset Asset { get; set; }
+    public MyHistoryListingAsset Asset { get; set; }
 
     [JsonPropertyName("original_price")]
     public long OriginalPrice { get; set; }

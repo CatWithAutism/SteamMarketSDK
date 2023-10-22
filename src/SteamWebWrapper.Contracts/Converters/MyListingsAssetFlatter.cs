@@ -1,15 +1,15 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SteamWebWrapper.Common.Utils;
-using SteamWebWrapper.Contracts.Entities.Market.History;
+using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 
 namespace SteamWebWrapper.Contracts.Converters;
 
-internal class AssetFlatter : JsonConverter<List<MarketHistoryAsset>>
+internal class MyListingsAssetFlatter : JsonConverter<List<MyListingsAsset>>
 {
-    public override bool CanConvert(Type t) => t == typeof(List<MarketHistoryAsset>);
+    public override bool CanConvert(Type t) => t == typeof(List<MyListingsAsset>);
 
-    public override List<MarketHistoryAsset> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override List<MyListingsAsset> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var jsonDoc = JsonDocument.ParseValue(ref reader);
 
@@ -19,7 +19,7 @@ internal class AssetFlatter : JsonConverter<List<MarketHistoryAsset>>
             throw new ArgumentNullException(nameof(value), $"Value of reader is null or empty.");
         }
         
-        var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, MarketHistoryAsset>>>>(value, options);
+        var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, MyListingsAsset>>>>(value, options);
         if (data == null)
         {
             throw new ArgumentException($"We cannot serialize this data - {value}");
@@ -32,7 +32,7 @@ internal class AssetFlatter : JsonConverter<List<MarketHistoryAsset>>
                         .Select(pair => pair.Value))).ToList();
     }
 
-    public override void Write(Utf8JsonWriter writer, List<MarketHistoryAsset> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, List<MyListingsAsset> value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }

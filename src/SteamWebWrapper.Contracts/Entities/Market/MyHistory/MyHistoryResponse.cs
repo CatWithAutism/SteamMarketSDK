@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
 using SteamWebWrapper.Contracts.Converters;
 
-namespace SteamWebWrapper.Contracts.Entities.Market.History;
+namespace SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class MarketHistoryResponse
+public class MyHistoryResponse
 {
     [JsonPropertyName("success")]
     public bool Success { get; set; }
@@ -20,17 +20,17 @@ public class MarketHistoryResponse
     public long Start { get; set; }
 
     [JsonPropertyName("assets")]
-    [JsonConverter(typeof(AssetFlatter))]
-    public List<MarketHistoryAsset> Assets { get; set; }
+    [JsonConverter(typeof(MyHistoryAssetFlatter))]
+    public List<MyHistoryAsset> Assets { get; set; }
 
     [JsonPropertyName("events")]
-    public List<MarketHistoryEvent> Events { get; set; }
+    public List<MyHistoryEvent> Events { get; set; }
 
     [JsonPropertyName("purchases")]
-    [JsonConverter(typeof(ListFromDictionaryConverter<MarketHistoryPurchase>))]
-    public List<MarketHistoryPurchase> Purchases { get; set; }
+    [JsonConverter(typeof(ListFromDictionaryConverter<MyHistoryPurchase>))]
+    public List<MyHistoryPurchase> Purchases { get; set; }
 
     [JsonPropertyName("listings")]
-    [JsonConverter(typeof(ListFromDictionaryConverter<MarketHistoryListing>))]
-    public List<MarketHistoryListing> Listings { get; set; }
+    [JsonConverter(typeof(ListFromDictionaryConverter<MyHistoryListing>))]
+    public List<MyHistoryListing> Listings { get; set; }
 }

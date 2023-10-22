@@ -1,22 +1,43 @@
 using System.Text.Json.Serialization;
 using SteamWebWrapper.Contracts.Entities.Common;
 
-namespace SteamWebWrapper.Contracts.Entities.Inventory;
+namespace SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class InventoryAssetDescription
+public class MyHistoryAsset
 {
+    [JsonPropertyName("currency")]
+    public long Currency { get; set; }
+
     [JsonPropertyName("appid")]
     public long AppId { get; set; }
+
+    [JsonPropertyName("contextid")]
+    public long ContextId { get; set; }
+
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
     [JsonPropertyName("classid")]
     public long ClassId { get; set; }
 
     [JsonPropertyName("instanceid")]
-    public long Instanceid { get; set; }
+    public long InstanceId { get; set; }
 
-    [JsonPropertyName("currency")]
-    public long Currency { get; set; }
+    [JsonPropertyName("amount")]
+    public long Amount { get; set; }
+
+    [JsonPropertyName("status")]
+    public long Status { get; set; }
+
+    [JsonPropertyName("original_amount")]
+    public long OriginalAmount { get; set; }
+
+    [JsonPropertyName("unowned_id")]
+    public long UnownedId { get; set; }
+
+    [JsonPropertyName("unowned_contextid")]
+    public long UnownedContextId { get; set; }
 
     [JsonPropertyName("background_color")]
     public string BackgroundColor { get; set; }
@@ -24,23 +45,17 @@ public class InventoryAssetDescription
     [JsonPropertyName("icon_url")]
     public string IconUrl { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("icon_url_large")]
     public string IconUrlLarge { get; set; }
 
     [JsonPropertyName("descriptions")]
-    public List<OwnerDescriptionDetails> Descriptions { get; set; }
+    public List<SubjectDescription> Descriptions { get; set; }
 
     [JsonPropertyName("tradable")]
     public long Tradable { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("actions")]
     public List<SubjectAction> Actions { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("owner_descriptions")]
-    public List<OwnerDescriptionDetails> OwnerDescriptions { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -57,7 +72,6 @@ public class InventoryAssetDescription
     [JsonPropertyName("market_hash_name")]
     public string MarketHashName { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("market_actions")]
     public List<SubjectAction> MarketActions { get; set; }
 
@@ -70,10 +84,9 @@ public class InventoryAssetDescription
     [JsonPropertyName("marketable")]
     public long Marketable { get; set; }
 
-    [JsonPropertyName("tags")]
-    public List<Tag> Tags { get; set; }
+    [JsonPropertyName("app_icon")]
+    public string AppIcon { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("market_buy_country_restriction")]
-    public string MarketBuyCountryRestriction { get; set; }
+    [JsonPropertyName("owner")]
+    public long Owner { get; set; }
 }
