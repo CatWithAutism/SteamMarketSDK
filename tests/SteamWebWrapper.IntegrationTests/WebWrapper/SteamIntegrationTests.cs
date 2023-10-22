@@ -1,5 +1,6 @@
 using FluentAssertions;
 using SteamWebWrapper.Contracts.Entities.Account;
+using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Implementations;
 using SteamWebWrapper.IntegrationTests.Fixtures;
@@ -94,5 +95,20 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
             buyOrderStatus.Success.Should().Be(1);
             buyOrderStatus.Active.Should().Be(1);
         }
+    }
+    
+    [Fact]
+    public async Task GetPriceOverviewTest()
+    {
+        const string country = "US";
+        const long appId = 730;
+        const string marketHashName = "P250 | Sand Dune (Field-Tested)";
+        const long currency = 5;
+
+        var priceRequest = new PriceOverviewRequest(appId, marketHashName, country, currency);
+        var priceResponse = await MarketWrapper.GetItemCurrentPrice(priceRequest, CancellationToken.None);
+
+        priceResponse.Should().NotBeNull();
+        priceResponse.Success.Should().BeTrue();
     }
 }

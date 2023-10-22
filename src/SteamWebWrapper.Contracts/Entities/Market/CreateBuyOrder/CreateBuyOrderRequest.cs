@@ -2,13 +2,18 @@ namespace SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 
 public class CreateBuyOrderRequest
 {
-    public required long Currency { get; set; }
-    
-    public required long AppId { get; set; }
-    
-    public required string MarketHashName { get; set; }
-    
-    public required long TotalPrice { get; set; }
-    
-    public required long Quantity { get; set; }
+    public CreateBuyOrderRequest(long appId, string marketHashName, long currency, long priceTotal, long quantity)
+    {
+        AppId = appId;
+        MarketHashName = marketHashName;
+        Currency = currency;
+        PriceTotal = priceTotal;
+        Quantity = quantity;
+    }
+
+    public long AppId { get; private set; }
+    public string MarketHashName { get; private set; }
+    public long Currency { get; private set; }
+    public long PriceTotal { get; private set; }
+    public long Quantity { get; private set; }
 }

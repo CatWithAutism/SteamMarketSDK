@@ -2,6 +2,7 @@ using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
+using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 
 namespace SteamWebWrapper.Interfaces;
 
@@ -20,4 +21,12 @@ public interface IMarketWrapper : IDisposable
     Task<MyListingsResponse?> GetMyListings(long offset, long count, CancellationToken cancellationToken);
 
     Task<BuyOrderStatusResponse?> GetBuyOrderStatus(long buyOrderId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Request prive overwive of specified item.
+    /// </summary>
+    /// <param name="priceRequest">Price request.</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Price overview response</returns>
+    Task<PriceOverviewResponse?> GetItemCurrentPrice(PriceOverviewRequest priceRequest, CancellationToken cancellationToken);
 }

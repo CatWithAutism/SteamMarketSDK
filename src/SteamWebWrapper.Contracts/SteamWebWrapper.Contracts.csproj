@@ -11,8 +11,4 @@
       <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Entities\Market\PriceOverview\" />
-    </ItemGroup>
-
 </Project>
