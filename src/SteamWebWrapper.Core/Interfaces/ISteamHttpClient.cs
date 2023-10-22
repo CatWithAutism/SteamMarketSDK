@@ -1,6 +1,5 @@
 using System.Net.Http.Headers;
 using SteamKit2;
-using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 
 namespace SteamWebWrapper.Core.Interfaces;

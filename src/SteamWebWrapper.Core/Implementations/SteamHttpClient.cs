@@ -1,12 +1,10 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using SteamKit2;
 using SteamKit2.Authentication;
 using SteamKit2.Internal;
 using SteamWebWrapper.Common.Utils;
-using SteamWebWrapper.Contracts.Entities.Account;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Exceptions;
 using SteamWebWrapper.Core.Interfaces;

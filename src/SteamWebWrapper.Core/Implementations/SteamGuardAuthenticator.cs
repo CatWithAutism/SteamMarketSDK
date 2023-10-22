@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.SteamGuard;
 

@@ -1,8 +1,6 @@
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Implementations;
 using SteamWebWrapper.Core.Interfaces;
