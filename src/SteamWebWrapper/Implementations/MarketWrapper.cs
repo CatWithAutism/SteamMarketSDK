@@ -1,6 +1,8 @@
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using SteamWebWrapper.Contracts.Entities.Account;
+using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Core.Interfaces;
@@ -12,6 +14,10 @@ public class MarketWrapper : IMarketWrapper
 {
     private readonly ISteamHttpClient _steamHttpClient;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="steamHttpClient">Your steam client should be already authorized otherwise you can get errors.</param>
     public MarketWrapper(ISteamHttpClient steamHttpClient)
     {
         _steamHttpClient = steamHttpClient;
@@ -57,6 +63,42 @@ public class MarketWrapper : IMarketWrapper
 
         var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
         return JsonSerializer.Deserialize<MyListingsResponse>(stringResponse);
+    }
+    
+    public async Task<BuyOrderStatusResponse?> GetBuyOrderStatus(long buyOrderId, CancellationToken cancellationToken)
+    {
+        string requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?sessionid={_steamHttpClient.SessionId}&buy_orderid={buyOrderId}";
+
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(requestUri),
+            Method = HttpMethod.Get,
+        };
+        request.Headers.Referrer = new Uri($"https://steamcommunity.com/id/{_steamHttpClient.SteamId}/inventory/");
+        
+        var response = await _steamHttpClient.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<BuyOrderStatusResponse>(stringResponse);
+    }
+    
+    public async Task<BuyOrderStatusResponse?> GetCurrentPrice(long buyOrderId, CancellationToken cancellationToken)
+    {
+        string requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?sessionid={_steamHttpClient.SessionId}&buy_orderid={buyOrderId}";
+
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(requestUri),
+            Method = HttpMethod.Get,
+        };
+        request.Headers.Referrer = new Uri($"https://steamcommunity.com/id/{_steamHttpClient.SteamId}/inventory/");
+        
+        var response = await _steamHttpClient.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<BuyOrderStatusResponse>(stringResponse);
     }
 
     public void Dispose()

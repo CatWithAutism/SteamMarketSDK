@@ -1,6 +1,7 @@
 using System.Text.Json;
 using FluentAssertions;
 using SteamWebWrapper.Contracts.Entities.Inventory;
+using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using Xunit;
@@ -63,5 +64,20 @@ public class DeserializeTests
         marketHistoryResponse.Assets.Count.Should().Be(assetCount);
         marketHistoryResponse.Listings.Count.Should().Be(listingCount);
         marketHistoryResponse.BuyOrders.Count.Should().Be(buyOrderCount);
+    }
+    
+    [Fact]
+    public async Task DeserializeBuyOrderStatusResponseTest()
+    {
+        const int buyOrderCount = 57;
+        const string dataPath = "Data/GetBuyOrderStatusResponse.json";
+        
+        var data = await File.ReadAllTextAsync(dataPath);
+        data.Should().NotBeNullOrEmpty();
+
+        var marketHistoryResponse = JsonSerializer.Deserialize<BuyOrderStatusResponse>(data);
+        marketHistoryResponse.Should().NotBeNull();
+        marketHistoryResponse.Success.Should().Be(1);
+        marketHistoryResponse.Purchases.Count.Should().Be(buyOrderCount);
     }
 }

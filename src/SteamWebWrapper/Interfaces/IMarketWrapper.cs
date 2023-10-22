@@ -1,4 +1,5 @@
 using SteamWebWrapper.Contracts.Entities.Account;
+using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 
@@ -17,4 +18,6 @@ public interface IMarketWrapper : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
     Task<MyListingsResponse?> GetMyListings(long offset, long count, CancellationToken cancellationToken);
+
+    Task<BuyOrderStatusResponse?> GetBuyOrderStatus(long buyOrderId, CancellationToken cancellationToken);
 }

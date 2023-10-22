@@ -73,4 +73,26 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
             marketHistory.Assets.Should().NotBeNullOrEmpty();
         }
     }
+    
+    [Fact]
+    public async Task GetByOrderStatusTest()
+    {
+        const long offset = 0;
+        const long count = 150;
+        var marketHistory = await MarketWrapper.GetMyListings(offset, count, CancellationToken.None);
+
+        marketHistory.Should().NotBeNull();
+        marketHistory.Success.Should().BeTrue();
+
+        if (marketHistory.BuyOrders is { Count: > 0 })
+        {
+            var buyOrderIndex = new Random().Next(0, marketHistory.BuyOrders.Count - 1);
+            var buyOrderId = marketHistory.BuyOrders.ElementAt(buyOrderIndex).BuyOrderId;
+            var buyOrderStatus = await MarketWrapper.GetBuyOrderStatus(buyOrderId, CancellationToken.None);
+
+            buyOrderStatus.Should().NotBeNull();
+            buyOrderStatus.Success.Should().Be(1);
+            buyOrderStatus.Active.Should().Be(1);
+        }
+    }
 }
