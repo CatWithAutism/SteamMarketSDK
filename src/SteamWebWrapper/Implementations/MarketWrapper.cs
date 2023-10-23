@@ -5,6 +5,7 @@ using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
+using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
@@ -205,6 +206,38 @@ public class MarketWrapper : IMarketWrapper
 
         var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
         return JsonSerializer.Deserialize<PriceHistoryResponse>(stringResponse);
+    }
+    
+    /// <summary>
+    /// Request to create sell order.
+    /// </summary>
+    public async Task<CreateSellOrderResponse?> CreateSellOrder(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken)
+    {
+        const string requestUri = "https://steamcommunity.com/market/sellitem/";
+        
+        var content = new FormUrlEncodedContent(new []
+        {
+            new KeyValuePair<string, string>("sessionid", _steamHttpClient.SessionId),
+            new KeyValuePair<string, string>("appid", createSellOrderRequest.AppId.ToString()),
+            new KeyValuePair<string, string>("contextid", createSellOrderRequest.ContextId.ToString()),
+            new KeyValuePair<string, string>("assetid", createSellOrderRequest.AssetId.ToString()),
+            new KeyValuePair<string, string>("amount", createSellOrderRequest.Quantity.ToString()),
+            new KeyValuePair<string, string>("price", createSellOrderRequest.Price.ToString()),
+        });
+        
+        var request = new HttpRequestMessage
+        {
+            RequestUri = new Uri(requestUri),
+            Method = HttpMethod.Post,
+            Content = content,
+        };
+        request.Headers.Referrer = new Uri($"https://steamcommunity.com/id/{_steamHttpClient.SteamId}/inventory/");
+        
+        var response = await _steamHttpClient.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<CreateSellOrderResponse>(stringResponse);
     }
 
 

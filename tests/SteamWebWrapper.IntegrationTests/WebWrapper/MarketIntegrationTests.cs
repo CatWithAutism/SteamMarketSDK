@@ -1,5 +1,6 @@
 using FluentAssertions;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
+using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Implementations;
@@ -179,5 +180,27 @@ public class MarketIntegrationTests : IClassFixture<SteamHttpClientFixture>
 
         cancelBuyOrder.Should().NotBeNull();
         cancelBuyOrder.Success.Should().Be(1);
+    }
+    
+    
+    [Fact]
+    public async Task CreateSellOrderTestFailed()
+    {
+        var accountInfo = await MarketWrapper.CollectMarketAccountInfo(CancellationToken.None);
+
+        accountInfo.Should().NotBeNull();
+        accountInfo.Success.Should().Be(1);
+
+        const long appId = 730;
+        const long contextId = 2;
+        const long assetId = 30000;
+        const long price = 10000;
+        const long quantity = 1;
+        
+        var createSellOrderRequest = new CreateSellOrderRequest(appId, contextId, assetId, price, quantity);
+        var sellOrder = await MarketWrapper.CreateSellOrder(createSellOrderRequest, CancellationToken.None);
+
+        sellOrder.Should().NotBeNull();
+        sellOrder.Success.Should().BeFalse();
     }
 }

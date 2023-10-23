@@ -2,6 +2,7 @@ using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
+using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
@@ -55,4 +56,9 @@ public interface IMarketWrapper : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
     Task<PriceHistoryResponse?> GetPriceHistory(long appId, string marketHashName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Request to create sell order.
+    /// </summary>
+    Task<CreateSellOrderResponse?> CreateSellOrder(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken);
 }
