@@ -7,7 +7,7 @@ namespace SteamWebWrapper.Contracts.Entities.Inventory;
 public class InventoryAssetDescription
 {
     [JsonPropertyName("appid")]
-    public long Appid { get; set; }
+    public long AppId { get; set; }
 
     [JsonPropertyName("classid")]
     public long ClassId { get; set; }

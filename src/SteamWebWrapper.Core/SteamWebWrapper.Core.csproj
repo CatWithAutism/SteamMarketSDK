@@ -4,6 +4,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
 
@@ -21,6 +22,7 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\SteamWebWrapper.Core.SteamGuard\SteamWebWrapper.Core.SteamGuard.csproj" />
       <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj" />
       <ProjectReference Include="..\SteamWebWrapper.Contracts\SteamWebWrapper.Contracts.csproj" />
     </ItemGroup>
@@ -31,6 +33,7 @@
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="SteamKit2" Version="2.5.0-Beta.1" />
     </ItemGroup>
 
 

@@ -8,11 +8,13 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <UserSecretsId>3d1b9802-db3a-4e7c-920c-676ab09cfdf2</UserSecretsId>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
         <PackageReference Include="xunit" Version="2.4.2"/>
@@ -28,7 +30,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\SteamAuth\SteamAuth.csproj" />
+      <ProjectReference Include="..\..\src\SteamWebWrapper.Core.SteamGuard\SteamWebWrapper.Core.SteamGuard.csproj" />
       <ProjectReference Include="..\..\src\SteamWebWrapper.Core\SteamWebWrapper.Core.csproj" />
       <ProjectReference Include="..\..\src\SteamWebWrapper\SteamWebWrapper.csproj" />
     </ItemGroup>

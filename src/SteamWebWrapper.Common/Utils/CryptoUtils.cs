@@ -31,4 +31,15 @@ public static class CryptoUtils
     }
     
     public static string ConvertToBase64String(byte[] data) => Convert.ToBase64String(data);
+    
+    public static string GetRandomHexNumber(int digits)
+    {
+        var random = new Random();
+        var buffer = new byte[digits / 2];
+        random.NextBytes(buffer);
+        var result = String.Concat(buffer.Select(x => x.ToString("X2")).ToArray());
+        if (digits % 2 == 0)
+            return result;
+        return result + random.Next(16).ToString("X");
+    }
 }

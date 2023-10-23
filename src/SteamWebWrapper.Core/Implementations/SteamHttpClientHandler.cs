@@ -4,7 +4,6 @@ public class SteamHttpClientHandler : DelegatingHandler
 {
     public string? SteamCountry { get; private set; }
     public string? SessionId { get; private set; }
-    public string? BrowserId { get; private set; }
     public string? SteamLoginSecure { get; private set; }
     
     public SteamHttpClientHandler(HttpClientHandler clientHandler) : base(clientHandler)
@@ -14,7 +13,7 @@ public class SteamHttpClientHandler : DelegatingHandler
     protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var responseMessage = base.Send(request, cancellationToken);
-        RefreshSessionData(request.RequestUri!);
+        UpdateSessionData(request.RequestUri!);
         
         return responseMessage;
     }
@@ -22,12 +21,12 @@ public class SteamHttpClientHandler : DelegatingHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var responseMessage = await base.SendAsync(request, cancellationToken);
-        RefreshSessionData(request.RequestUri!);
+        UpdateSessionData(request.RequestUri!);
         
         return responseMessage;
     }
 
-    private void RefreshSessionData(Uri uri)
+    private void UpdateSessionData(Uri uri)
     {
         if (InnerHandler is not HttpClientHandler httpClientHandler)
         {
@@ -37,7 +36,6 @@ public class SteamHttpClientHandler : DelegatingHandler
         var cookieCollection = httpClientHandler.CookieContainer.GetCookies(uri);
         SteamCountry = cookieCollection["steamCountry"]?.Value;
         SessionId = cookieCollection["sessionid"]?.Value;
-        BrowserId = cookieCollection["browserid"]?.Value;
         SteamLoginSecure = cookieCollection["steamLoginSecure"]?.Value;
     }
 }

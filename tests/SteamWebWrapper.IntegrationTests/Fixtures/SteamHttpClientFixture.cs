@@ -1,60 +1,55 @@
+using System.Collections.Specialized;
 using System.Net;
 using System.Text.Json;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using SteamKit2.Authentication;
+using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Implementations;
 using SteamWebWrapper.Core.Interfaces;
+using SteamWebWrapper.SteamGuard;
 
 namespace SteamWebWrapper.IntegrationTests.Fixtures;
 
 public class SteamHttpClientFixture : IDisposable
 {
-    private IConfiguration Configuration { get; } = new ConfigurationBuilder()
+        
+    public ISteamHttpClient SteamHttpClient { get; private set; }
+    
+    private static IConfiguration Configuration { get; } = new ConfigurationBuilder()
         .AddUserSecrets<SteamHttpClientFixture>()
+        .AddEnvironmentVariables()
         .Build();
     
     public SteamHttpClientFixture()
     {
-        const string baseUrl = "https://steamcommunity.com/";
+        var twoFactor = Configuration["twoFactor"];
+        var serializedSteamGuard = Configuration["steamGuard"];
         
-        var cookieContainer = new CookieContainer();
-        
-        if (bool.TryParse(Configuration["useCookie"], out var useCookie) && useCookie)
-        {
-            var serializedCookieCollection = Configuration["cookieCollection"] ?? throw new InvalidOperationException();
-            var cookieCollection = JsonSerializer.Deserialize<CookieCollection>(serializedCookieCollection) ?? throw new InvalidOperationException();
-            cookieContainer.Add(cookieCollection);
-        }
-        
+        ISteamGuardAuthenticator? steamGuardAuthenticator = twoFactor.IsNullOrEmpty() 
+            ? JsonSerializer.Deserialize<SteamGuardAuthenticator>(serializedSteamGuard)
+            : new SteamGuardTestAuthenticator();
+
+
         var httpClientHandler = new HttpClientHandler
         {
-            CookieContainer = cookieContainer,
+            CookieContainer = new CookieContainer(),
             UseCookies = true,
             AutomaticDecompression = DecompressionMethods.All,
         };
 
         var steamHttpClientHandler = new SteamHttpClientHandler(httpClientHandler);
-        
-        if (useCookie)
-        {
-            SteamHttpClient = new SteamHttpClient(baseUrl, steamHttpClientHandler);
-            return;
-        }
 
-        var steamHttpClient = new SteamHttpClient(baseUrl, steamHttpClientHandler);
+        var steamHttpClient = new SteamHttpClient(steamHttpClientHandler);
         var steamAuthCredentials = new SteamAuthCredentials()
         {
             Login = Configuration["username"] ?? throw new InvalidOperationException(),
             Password = Configuration["password"] ?? throw new InvalidOperationException(),
             MachineName = Configuration["machineName"] ?? $"PrettyPC-{Guid.NewGuid()}",
-            TwoFactor = Configuration["twofactor"] ?? string.Empty,
+            
         };
 
-        var steamAuthResult = steamHttpClient.Authorize(steamAuthCredentials, CancellationToken.None).GetAwaiter().GetResult();
-        
-        steamAuthResult.Should().NotBeNull();
-        steamAuthResult.Success.Should().BeTrue();
+        steamHttpClient.AuthorizeViaOAuth(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
 
         SteamHttpClient = steamHttpClient;
     }
@@ -63,6 +58,100 @@ public class SteamHttpClientFixture : IDisposable
     {
         SteamHttpClient.Dispose();
     }
-    
-    public ISteamHttpClient SteamHttpClient { get; private set; }
+
+    private class SteamGuardTestAuthenticator : ISteamGuardAuthenticator
+    {
+        public Task<string> GetDeviceCodeAsync(bool previousCodeWasIncorrect)
+        {
+            return Task.FromResult(Configuration["twofactor"] ?? throw new InvalidOperationException("Cannot use test authenticator because two factor is null."));
+        }
+
+        public Task<string> GetEmailCodeAsync(string email, bool previousCodeWasIncorrect)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AcceptDeviceConfirmationAsync()
+        {
+            return Task.FromResult(false);
+        }
+
+        public string SharedSecret { get; set; }
+        public string SerialNumber { get; set; }
+        public string RevocationCode { get; set; }
+        public string Uri { get; set; }
+        public long ServerTime { get; set; }
+        public string AccountName { get; set; }
+        public string TokenGid { get; set; }
+        public string IdentitySecret { get; set; }
+        public string Secret1 { get; set; }
+        public int Status { get; set; }
+        public string DeviceId { get; set; }
+        public bool FullyEnrolled { get; set; }
+        public SessionData Session { get; set; }
+        public Task<bool> DeactivateAuthenticator(int scheme = 1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateSteamGuardCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GenerateSteamGuardCodeAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateSteamGuardCodeForTime(long time)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Confirmation[] FetchConfirmations()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Confirmation[]> FetchConfirmationsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AcceptMultipleConfirmations(Confirmation[] confs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DenyMultipleConfirmations(Confirmation[] confs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AcceptConfirmation(Confirmation conf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DenyConfirmation(Confirmation conf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateConfirmationUrl(string tag = "conf")
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateConfirmationQueryParams(string tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public NameValueCollection GenerateConfirmationQueryParamsAsNvc(string tag)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

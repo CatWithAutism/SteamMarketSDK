@@ -1,0 +1,468 @@
+{
+  "success": true,
+  "pagesize": 20,
+  "total_count": 1,
+  "assets": {
+    "730": {
+      "2": {
+        "34177905801": {
+          "currency": 0,
+          "appid": 730,
+          "contextid": "2",
+          "id": "34177905801",
+          "classid": "5575423658",
+          "instanceid": "302028390",
+          "amount": "1",
+          "status": 2,
+          "original_amount": "1",
+          "unowned_id": "34177905801",
+          "unowned_contextid": "2",
+          "background_color": "",
+          "icon_url": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhz3MzbcDNG09GzkImemrmkMeuEzjwB7sMgjL_H8d6hilbs_0c5Ym6lI9WddVc2MgyB-FXtl7q6m9bi65jdplfl",
+          "icon_url_large": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhz3MzbcDNG09GzkImemsj4MqnWkyUB6pUk0r6R84qkjgKyr0FoMTv7IILAcwFoZgvY_QC2krq-h5Lv6smc1zI97WWh0fYG",
+          "descriptions": [
+            {
+              "type": "html",
+              "value": "Exterior: Field-Tested"
+            },
+            {
+              "type": "html",
+              "value": " "
+            },
+            {
+              "type": "html",
+              "value": "A low-recoil firearm with a high rate of fire, the P250 is a relatively inexpensive choice against armored opponents. It has individual parts spray-painted solid colors in a sand dune color scheme.\n\n<i>With Turner dead, we have a new priority: rescue Alex Kincaide - Felix Riley, Commanding Officer</i>"
+            },
+            {
+              "type": "html",
+              "value": " "
+            },
+            {
+              "type": "html",
+              "value": "The Dust 2 Collection",
+              "color": "9da1a9"
+            },
+            {
+              "type": "html",
+              "value": " "
+            }
+          ],
+          "tradable": 0,
+          "actions": [
+            {
+              "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M4383750158119124766A%assetid%D7387289480712831306",
+              "name": "Inspect in Game..."
+            }
+          ],
+          "owner_descriptions": [
+            {
+              "type": "html",
+              "value": " "
+            },
+            {
+              "type": "html",
+              "value": "Tradable After Oct 30, 2023 (7:00:00) GMT",
+              "color": "ff4040"
+            }
+          ],
+          "name": "P250 | Sand Dune",
+          "name_color": "D2D2D2",
+          "type": "Consumer Grade Pistol",
+          "market_name": "P250 | Sand Dune (Field-Tested)",
+          "market_hash_name": "P250 | Sand Dune (Field-Tested)",
+          "market_actions": [
+            {
+              "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M4383750158119124766A%assetid%D7387289480712831306",
+              "name": "Inspect in Game..."
+            }
+          ],
+          "commodity": 0,
+          "market_tradable_restriction": 7,
+          "marketable": 1,
+          "app_icon": "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/730/8dbc71957312bbd3baea65848b545be9eae2a355.jpg",
+          "owner": 0
+        }
+      }
+    }
+  },
+  "start": 0,
+  "num_active_listings": 1,
+  "listings": [
+    {
+      "listingid": "4383750158119124766",
+      "time_created": 1697998389,
+      "asset": {
+        "currency": 0,
+        "appid": 730,
+        "contextid": "2",
+        "id": "34177905801",
+        "classid": "5575423658",
+        "instanceid": "302028390",
+        "amount": "1",
+        "status": 2,
+        "original_amount": "1",
+        "unowned_id": "34177905801",
+        "unowned_contextid": "2",
+        "background_color": "",
+        "icon_url": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhz3MzbcDNG09GzkImemrmkMeuEzjwB7sMgjL_H8d6hilbs_0c5Ym6lI9WddVc2MgyB-FXtl7q6m9bi65jdplfl",
+        "icon_url_large": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhz3MzbcDNG09GzkImemsj4MqnWkyUB6pUk0r6R84qkjgKyr0FoMTv7IILAcwFoZgvY_QC2krq-h5Lv6smc1zI97WWh0fYG",
+        "descriptions": [
+          {
+            "type": "html",
+            "value": "Exterior: Field-Tested"
+          },
+          {
+            "type": "html",
+            "value": " "
+          },
+          {
+            "type": "html",
+            "value": "A low-recoil firearm with a high rate of fire, the P250 is a relatively inexpensive choice against armored opponents. It has individual parts spray-painted solid colors in a sand dune color scheme.\n\n<i>With Turner dead, we have a new priority: rescue Alex Kincaide - Felix Riley, Commanding Officer</i>"
+          },
+          {
+            "type": "html",
+            "value": " "
+          },
+          {
+            "type": "html",
+            "value": "The Dust 2 Collection",
+            "color": "9da1a9"
+          },
+          {
+            "type": "html",
+            "value": " "
+          }
+        ],
+        "tradable": 0,
+        "actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S%owner_steamid%A%assetid%D7387289480712831306",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "owner_descriptions": [
+          {
+            "type": "html",
+            "value": " "
+          },
+          {
+            "type": "html",
+            "value": "Tradable After Oct 30, 2023 (7:00:00) GMT",
+            "color": "ff4040"
+          }
+        ],
+        "name": "P250 | Sand Dune",
+        "name_color": "D2D2D2",
+        "type": "Consumer Grade Pistol",
+        "market_name": "P250 | Sand Dune (Field-Tested)",
+        "market_hash_name": "P250 | Sand Dune (Field-Tested)",
+        "market_actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M%listingid%A%assetid%D7387289480712831306",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "commodity": 0,
+        "market_tradable_restriction": 7,
+        "marketable": 1
+      },
+      "steamid_lister": "76561198040697804",
+      "price": 1305,
+      "original_price": 1305,
+      "fee": 195,
+      "currencyid": "2037",
+      "converted_price": 1305,
+      "converted_fee": 195,
+      "converted_currencyid": "2037",
+      "status": 1,
+      "active": 1,
+      "steam_fee": 65,
+      "converted_steam_fee": 65,
+      "publisher_fee": 130,
+      "converted_publisher_fee": 130,
+      "publisher_fee_percent": "0.100000001490116119",
+      "publisher_fee_app": 730,
+      "cancel_reason": 0,
+      "item_expired": 0,
+      "original_amount_listed": 1,
+      "original_price_per_unit": 1305,
+      "fee_per_unit": 195,
+      "steam_fee_per_unit": 65,
+      "publisher_fee_per_unit": 130,
+      "converted_price_per_unit": 1305,
+      "converted_fee_per_unit": 195,
+      "converted_steam_fee_per_unit": 65,
+      "converted_publisher_fee_per_unit": 130,
+      "time_finish_hold": 0,
+      "time_created_str": "22 Oct"
+    }
+  ],
+  "listings_on_hold": [],
+  "listings_to_confirm": [],
+  "buy_orders": [
+    {
+      "appid": 730,
+      "hash_name": "P2000 | Lifted Spirits (Well-Worn)",
+      "wallet_currency": 37,
+      "price": "2834",
+      "quantity": "20",
+      "quantity_remaining": "20",
+      "buy_orderid": "6579193752",
+      "description": {
+        "appid": 730,
+        "classid": "4717334839",
+        "instanceid": "0",
+        "currency": 0,
+        "background_color": "",
+        "icon_url": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovrG1eVcwg8zLZAJSvteJkoySnvnzDL_Dk2pc18h0juDU-MKh21Hs_BZrY2vyIYKQdwJvNwzQ-VS5le_n08S-7snNyXJjuyMr4yzdgVXp1mZ0gvmF",
+        "icon_url_large": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovrG1eVcwg8zLZAJSvteJkoySnvnzDL_Dk2pc18h0juDU-LP5iUazrl1oYDz7I9OScgQ_ZFzV_1Xvl7rvhpO76JzBnyBh6HQm5X_dnha-h0tMcKUx0iaR7m8f",
+        "descriptions": [
+          {
+            "type": "html",
+            "value": "Exterior: Well-Worn",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": "Accurate and controllable, the German-made P2000 is a serviceable first-round pistol that works best against unarmored opponents. It has been custom painted with a forest beneath ascending bodies.\n\n<i>Many lost souls do not wish to be found</i>",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": "The Dreams & Nightmares Collection",
+            "color": "9da1a9",
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          }
+        ],
+        "tradable": 1,
+        "actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S%owner_steamid%A%assetid%D7496283834354929344",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "owner_descriptions": [],
+        "owner_actions": [],
+        "fraudwarnings": [],
+        "name": "P2000 | Lifted Spirits",
+        "name_color": "D2D2D2",
+        "type": "Mil-Spec Grade Pistol",
+        "market_name": "P2000 | Lifted Spirits (Well-Worn)",
+        "market_hash_name": "P2000 | Lifted Spirits (Well-Worn)",
+        "market_fee": null,
+        "market_fee_app": null,
+        "contained_item": null,
+        "market_actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M%listingid%A%assetid%D7496283834354929344",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "commodity": 0,
+        "market_tradable_restriction": 7,
+        "market_marketable_restriction": null,
+        "marketable": 1,
+        "tags": [],
+        "item_expiration": null,
+        "market_buy_country_restriction": null,
+        "market_sell_country_restriction": null
+      }
+    },
+    {
+      "appid": 730,
+      "hash_name": "P250 | Sand Dune (Field-Tested)",
+      "wallet_currency": 37,
+      "price": "700",
+      "quantity": "200",
+      "quantity_remaining": "131",
+      "buy_orderid": "6589208210",
+      "description": {
+        "appid": 730,
+        "classid": "241581542",
+        "instanceid": "0",
+        "currency": 0,
+        "background_color": "",
+        "icon_url": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhz3MzbcDNG09GzkImemrmkMeuEzjwB7sMgjL_H8d6hilbs_0c5Ym6lI9WddVc2MgyB-FXtl7q6m9bi65jdplfl",
+        "icon_url_large": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhz3MzbcDNG09GzkImemsj4MqnWkyUB6pUk0r6R84qkjgKyr0FoMTv7IILAcwFoZgvY_QC2krq-h5Lv6smc1zI97WWh0fYG",
+        "descriptions": [
+          {
+            "type": "html",
+            "value": "Exterior: Field-Tested",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": "A low-recoil firearm with a high rate of fire, the P250 is a relatively inexpensive choice against armored opponents. It has individual parts spray-painted solid colors in a sand dune color scheme.\n\n<i>With Turner dead, we have a new priority: rescue Alex Kincaide - Felix Riley, Commanding Officer</i>",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": "The Dust 2 Collection",
+            "color": "9da1a9",
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          }
+        ],
+        "tradable": 1,
+        "actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S%owner_steamid%A%assetid%D9512843660167652128",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "owner_descriptions": [],
+        "owner_actions": [],
+        "fraudwarnings": [],
+        "name": "P250 | Sand Dune",
+        "name_color": "D2D2D2",
+        "type": "Consumer Grade Pistol",
+        "market_name": "P250 | Sand Dune (Field-Tested)",
+        "market_hash_name": "P250 | Sand Dune (Field-Tested)",
+        "market_fee": null,
+        "market_fee_app": null,
+        "contained_item": null,
+        "market_actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M%listingid%A%assetid%D9512843660167652128",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "commodity": 0,
+        "market_tradable_restriction": 7,
+        "market_marketable_restriction": null,
+        "marketable": 1,
+        "tags": [],
+        "item_expiration": null,
+        "market_buy_country_restriction": null,
+        "market_sell_country_restriction": null
+      }
+    },
+    {
+      "appid": 730,
+      "hash_name": "MAC-10 | Ensnared (Field-Tested)",
+      "wallet_currency": 37,
+      "price": "3366",
+      "quantity": "85",
+      "quantity_remaining": "85",
+      "buy_orderid": "6604528925",
+      "description": {
+        "appid": 730,
+        "classid": "4717332969",
+        "instanceid": "0",
+        "currency": 0,
+        "background_color": "",
+        "icon_url": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou7umeldf0Ob3fDxBvYyJhImTnvLLPr7Vn35cppN1i-iW8I2k3gC3-hdpYjv0JYOdJAY5Mw6F-VS6w-zv1Ja1tcjMmHp9-n51xWEz6Qs",
+        "icon_url_large": "-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou7umeldf0Ob3fDxBvYyJhImTnvLLPr7Vn35c18lwmO7Eu9rxiVXjrhJtZW2gJdKQc1Q5YF3YrFG5k7i6hpO4vp_JmHJqs3UntHfD30vg5GSX_Ic",
+        "descriptions": [
+          {
+            "type": "html",
+            "value": "Exterior: Field-Tested",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": "Essentially a box that bullets come out of, the MAC-10 SMG boasts a high rate of fire, with poor spread accuracy and high recoil as trade-offs. A custom paint job of pixies, trapped inside the weapon and eager to escape, has been applied.\n\n<i>They have yet to find someone they cannot fool</i>",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": "The Dreams & Nightmares Collection",
+            "color": "9da1a9",
+            "label": null
+          },
+          {
+            "type": "html",
+            "value": " ",
+            "color": null,
+            "label": null
+          }
+        ],
+        "tradable": 1,
+        "actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S%owner_steamid%A%assetid%D11574931563873643233",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "owner_descriptions": [],
+        "owner_actions": [],
+        "fraudwarnings": [],
+        "name": "MAC-10 | Ensnared",
+        "name_color": "D2D2D2",
+        "type": "Mil-Spec Grade SMG",
+        "market_name": "MAC-10 | Ensnared (Field-Tested)",
+        "market_hash_name": "MAC-10 | Ensnared (Field-Tested)",
+        "market_fee": null,
+        "market_fee_app": null,
+        "contained_item": null,
+        "market_actions": [
+          {
+            "link": "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M%listingid%A%assetid%D11574931563873643233",
+            "name": "Inspect in Game..."
+          }
+        ],
+        "commodity": 0,
+        "market_tradable_restriction": 7,
+        "market_marketable_restriction": null,
+        "marketable": 1,
+        "tags": [],
+        "item_expiration": null,
+        "market_buy_country_restriction": null,
+        "market_sell_country_restriction": null
+      }
+    }
+  ]
+}

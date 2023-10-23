@@ -16,7 +16,7 @@ public class InventoryWrapper : IInventoryWrapper
     
     public async Task<InventoryResponse?> GetInventory(string steamId, uint appId, uint assetId, string language, int count)
     {
-        var requestUri = $"/inventory/{steamId}/{appId}/{assetId}?l={language}&count={count}&norender=true";
+        var requestUri = $"https://steamcommunity.com/inventory/{steamId}/{appId}/{assetId}?l={language}&count={count}&norender=true";
         
         var response = await _steamHttpClient.GetAsync(requestUri);
         response.EnsureSuccessStatusCode();

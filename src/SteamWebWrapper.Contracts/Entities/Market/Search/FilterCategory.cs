@@ -5,7 +5,7 @@ namespace SteamWebWrapper.Contracts.Entities.Market.Search;
 public class FilterCategory
 {
     [JsonPropertyName("appid")]
-    public long Appid { get; set; }
+    public long AppId { get; set; }
 
     [JsonPropertyName("name")]
     public required string Name { get; set; }
