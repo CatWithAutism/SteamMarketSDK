@@ -13,7 +13,7 @@ public class MyHistoryPurchase
     public long PurchaseId { get; set; }
 
     [JsonPropertyName("time_sold")]
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonConverter(typeof(TimestampToDateConverter))]
     public DateTime TimeSold { get; set; }
 
     [JsonPropertyName("steamid_purchaser")]
@@ -70,7 +70,7 @@ public class MyHistoryPurchase
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("time_funds_held_until")]
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonConverter(typeof(TimestampToDateConverter))]
     public DateTime? TimeFundsHeldUntil { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
