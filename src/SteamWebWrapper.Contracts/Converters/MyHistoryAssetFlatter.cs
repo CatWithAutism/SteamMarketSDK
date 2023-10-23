@@ -16,7 +16,7 @@ internal class MyHistoryAssetFlatter : JsonConverter<List<MyHistoryAsset>>
         var value = jsonDoc.RootElement.GetRawText();
         if (value.IsNullOrEmpty())
         {
-            throw new ArgumentNullException(nameof(value), $"Value of reader is null or empty.");
+            throw new ArgumentNullException(nameof(value), "Value of reader is null or empty.");
         }
         
         var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, MyHistoryAsset>>>>(value, options);

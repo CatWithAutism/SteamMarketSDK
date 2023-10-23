@@ -104,7 +104,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         while (!steamClient.IsConnected)
             await Task.Delay(500);
 
-        var authSession = await steamClient.Authentication.BeginAuthSessionViaCredentialsAsync(new AuthSessionDetails()
+        var authSession = await steamClient.Authentication.BeginAuthSessionViaCredentialsAsync(new AuthSessionDetails
         {
             Username = credentials.Login,
             Password = credentials.Password,

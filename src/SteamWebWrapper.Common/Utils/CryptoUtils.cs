@@ -19,8 +19,8 @@ public static class CryptoUtils
         var rsa = new RSACryptoServiceProvider();
         var rsaParameters = new RSAParameters
         {
-            Exponent = CryptoUtils.HexToByteArray(publicKeyExp),
-            Modulus = CryptoUtils.HexToByteArray(publicKeyMod)
+            Exponent = HexToByteArray(publicKeyExp),
+            Modulus = HexToByteArray(publicKeyMod)
         };
 
         rsa.ImportParameters(rsaParameters);

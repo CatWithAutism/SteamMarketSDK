@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -86,7 +85,7 @@ public class MarketWrapper : IMarketWrapper
     {
         string requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?sessionid={_steamHttpClient.SessionId}&buy_orderid={buyOrderId}";
 
-        var request = new HttpRequestMessage()
+        var request = new HttpRequestMessage
         {
             RequestUri = new Uri(requestUri),
             Method = HttpMethod.Get,
@@ -128,7 +127,7 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="cancellationToken">Cancellation token</param>
     public async Task<CreateBuyOrderResponse?> CreateBuyOrder(CreateBuyOrderRequest createBuyOrderRequest, CancellationToken cancellationToken)
     {
-        const string requestUri = $"https://steamcommunity.com/market/createbuyorder/";
+        const string requestUri = "https://steamcommunity.com/market/createbuyorder/";
         string urlEncodedHashName = HttpUtility.UrlEncode(createBuyOrderRequest.MarketHashName); 
         
         var content = new FormUrlEncodedContent(new []
@@ -143,7 +142,7 @@ public class MarketWrapper : IMarketWrapper
             new KeyValuePair<string, string>("save_my_address", "0"),
         });
         
-        var request = new HttpRequestMessage()
+        var request = new HttpRequestMessage
         {
             RequestUri = new Uri(requestUri),
             Method = HttpMethod.Post,
@@ -165,7 +164,7 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="cancellationToken">Cancellation token</param>
     public async Task<CancelBuyOrderResponse?> CancelBuyOrder(long buyOrderId, CancellationToken cancellationToken)
     {
-        const string requestUri = $"https://steamcommunity.com/market/cancelbuyorder/";
+        const string requestUri = "https://steamcommunity.com/market/cancelbuyorder/";
         
         var content = new FormUrlEncodedContent(new []
         {
@@ -173,14 +172,14 @@ public class MarketWrapper : IMarketWrapper
             new KeyValuePair<string, string>("buy_orderid", buyOrderId.ToString()),
         });
         
-        var request = new HttpRequestMessage()
+        var request = new HttpRequestMessage
         {
             RequestUri = new Uri(requestUri),
             Method = HttpMethod.Post,
             Content = content,
         };
         
-        request.Headers.Referrer = new Uri($"https://steamcommunity.com/market/");
+        request.Headers.Referrer = new Uri("https://steamcommunity.com/market/");
         
         var response = await _steamHttpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();

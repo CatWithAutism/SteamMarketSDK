@@ -2,7 +2,6 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
-using SteamKit2.Authentication;
 using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Implementations;
@@ -41,7 +40,7 @@ public class SteamHttpClientFixture : IDisposable
         var steamHttpClientHandler = new SteamHttpClientHandler(httpClientHandler);
 
         var steamHttpClient = new SteamHttpClient(steamHttpClientHandler);
-        var steamAuthCredentials = new SteamAuthCredentials()
+        var steamAuthCredentials = new SteamAuthCredentials
         {
             Login = Configuration["username"] ?? throw new InvalidOperationException(),
             Password = Configuration["password"] ?? throw new InvalidOperationException(),

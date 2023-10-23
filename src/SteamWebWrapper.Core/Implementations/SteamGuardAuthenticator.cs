@@ -24,7 +24,7 @@ public class SteamGuardAuthenticator : SteamGuardAccount, ISteamGuardAuthenticat
 
     public async Task<bool> AcceptDeviceConfirmationAsync()
     {
-        var confirmations = await this.FetchConfirmationsAsync();
+        var confirmations = await FetchConfirmationsAsync();
 
         var confirmation = confirmations?.FirstOrDefault(t => t.ConfType == Confirmation.EMobileConfirmationType.FeatureOptOut);
         if (confirmation == null)

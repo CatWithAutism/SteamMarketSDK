@@ -16,7 +16,7 @@ internal class PeriodPriceConverter : JsonConverter<List<PriceHistoryPeriodPrice
         var value = jsonDoc.RootElement.GetRawText();
         if (value.IsNullOrEmpty())
         {
-            throw new ArgumentNullException(nameof(value), $"Value of reader is null or empty.");
+            throw new ArgumentNullException(nameof(value), "Value of reader is null or empty.");
         }
         
         var data = JsonSerializer.Deserialize<List<List<object>>>(value, options);
@@ -25,7 +25,7 @@ internal class PeriodPriceConverter : JsonConverter<List<PriceHistoryPeriodPrice
             throw new ArgumentException($"We cannot serialize this data - {value}");
         }
         
-        var periodPrices = data.Select(periodData => new PriceHistoryPeriodPrice()
+        var periodPrices = data.Select(periodData => new PriceHistoryPeriodPrice
         {
             Period = DateTime.ParseExact(periodData[0].ToString(), "MMM dd yyyy HH: z", CultureInfo.InvariantCulture),
             Price = float.Parse(periodData[1].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture),

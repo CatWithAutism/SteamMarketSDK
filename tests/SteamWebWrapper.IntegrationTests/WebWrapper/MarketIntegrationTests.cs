@@ -1,5 +1,4 @@
 using FluentAssertions;
-using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Core.Interfaces;
