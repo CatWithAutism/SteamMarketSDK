@@ -1,25 +1,28 @@
 using FluentAssertions;
-using SteamWebWrapper.Contracts.Entities.Account;
+using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
+using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Implementations;
 using SteamWebWrapper.IntegrationTests.Fixtures;
+using SteamWebWrapper.Interfaces;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace SteamWebWrapper.IntegrationTests.WebWrapper;
 
-public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
+public class MarketIntegrationTests : IClassFixture<SteamHttpClientFixture>
 {
+    private  ITestOutputHelper TestOutputHelper { get; set; }
     private ISteamHttpClient SteamHttpClient { get; set; }
 
-    private MarketWrapper MarketWrapper { get; set; }
+    private IMarketWrapper MarketWrapper { get; set; }
 
-    private InventoryWrapper InventoryWrapper { get; set; }
-
-    private AccountInfo? AccountInfo { get; set; }
+    private IInventoryWrapper InventoryWrapper { get; set; }
     
-    public SteamIntegrationTests(SteamHttpClientFixture steamHttpClientFixture)
+    public MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixture, ITestOutputHelper testOutputHelper)
     {
+        TestOutputHelper = testOutputHelper;
         SteamHttpClient = steamHttpClientFixture.SteamHttpClient;
         InventoryWrapper = new InventoryWrapper(steamHttpClientFixture.SteamHttpClient);
         MarketWrapper = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
@@ -28,10 +31,10 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
     [Fact]
     public async Task CollectMarketAccountInfoTest()
     {
-        AccountInfo = await MarketWrapper.CollectMarketAccountInfo(CancellationToken.None);
+        var accountInfo = await MarketWrapper.CollectMarketAccountInfo(CancellationToken.None);
 
-        AccountInfo.Should().NotBeNull();
-        AccountInfo.Success.Should().Be(1);
+        accountInfo.Should().NotBeNull();
+        accountInfo.Success.Should().Be(1);
     }
     
     [Fact]
@@ -110,5 +113,56 @@ public class SteamIntegrationTests : IClassFixture<SteamHttpClientFixture>
 
         priceResponse.Should().NotBeNull();
         priceResponse.Success.Should().BeTrue();
+    }
+    
+    [Fact]
+    public async Task CreateAndCancelBuyOrderTest()
+    {
+        var accountInfo = await MarketWrapper.CollectMarketAccountInfo(CancellationToken.None);
+
+        accountInfo.Should().NotBeNull();
+        accountInfo.Success.Should().Be(1);
+        if (!accountInfo.MarketAllowed || accountInfo.WalletBalance < 300)
+        {
+            return;
+        }
+        
+        const long offset = 0;
+        const long count = 150;
+        var marketHistory = await MarketWrapper.GetMyListings(offset, count, CancellationToken.None);
+        
+        marketHistory.Should().NotBeNull();
+        marketHistory.Success.Should().BeTrue();
+        
+        const long appId = 730;
+        const long priceTotal = 300;
+        const long quantity = 1;
+        const string marketHashName = "P250 | Sand Dune (Field-Tested)";
+        if (marketHistory.BuyOrders.Count > 0)
+        {
+            marketHistory.Assets.Should().NotBeNullOrEmpty();
+
+            var existingOrder = marketHistory.BuyOrders.FirstOrDefault(t => t.HashName == marketHashName);
+            if (existingOrder != null)
+            {
+                var cancelExistingOrder = await MarketWrapper.CancelBuyOrder(existingOrder.BuyOrderId, CancellationToken.None);
+
+                cancelExistingOrder.Should().NotBeNull();
+                cancelExistingOrder.Success.Should().Be(1);
+
+                return;
+            }
+        }
+
+        var createBuyOrderRequest = new CreateBuyOrderRequest(appId, marketHashName, accountInfo.WalletCurrency, priceTotal, quantity);
+        var buyOrder = await MarketWrapper.CreateBuyOrder(createBuyOrderRequest, CancellationToken.None);
+
+        buyOrder.Should().NotBeNull();
+        buyOrder.Success.Should().Be(1);
+        
+        var cancelBuyOrder = await MarketWrapper.CancelBuyOrder(buyOrder.BuyOrderId, CancellationToken.None);
+
+        cancelBuyOrder.Should().NotBeNull();
+        cancelBuyOrder.Success.Should().Be(1);
     }
 }

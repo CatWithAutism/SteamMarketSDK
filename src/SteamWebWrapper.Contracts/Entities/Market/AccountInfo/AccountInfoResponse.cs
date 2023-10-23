@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 
-namespace SteamWebWrapper.Contracts.Entities.Account;
+namespace SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class AccountInfo
+public class AccountInfoResponse
 {
     [JsonPropertyName("wallet_currency")]
     public int WalletCurrency { get; set; }
@@ -46,4 +46,8 @@ public class AccountInfo
 
     [JsonPropertyName("rwgrsn")]
     public int Rwgrsn { get; set; }
+    
+    public DateTime? DateCanUseMarket { get; set; }
+    
+    public bool MarketAllowed { get; set; }
 }

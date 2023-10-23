@@ -1,5 +1,7 @@
-using SteamWebWrapper.Contracts.Entities.Account;
+using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
+using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
+using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
@@ -9,7 +11,7 @@ namespace SteamWebWrapper.Interfaces;
 public interface IMarketWrapper : IDisposable
 {
     Task<MyHistoryResponse?> GetMarketHistoryAsync(long offset, long count, CancellationToken cancellationToken);
-    Task<AccountInfo?> CollectMarketAccountInfo(CancellationToken cancellationToken);
+    Task<AccountInfoResponse?> CollectMarketAccountInfo(CancellationToken cancellationToken);
 
     /// <summary>
     /// Returns current listings and buy orders.
@@ -29,4 +31,18 @@ public interface IMarketWrapper : IDisposable
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Price overview response</returns>
     Task<PriceOverviewResponse?> GetItemCurrentPrice(PriceOverviewRequest priceRequest, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Request to cancel buy order.
+    /// </summary>
+    /// <param name="buyOrderId">Buy order id</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    Task<CancelBuyOrderResponse?> CancelBuyOrder(long buyOrderId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Request to create buy order.
+    /// </summary>
+    /// <param name="createBuyOrderRequest">Request.</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    Task<CreateBuyOrderResponse?> CreateBuyOrder(CreateBuyOrderRequest createBuyOrderRequest, CancellationToken cancellationToken);
 }

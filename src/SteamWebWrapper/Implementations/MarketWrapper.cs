@@ -2,8 +2,9 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
-using SteamWebWrapper.Contracts.Entities.Account;
+using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
+using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
@@ -37,7 +38,7 @@ public class MarketWrapper : IMarketWrapper
         return JsonSerializer.Deserialize<MyHistoryResponse>(stringResponse);
     }
     
-    public async Task<AccountInfo?> CollectMarketAccountInfo(CancellationToken cancellationToken)
+    public async Task<AccountInfoResponse?> CollectMarketAccountInfo(CancellationToken cancellationToken)
     {
         const string infoPage = "https://steamcommunity.com/market/#";
         
@@ -45,9 +46,22 @@ public class MarketWrapper : IMarketWrapper
         response.EnsureSuccessStatusCode();
 
         var webPage = await response.Content.ReadAsStringAsync(cancellationToken);
+        
         var match = Regex.Match(webPage, @"{\s*\""wallet_currency\""[A-Za-z0-9:\.\s,\""\\_\-]+}");
+        var accountInfo = JsonSerializer.Deserialize<AccountInfoResponse>(match.Value);
+        
+        match = Regex.Match(webPage, @"dateCanUseMarket\s*=\s*new\s*Date\(\""(.+?)\""\)");
+        if (match.Success)
+        {
+            accountInfo.MarketAllowed = false;
+            accountInfo.DateCanUseMarket = DateTime.Parse(match.Groups[1].Value);
+        }
+        else
+        {
+            accountInfo.MarketAllowed = true;
+        }
 
-        return JsonSerializer.Deserialize<AccountInfo>(match.Value);
+        return accountInfo;
     }
 
     /// <summary>
@@ -116,15 +130,18 @@ public class MarketWrapper : IMarketWrapper
     {
         const string requestUri = $"https://steamcommunity.com/market/createbuyorder/";
         string urlEncodedHashName = HttpUtility.UrlEncode(createBuyOrderRequest.MarketHashName); 
-
-        var content = new StringContent($"sessionid={_steamHttpClient.SessionId}&" +
-                                        $"currency={createBuyOrderRequest.Currency}&" +
-                                        $"appid={createBuyOrderRequest.AppId}&" +
-                                        $"market_hash_name={urlEncodedHashName}&" +
-                                        $"price_total={createBuyOrderRequest.PriceTotal}&" +
-                                        $"quantity={createBuyOrderRequest.Quantity}&" +
-                                        "billing_state=&" +
-                                        "save_my_address=0");
+        
+        var content = new FormUrlEncodedContent(new []
+        {
+            new KeyValuePair<string, string>("sessionid", _steamHttpClient.SessionId),
+            new KeyValuePair<string, string>("currency", createBuyOrderRequest.Currency.ToString()),
+            new KeyValuePair<string, string>("appid", createBuyOrderRequest.AppId.ToString()),
+            new KeyValuePair<string, string>("market_hash_name", createBuyOrderRequest.MarketHashName),
+            new KeyValuePair<string, string>("price_total", createBuyOrderRequest.PriceTotal.ToString()),
+            new KeyValuePair<string, string>("quantity", createBuyOrderRequest.Quantity.ToString()),
+            new KeyValuePair<string, string>("billing_state", string.Empty),
+            new KeyValuePair<string, string>("save_my_address", "0"),
+        });
         
         var request = new HttpRequestMessage()
         {
@@ -146,11 +163,15 @@ public class MarketWrapper : IMarketWrapper
     /// </summary>
     /// <param name="buyOrderId">Buy order id</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    public async Task<CreateBuyOrderResponse?> CancelBuyOrder(long buyOrderId, CancellationToken cancellationToken)
+    public async Task<CancelBuyOrderResponse?> CancelBuyOrder(long buyOrderId, CancellationToken cancellationToken)
     {
-        const string requestUri = $"https://steamcommunity.com/market/createbuyorder/";
-
-        var content = new StringContent($"sessionid={_steamHttpClient.SessionId}&buy_orderid={buyOrderId}");
+        const string requestUri = $"https://steamcommunity.com/market/cancelbuyorder/";
+        
+        var content = new FormUrlEncodedContent(new []
+        {
+            new KeyValuePair<string, string>("sessionid", _steamHttpClient.SessionId),
+            new KeyValuePair<string, string>("buy_orderid", buyOrderId.ToString()),
+        });
         
         var request = new HttpRequestMessage()
         {
@@ -158,13 +179,14 @@ public class MarketWrapper : IMarketWrapper
             Method = HttpMethod.Post,
             Content = content,
         };
+        
         request.Headers.Referrer = new Uri($"https://steamcommunity.com/market/");
         
         var response = await _steamHttpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<CreateBuyOrderResponse>(stringResponse);
+        return JsonSerializer.Deserialize<CancelBuyOrderResponse>(stringResponse);
     }
 
     public void Dispose()
