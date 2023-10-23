@@ -7,6 +7,7 @@ using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
+using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Interfaces;
@@ -187,6 +188,25 @@ public class MarketWrapper : IMarketWrapper
         var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
         return JsonSerializer.Deserialize<CancelBuyOrderResponse>(stringResponse);
     }
+
+    /// <summary>
+    /// Returns price history of the market item.
+    /// </summary>
+    /// <param name="appId">Game id</param>
+    /// <param name="marketHashName">Market hash name.</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns></returns>
+    public async Task<PriceHistoryResponse?> GetPriceHistory(long appId, string marketHashName, CancellationToken cancellationToken)
+    {
+        var requestUri = $"https://steamcommunity.com/market/pricehistory?appid={appId}&market_hash_name={HttpUtility.UrlEncode(marketHashName)}";
+        
+        var response = await _steamHttpClient.GetAsync(requestUri, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        return JsonSerializer.Deserialize<PriceHistoryResponse>(stringResponse);
+    }
+
 
     public void Dispose()
     {

@@ -115,13 +115,29 @@ public class MarketIntegrationTests : IClassFixture<SteamHttpClientFixture>
     }
     
     [Fact]
+    public async Task GetPriceHistoryTest()
+    {
+        const long appId = 730;
+        const string marketHashName = "P250 | Sand Dune (Field-Tested)";
+        const int expectedMinCount = 1000;
+        
+        var priceResponse = await MarketWrapper.GetPriceHistory(appId, marketHashName, CancellationToken.None);
+
+        priceResponse.Should().NotBeNull();
+        priceResponse.Success.Should().BeTrue(); 
+        priceResponse.PeriodPrices.Count.Should().BeGreaterThan(expectedMinCount);
+    }
+    
+    [Fact]
     public async Task CreateAndCancelBuyOrderTest()
     {
         var accountInfo = await MarketWrapper.CollectMarketAccountInfo(CancellationToken.None);
 
         accountInfo.Should().NotBeNull();
         accountInfo.Success.Should().Be(1);
-        if (!accountInfo.MarketAllowed || accountInfo.WalletBalance < 300)
+        
+        const long minBalance = 300;
+        if (!accountInfo.MarketAllowed || accountInfo.WalletBalance < minBalance)
         {
             return;
         }

@@ -86,11 +86,13 @@ public class DeserializeTests
     public async Task DeserializePriceHistoryResponseTest()
     {
         const string dataPath = "Data/PriceHistoryResponse.json";
+        const int countPeriodPrices = 4306;
         
         var data = await File.ReadAllTextAsync(dataPath);
         data.Should().NotBeNullOrEmpty();
 
         var marketHistoryResponse = JsonSerializer.Deserialize<PriceHistoryResponse>(data);
         marketHistoryResponse.Should().NotBeNull();
+        marketHistoryResponse.PeriodPrices.Count.Should().Be(countPeriodPrices);
     }
 }
