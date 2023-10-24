@@ -14,9 +14,9 @@ internal class MyListingsAssetFlatter : JsonConverter<List<MyListingsAsset>>
         using var jsonDoc = JsonDocument.ParseValue(ref reader);
 
         var value = jsonDoc.RootElement.GetRawText();
-        if (value.IsNullOrEmpty())
+        if (value.IsNullOrEmpty() || value == "[]")
         {
-            throw new ArgumentNullException(nameof(value), "Value of reader is null or empty.");
+            return new List<MyListingsAsset>();
         }
         
         var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, MyListingsAsset>>>>(value, options);

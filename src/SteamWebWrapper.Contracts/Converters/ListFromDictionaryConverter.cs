@@ -13,9 +13,9 @@ internal class ListFromDictionaryConverter<T> : JsonConverter<List<T>>
         using var jsonDoc = JsonDocument.ParseValue(ref reader);
 
         var value = jsonDoc.RootElement.GetRawText();
-        if (value.IsNullOrEmpty())
+        if (value.IsNullOrEmpty() || value == "[]")
         {
-            throw new ArgumentNullException(nameof(value), "Value of reader is null or empty.");
+            return new List<T>();
         }
         
         var data = JsonSerializer.Deserialize<Dictionary<string, T>>(value, options);

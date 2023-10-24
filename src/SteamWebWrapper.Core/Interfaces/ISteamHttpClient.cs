@@ -13,7 +13,7 @@ public interface ISteamHttpClient
     /// <param name="steamGuardAuthenticator">Authenticator</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A bool containing a value, if the login was successful.</returns>
-    Task AuthorizeViaOAuth(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator,
+    Task AuthorizeViaOAuthAsync(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator,
         CancellationToken? cancellationToken);
     HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken);
     HttpResponseMessage Send(HttpRequestMessage request);
@@ -70,7 +70,7 @@ public interface ISteamHttpClient
     string? AccessToken { get; }
     string? RefreshToken { get; }
     SteamID? SteamId { get; }
-    string? SessionId { get; }
-    string? SteamLoginSecure { get; }
-    string? SteamCountry { get; }
+    string? GetSteamCountry(Uri url);
+    string? GetSessionId(Uri url);
+    string? GetSteamSecureLogin(Uri url);
 }

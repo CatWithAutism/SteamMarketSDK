@@ -61,4 +61,9 @@ public interface IMarketWrapper : IDisposable
     /// Request to create sell order.
     /// </summary>
     Task<CreateSellOrderResponse?> CreateSellOrder(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Request to create sell order.
+    /// </summary>
+    Task<bool> CancelSellOrder(long listingId, CancellationToken cancellationToken);
 }

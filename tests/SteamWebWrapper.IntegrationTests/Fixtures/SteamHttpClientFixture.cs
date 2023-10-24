@@ -37,9 +37,7 @@ public class SteamHttpClientFixture : IDisposable
             AutomaticDecompression = DecompressionMethods.All,
         };
 
-        var steamHttpClientHandler = new SteamHttpClientHandler(httpClientHandler);
-
-        var steamHttpClient = new SteamHttpClient(steamHttpClientHandler);
+        var steamHttpClient = new SteamHttpClient(httpClientHandler);
         var steamAuthCredentials = new SteamAuthCredentials
         {
             Login = Configuration["username"] ?? throw new InvalidOperationException(),
@@ -48,7 +46,7 @@ public class SteamHttpClientFixture : IDisposable
             
         };
 
-        steamHttpClient.AuthorizeViaOAuth(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
+        steamHttpClient.AuthorizeViaOAuthAsync(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
 
         SteamHttpClient = steamHttpClient;
     }
