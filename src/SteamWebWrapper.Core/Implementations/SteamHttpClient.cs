@@ -16,22 +16,19 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     public string? AccessToken { get; private set; }
     public string? RefreshToken { get; private set; }
     public SteamID? SteamId { get; private set; }
-    public string? SessionId => SteamHttpClientHandler.SessionId;
-    public string? SteamLoginSecure => SteamHttpClientHandler.SteamLoginSecure;
-    public string? SteamCountry => SteamHttpClientHandler.SteamCountry;
-    
-    private SteamHttpClientHandler SteamHttpClientHandler { get; set; }
+    private HttpClientHandler HttpClientHandler { get; set; }
     private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }
 
-    public SteamHttpClient(SteamHttpClientHandler steamHttpClientHandler) : base(steamHttpClientHandler)
+    public SteamHttpClient(HttpClientHandler httpClientHandler) : base(httpClientHandler)
     {
-        SteamHttpClientHandler = steamHttpClientHandler;
-        
+        HttpClientHandler = httpClientHandler;
         DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
         DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
         DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
         DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
         DefaultRequestHeaders.Add("Connection", "keep-alive");
+        DefaultRequestHeaders.Add("Origin", "https://steamcommunity.com");
+        DefaultRequestHeaders.Referrer = new Uri($"https://steamcommunity.com/market/");
     }
 
     #region Private
@@ -61,7 +58,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         return rsaJson;
     }
 
-    private async Task ApplyCookies()
+    private async Task EndAuthSession()
     {
         const string finalizeAuthPath = "https://login.steampowered.com/jwt/finalizelogin";
         
@@ -86,11 +83,25 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
                 
             response = await PostAsync(info.Url, postData);
             response.EnsureSuccessStatusCode();
+            
+            HttpClientHandler.CookieContainer.SetCookies(new Uri(info.Url), $"sessionid={sessionId}");
         }
+        
+        HttpClientHandler.CookieContainer.SetCookies(new Uri("https://steamcommunity.com/"), $"sessionid={sessionId}");
+    }
+    
+    private string? GetCookie(Uri url, string name)
+    {
+        var cookies = HttpClientHandler.CookieContainer.GetCookies(url);
+        return cookies[name]?.Value;
     }
     #endregion
 
-    public async Task AuthorizeViaOAuth(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken? cancellationToken)
+    public string? GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
+    public string? GetSessionId(Uri url) => GetCookie(url, "sessionid");
+    public string? GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
+    
+    public async Task AuthorizeViaOAuthAsync(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken? cancellationToken)
     {
         if (steamGuardAuthenticator != null)
         {
@@ -104,7 +115,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         while (!steamClient.IsConnected)
             await Task.Delay(500);
 
-        var authSession = await steamClient.Authentication.BeginAuthSessionViaCredentialsAsync(new AuthSessionDetails()
+        var authSession = await steamClient.Authentication.BeginAuthSessionViaCredentialsAsync(new AuthSessionDetails
         {
             Username = credentials.Login,
             Password = credentials.Password,
@@ -121,6 +132,6 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         RefreshToken = pollResponse.RefreshToken;
         SteamId = authSession.SteamID;
 
-        await ApplyCookies();
+        await EndAuthSession();
     }
 }

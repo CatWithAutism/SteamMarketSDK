@@ -13,7 +13,7 @@ public class MyHistoryEvent
     public MyHistoryEventType EventType { get; set; }
 
     [JsonPropertyName("time_event")]
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonConverter(typeof(TimestampToDateConverter))]
     public DateTime TimeEvent { get; set; }
 
     [JsonPropertyName("time_event_fraction")]

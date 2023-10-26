@@ -4,6 +4,8 @@ using SteamWebWrapper.Contracts.Entities.Inventory;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
+using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
+using SteamWebWrapper.Contracts.Entities.Market.Search;
 using Xunit;
 
 namespace SteamWebWrapper.UnitTests.WebWrapper;
@@ -79,5 +81,32 @@ public class DeserializeTests
         marketHistoryResponse.Should().NotBeNull();
         marketHistoryResponse.Success.Should().Be(1);
         marketHistoryResponse.Purchases.Count.Should().Be(buyOrderCount);
+    }
+    
+    [Fact]
+    public async Task DeserializePriceHistoryResponseTest()
+    {
+        const string dataPath = "Data/PriceHistoryResponse.json";
+        const int countPeriodPrices = 4306;
+        
+        var data = await File.ReadAllTextAsync(dataPath);
+        data.Should().NotBeNullOrEmpty();
+
+        var marketHistoryResponse = JsonSerializer.Deserialize<PriceHistoryResponse>(data);
+        marketHistoryResponse.Should().NotBeNull();
+        marketHistoryResponse.PeriodPrices.Count.Should().Be(countPeriodPrices);
+    }
+    
+    [Fact]
+    public async Task DeserializeSearchResponseTest()
+    {
+        const string dataPath = "Data/SearchResponse.json";
+        
+        var data = await File.ReadAllTextAsync(dataPath);
+        data.Should().NotBeNullOrEmpty();
+
+        var marketHistoryResponse = JsonSerializer.Deserialize<SearchResponse>(data);
+        marketHistoryResponse.Should().NotBeNull();
+        marketHistoryResponse.SearchResult.Should().NotBeNullOrEmpty();
     }
 }

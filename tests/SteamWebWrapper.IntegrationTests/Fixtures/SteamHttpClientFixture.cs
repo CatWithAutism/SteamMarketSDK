@@ -2,7 +2,6 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
-using SteamKit2.Authentication;
 using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Implementations;
@@ -38,10 +37,8 @@ public class SteamHttpClientFixture : IDisposable
             AutomaticDecompression = DecompressionMethods.All,
         };
 
-        var steamHttpClientHandler = new SteamHttpClientHandler(httpClientHandler);
-
-        var steamHttpClient = new SteamHttpClient(steamHttpClientHandler);
-        var steamAuthCredentials = new SteamAuthCredentials()
+        var steamHttpClient = new SteamHttpClient(httpClientHandler);
+        var steamAuthCredentials = new SteamAuthCredentials
         {
             Login = Configuration["username"] ?? throw new InvalidOperationException(),
             Password = Configuration["password"] ?? throw new InvalidOperationException(),
@@ -49,7 +46,7 @@ public class SteamHttpClientFixture : IDisposable
             
         };
 
-        steamHttpClient.AuthorizeViaOAuth(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
+        steamHttpClient.AuthorizeViaOAuthAsync(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
 
         SteamHttpClient = steamHttpClient;
     }

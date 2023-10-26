@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SteamWebWrapper.Contracts.Converters;
 
-internal class DateTimeConverter : JsonConverter<DateTime>
+internal class TimestampToDateConverter : JsonConverter<DateTime>
 {
     public override bool CanConvert(Type t) => t == typeof(DateTime);
 
