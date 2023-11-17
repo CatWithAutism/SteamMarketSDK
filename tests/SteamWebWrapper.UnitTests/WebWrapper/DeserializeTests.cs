@@ -2,6 +2,7 @@ using System.Text.Json;
 using FluentAssertions;
 using SteamWebWrapper.Contracts.Entities.Inventory;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
+using SteamWebWrapper.Contracts.Entities.Market.ItemOrdersActivity;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
@@ -97,16 +98,19 @@ public class DeserializeTests
         marketHistoryResponse.PeriodPrices.Count.Should().Be(countPeriodPrices);
     }
     
+
+    
     [Fact]
-    public async Task DeserializeSearchResponseTest()
+    public async Task DeserializeItemOrdersActivityResponseTest()
     {
-        const string dataPath = "Data/SearchResponse.json";
+        const int expectedActivityCount = 13;
+        const string dataPath = "Data/GetOrderItemActivityResponse.json";
         
         var data = await File.ReadAllTextAsync(dataPath);
         data.Should().NotBeNullOrEmpty();
 
-        var marketHistoryResponse = JsonSerializer.Deserialize<SearchResponse>(data);
+        var marketHistoryResponse = JsonSerializer.Deserialize<ItemOrdersActivityResponse>(data);
         marketHistoryResponse.Should().NotBeNull();
-        marketHistoryResponse.SearchResult.Should().NotBeNullOrEmpty();
+        marketHistoryResponse.Activity.Count.Should().Be(expectedActivityCount);
     }
 }

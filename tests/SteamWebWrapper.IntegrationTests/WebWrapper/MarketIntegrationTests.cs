@@ -212,6 +212,17 @@ public class MarketIntegrationTests : IClassFixture<SteamHttpClientFixture>
         itemId.Should().NotBeNull();
         itemId.Should().Be(expectedValue);
     }
+    
+        
+    [Fact]
+    public async Task GetItemOrdersActivityTest()
+    {
+        const long itemNameId = 176288467;
+        var activities = await MarketWrapper.GetItemOrdersActivityAsync(itemNameId, 1);
+
+        activities.Should().NotBeNull();
+        activities.Success.Should().Be(1);
+    }
         
     [Fact(Skip = "Is not safe for your money.")]
     public async Task CancelSellOrderTest()

@@ -11,6 +11,7 @@ using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
+using SteamWebWrapper.Contracts.Entities.Market.ItemOrdersActivity;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
@@ -310,6 +311,19 @@ public class MarketWrapper : IMarketWrapper
         }
 
         return null;
+    }
+    
+    public async Task<ItemOrdersActivityResponse?> GetItemOrdersActivityAsync(long itemNameId, long currency, string language = "english", string country = "US", CancellationToken cancellationToken = default)
+    {
+        var requestUri = $"https://steamcommunity.com/market/itemordersactivity?" +
+                         $"item_nameid={itemNameId}&currency={currency}&country={country}&language={language}&two_factor=0&norender=true";
+        
+        var response = await SteamHttpClient.GetAsync(requestUri, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        return JsonSerializer.Deserialize<ItemOrdersActivityResponse>(stringResponse);
     }
 
 

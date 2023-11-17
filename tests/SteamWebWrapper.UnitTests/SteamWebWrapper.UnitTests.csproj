@@ -45,6 +45,9 @@
       <None Update="Data\SearchResponse.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Data\GetOrderItemActivityResponse.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 

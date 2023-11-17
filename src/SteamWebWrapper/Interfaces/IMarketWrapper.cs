@@ -3,6 +3,7 @@ using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.CancelBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
+using SteamWebWrapper.Contracts.Entities.Market.ItemOrdersActivity;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
@@ -79,4 +80,6 @@ public interface IMarketWrapper : IDisposable
     /// <param name="appId">AppId of Steam</param>
     /// <param name="marketHashName">Market Hash Name</param>
     Task<long?> GetItemNameIdAsync(long appId, string marketHashName, CancellationToken cancellationToken);
+
+    Task<ItemOrdersActivityResponse?> GetItemOrdersActivityAsync(long itemNameId, long currency, string language = "english", string country = "US", CancellationToken cancellationToken = default);
 }
