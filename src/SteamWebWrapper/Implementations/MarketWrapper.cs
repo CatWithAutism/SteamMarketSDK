@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -14,6 +15,7 @@ using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
+using SteamWebWrapper.Contracts.Entities.Market.Search;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Interfaces;
 
@@ -54,7 +56,7 @@ public class MarketWrapper : IMarketWrapper
         return JsonSerializer.Deserialize<MyHistoryResponse>(stringResponse);
     }
     
-    public async Task<AccountInfoResponse?> CollectMarketAccountInfo(CancellationToken cancellationToken)
+    public async Task<AccountInfoResponse?> CollectMarketAccountInfoAsync(CancellationToken cancellationToken)
     {
         const string infoPage = "https://steamcommunity.com/market/#";
         
@@ -87,18 +89,18 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="count">Count of elements. Max size is 500</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
-    public async Task<MyListingsResponse?> GetMyListings(long offset, long count, CancellationToken cancellationToken)
+    public async Task<MyListingsResponse?> GetMyListingsAsync(long offset, long count, CancellationToken cancellationToken)
     {
         string requestUri = $"https://steamcommunity.com/market/mylistings?count={count}&start={offset}&norender=true";
         
         var response = await SteamHttpClient.GetAsync(requestUri, cancellationToken);
         var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-        response.EnsureSuccessStatusCode();
         
+        response.EnsureSuccessStatusCode();
         return JsonSerializer.Deserialize<MyListingsResponse>(stringResponse);
     }
     
-    public async Task<BuyOrderStatusResponse?> GetBuyOrderStatus(long buyOrderId, CancellationToken cancellationToken)
+    public async Task<BuyOrderStatusResponse?> GetBuyOrderStatusAsync(long buyOrderId, CancellationToken cancellationToken)
     {
         string requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?sessionid={SessionId}&buy_orderid={buyOrderId}";
 
@@ -122,7 +124,7 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="priceRequest">Price request.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Price overview response</returns>
-    public async Task<PriceOverviewResponse?> GetItemCurrentPrice(PriceOverviewRequest priceRequest, CancellationToken cancellationToken)
+    public async Task<PriceOverviewResponse?> GetPriceOverviewAsync(PriceOverviewRequest priceRequest, CancellationToken cancellationToken)
     {
         string requestUri = $"https://steamcommunity.com/market/priceoverview/?" +
                             $"country={priceRequest.Country}&" +
@@ -142,7 +144,7 @@ public class MarketWrapper : IMarketWrapper
     /// </summary>
     /// <param name="createBuyOrderRequest">Request.</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    public async Task<CreateBuyOrderResponse?> CreateBuyOrder(CreateBuyOrderRequest createBuyOrderRequest, CancellationToken cancellationToken)
+    public async Task<CreateBuyOrderResponse?> CreateBuyOrderAsync(CreateBuyOrderRequest createBuyOrderRequest, CancellationToken cancellationToken)
     {
         
         
@@ -181,7 +183,7 @@ public class MarketWrapper : IMarketWrapper
     /// </summary>
     /// <param name="buyOrderId">Buy order id</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    public async Task<CancelBuyOrderResponse?> CancelBuyOrder(long buyOrderId, CancellationToken cancellationToken)
+    public async Task<CancelBuyOrderResponse?> CancelBuyOrderAsync(long buyOrderId, CancellationToken cancellationToken)
     {
         const string requestUri = "https://steamcommunity.com/market/cancelbuyorder/";
         
@@ -214,7 +216,7 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="marketHashName">Market hash name.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
-    public async Task<PriceHistoryResponse?> GetPriceHistory(long appId, string marketHashName, CancellationToken cancellationToken)
+    public async Task<PriceHistoryResponse?> GetPriceHistoryAsync(long appId, string marketHashName, CancellationToken cancellationToken)
     {
         var requestUri = $"https://steamcommunity.com/market/pricehistory?appid={appId}&market_hash_name={HttpUtility.UrlEncode(marketHashName)}";
         
@@ -228,7 +230,7 @@ public class MarketWrapper : IMarketWrapper
     /// <summary>
     /// Request to create sell order.
     /// </summary>
-    public async Task<CreateSellOrderResponse?> CreateSellOrder(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken)
+    public async Task<CreateSellOrderResponse?> CreateSellOrderAsync(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken)
     {
         const string requestUri = "https://steamcommunity.com/market/sellitem/";
         
@@ -260,7 +262,7 @@ public class MarketWrapper : IMarketWrapper
     /// <summary>
     /// Request to cancel sell order.
     /// </summary>
-    public async Task<bool> CancelSellOrder(long listingId, CancellationToken cancellationToken)
+    public async Task<bool> CancelSellOrderAsync(long listingId, CancellationToken cancellationToken)
     {
         var requestUri = $"https://steamcommunity.com/market/removelisting/{listingId}";
         
@@ -270,8 +272,39 @@ public class MarketWrapper : IMarketWrapper
         });
         
         var response = await SteamHttpClient.PostAsync(requestUri, content, cancellationToken);
-        var readAsStringAsync = await response.Content.ReadAsStringAsync();
         return response.StatusCode == HttpStatusCode.OK;
+    }
+    
+    /// <summary>
+    /// Do not use it. This method raw as fuck.
+    /// </summary>
+    public async Task<SearchResponse?> SearchItemsAsync(string? query, long offset, long count, string searchData, CancellationToken cancellationToken)
+    {
+        var requestUri = $"https://steamcommunity.com/market/search/render/?query={query}&start={offset}&count={count}&{searchData}&norender=true";
+        
+        var response = await SteamHttpClient.GetAsync(requestUri, cancellationToken);
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        
+        response.EnsureSuccessStatusCode();
+        return JsonSerializer.Deserialize<SearchResponse>(stringResponse);
+    }
+
+    public async Task<long?> GetItemNameIdAsync(long appId, string marketHashName, CancellationToken cancellationToken)
+    {
+        const string searchPatter = @"Market_LoadOrderSpread\(\s*(\d+)\s*\)";
+        var requestUri = $"https://steamcommunity.com/market/listings/{appId}/{marketHashName}";
+        
+        var response = await SteamHttpClient.GetAsync(requestUri, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        
+        var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
+        var match = Regex.Match(stringResponse, searchPatter);
+        if (match.Success)
+        {
+            return long.Parse(match.Groups[1].Value);
+        }
+
+        return null;
     }
 
 

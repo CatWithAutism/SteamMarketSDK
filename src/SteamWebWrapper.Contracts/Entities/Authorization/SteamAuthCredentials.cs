@@ -1,13 +1,20 @@
 using System.Security;
+using System.Text.Json.Serialization;
 
 namespace SteamWebWrapper.Contracts.Entities.Authorization;
 
 [SecuritySafeCritical]
 public class SteamAuthCredentials
 {
-    public required string Login { get; set; }
+    [JsonPropertyName("Login")]
+    public string Login { get; set; }
     
-    public required string Password { get; set; }
+    [JsonPropertyName("Password")]
+    public string Password { get; set; }
+    
+    [JsonPropertyName("TwoFactor")]
+    public string? TwoFactor { get; set; }
 
-    public required string MachineName { get; set; }
+    [JsonPropertyName("MachineName")]
+    public string? MachineName { get; set; }
 }

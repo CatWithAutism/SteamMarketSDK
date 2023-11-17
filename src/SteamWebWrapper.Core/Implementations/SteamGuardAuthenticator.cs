@@ -1,3 +1,4 @@
+using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.SteamGuard;
 
@@ -26,13 +27,13 @@ public class SteamGuardAuthenticator : SteamGuardAccount, ISteamGuardAuthenticat
     {
         var confirmations = await FetchConfirmationsAsync();
 
-        var confirmation = confirmations?.FirstOrDefault(t => t.ConfType == Confirmation.EMobileConfirmationType.FeatureOptOut);
-        if (confirmation == null)
+        var confirmation = confirmations?.Where(t => t.ConfType == Confirmation.EMobileConfirmationType.MarketListing).ToArray();
+        if (confirmation.IsNullOrEmpty())
         {
             return false;
         }
 
-        return await AcceptConfirmation(confirmation);
+        return await AcceptMultipleConfirmations(confirmation);
     }
     
 }

@@ -38,15 +38,17 @@ public class SteamHttpClientFixture : IDisposable
         };
 
         var steamHttpClient = new SteamHttpClient(httpClientHandler);
-        var steamAuthCredentials = new SteamAuthCredentials
+        if (!Configuration["username"].IsNullOrEmpty() && !Configuration["password"].IsNullOrEmpty())
         {
-            Login = Configuration["username"] ?? throw new InvalidOperationException(),
-            Password = Configuration["password"] ?? throw new InvalidOperationException(),
-            MachineName = Configuration["machineName"] ?? $"PrettyPC-{Guid.NewGuid()}",
-            
-        };
+            var steamAuthCredentials = new SteamAuthCredentials
+            {
+                Login = Configuration["username"] ?? throw new InvalidOperationException(),
+                Password = Configuration["password"] ?? throw new InvalidOperationException(),
+                MachineName = Configuration["machineName"] ?? $"PrettyPC-{Guid.NewGuid()}",
+            };
 
-        steamHttpClient.AuthorizeViaOAuthAsync(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
+            steamHttpClient.AuthorizeViaOAuthAsync(steamAuthCredentials, steamGuardAuthenticator, CancellationToken.None).GetAwaiter().GetResult();
+        }
 
         SteamHttpClient = steamHttpClient;
     }
