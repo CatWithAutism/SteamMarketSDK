@@ -201,7 +201,7 @@ public class MarketIntegrationTests : IClassFixture<SteamHttpClientFixture>
 
         sellOrder.Should().NotBeNull();
         sellOrder.Success.Should().BeFalse();
-    }
+    } 
     
     [Fact]
     public async Task GetItemNameIdTest()

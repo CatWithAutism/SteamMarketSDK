@@ -73,5 +73,10 @@ public interface IMarketWrapper : IDisposable
     /// </summary>
     Task<SearchResponse?> SearchItemsAsync(string? query, long offset, long count, string searchData, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// Fetch item name id of specified item
+    /// </summary>
+    /// <param name="appId">AppId of Steam</param>
+    /// <param name="marketHashName">Market Hash Name</param>
     Task<long?> GetItemNameIdAsync(long appId, string marketHashName, CancellationToken cancellationToken);
 }
