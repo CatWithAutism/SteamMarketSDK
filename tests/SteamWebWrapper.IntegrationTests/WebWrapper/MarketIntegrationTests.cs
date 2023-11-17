@@ -6,10 +6,10 @@ using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Contracts.Entities.Market.Search;
+using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.Implementations;
 using SteamWebWrapper.IntegrationTests.Fixtures;
-using SteamWebWrapper.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -1,6 +1,6 @@
 using SteamWebWrapper.Contracts.Entities.Inventory;
 
-namespace SteamWebWrapper.Interfaces;
+namespace SteamWebWrapper.Contracts.Interfaces;
 
 public interface IInventoryWrapper : IDisposable
 {

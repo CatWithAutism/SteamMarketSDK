@@ -10,7 +10,7 @@ using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Contracts.Entities.Market.Search;
 
-namespace SteamWebWrapper.Interfaces;
+namespace SteamWebWrapper.Contracts.Interfaces;
 
 public interface IMarketWrapper : IDisposable
 {
