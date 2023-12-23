@@ -1,7 +1,7 @@
 using System.Collections.Specialized;
 using SteamKit2.Authentication;
 using SteamKit2.Internal;
-using SteamWebWrapper.SteamGuard;
+using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
 
 namespace SteamWebWrapper.Core.Contracts.Interfaces;
 

@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Core.Contracts.Entities.Authorization;
+using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
 using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.Core.Implementations;
 using SteamWebWrapper.SteamGuard;

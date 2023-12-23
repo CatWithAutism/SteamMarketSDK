@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SteamWebWrapper.Core.SteamGuard\SteamWebWrapper.Core.SteamGuard.csproj" />
+      <Folder Include="Constants\" />
     </ItemGroup>
 
 </Project>

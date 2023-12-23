@@ -1,38 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace SteamWebWrapper.SteamGuard
+﻿using System.Text.Json.Serialization;
+namespace SteamWebWrapper.Core.Contracts.Entities.SteamGuard
 {
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public class Confirmation
     {
-        [JsonProperty(PropertyName = "id")]
+        [JsonPropertyName("id")]
         public ulong Id { get; set; }
 
-        [JsonProperty(PropertyName = "nonce")]
+        [JsonPropertyName("nonce")]
         public ulong Key { get; set; }
 
-        [JsonProperty(PropertyName = "creator_id")]
+        [JsonPropertyName("creator_id")]
         public ulong Creator { get; set; }
-
-        [JsonProperty(PropertyName = "headline")]
+        
+        [JsonPropertyName("headline")]
         public string Headline { get; set; }
 
-        [JsonProperty(PropertyName = "summary")]
+        [JsonPropertyName("summary")]
         public List<String> Summary { get; set; }
 
-        [JsonProperty(PropertyName = "accept")]
+        [JsonPropertyName("accept")]
         public string Accept { get; set; }
 
-        [JsonProperty(PropertyName = "cancel")]
+        [JsonPropertyName("cancel")]
         public string Cancel { get; set; }
 
-        [JsonProperty(PropertyName = "icon")]
+        [JsonPropertyName("icon")]
         public string Icon { get; set; }
 
-        [JsonProperty(PropertyName = "type")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonPropertyName("type")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public EMobileConfirmationType ConfType { get; set; } = EMobileConfirmationType.Invalid;
 
         public enum EMobileConfirmationType
@@ -49,16 +46,16 @@ namespace SteamWebWrapper.SteamGuard
 
     public class ConfirmationsResponse
     {
-        [JsonProperty("success")]
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
 
-        [JsonProperty("needauth")]
+        [JsonPropertyName("needauth")]
         public bool NeedAuthentication { get; set; }
 
-        [JsonProperty("conf")]
+        [JsonPropertyName("conf")]
         public Confirmation[] Confirmations { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
 
 namespace SteamWebWrapper.SteamGuard
 {
@@ -126,7 +127,7 @@ namespace SteamWebWrapper.SteamGuard
             }
             return Encoding.UTF8.GetString(codeArray);
         }
-
+        
         public Confirmation[] FetchConfirmations()
         {
             string url = GenerateConfirmationUrl();
