@@ -1,6 +1,6 @@
-﻿namespace SteamWebWrapper.SteamGuard
+﻿namespace SteamWebWrapper.Core.Contracts.Constants
 {
-    public static class ApiEndpoints
+    public static class SteamEndpoints
     {
         public const string SteamApiBase = "https://api.steampowered.com";
         public const string CommunityBase = "https://steamcommunity.com";

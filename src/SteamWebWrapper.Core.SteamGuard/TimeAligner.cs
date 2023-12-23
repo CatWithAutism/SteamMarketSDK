@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SteamWebWrapper.Core.Contracts.Constants;
 
 namespace SteamWebWrapper.SteamGuard
 {
@@ -41,7 +42,7 @@ namespace SteamWebWrapper.SteamGuard
                 client.Encoding = Encoding.UTF8;
                 try
                 {
-                    string response = client.UploadString(ApiEndpoints.TwoFactorTimeQuery, "steamid=0");
+                    string response = client.UploadString(SteamEndpoints.TwoFactorTimeQuery, "steamid=0");
                     TimeQuery query = JsonConvert.DeserializeObject<TimeQuery>(response);
                     _timeDifference = (int)(query.Response.ServerTime - currentTime);
                     _aligned = true;
@@ -59,7 +60,7 @@ namespace SteamWebWrapper.SteamGuard
             try
             {
                 client.Encoding = Encoding.UTF8;
-                string response = await client.UploadStringTaskAsync(new Uri(ApiEndpoints.TwoFactorTimeQuery), "steamid=0");
+                string response = await client.UploadStringTaskAsync(new Uri(SteamEndpoints.TwoFactorTimeQuery), "steamid=0");
                 TimeQuery query = JsonConvert.DeserializeObject<TimeQuery>(response);
                 _timeDifference = (int)(query.Response.ServerTime - currentTime);
                 _aligned = true;

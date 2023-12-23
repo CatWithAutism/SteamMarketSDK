@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SteamWebWrapper.Core.Contracts.Constants;
 using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
 
 namespace SteamWebWrapper.SteamGuard
@@ -194,7 +195,7 @@ namespace SteamWebWrapper.SteamGuard
 
         private async Task<bool> _sendConfirmationAjax(Confirmation conf, string op)
         {
-            string url = ApiEndpoints.CommunityBase + "/mobileconf/ajaxop";
+            string url = SteamEndpoints.CommunityBase + "/mobileconf/ajaxop";
             string queryString = "?op=" + op + "&";
             // tag is different from op now
             string tag = op == "allow" ? "accept" : "reject";
@@ -211,7 +212,7 @@ namespace SteamWebWrapper.SteamGuard
 
         private async Task<bool> _sendMultiConfirmationAjax(Confirmation[] confs, string op)
         {
-            string url = ApiEndpoints.CommunityBase + "/mobileconf/multiajaxop";
+            string url = SteamEndpoints.CommunityBase + "/mobileconf/multiajaxop";
             // tag is different from op now
             string tag = op == "allow" ? "accept" : "reject";
             string query = "op=" + op + "&" + GenerateConfirmationQueryParams(tag);
@@ -237,7 +238,7 @@ namespace SteamWebWrapper.SteamGuard
 
         public string GenerateConfirmationUrl(string tag = "conf")
         {
-            string endpoint = ApiEndpoints.CommunityBase + "/mobileconf/getlist?";
+            string endpoint = SteamEndpoints.CommunityBase + "/mobileconf/getlist?";
             string queryString = GenerateConfirmationQueryParams(tag);
             return endpoint + queryString;
         }
