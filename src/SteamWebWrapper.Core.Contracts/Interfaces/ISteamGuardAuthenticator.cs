@@ -1,8 +1,9 @@
 using System.Collections.Specialized;
 using SteamKit2.Authentication;
+using SteamKit2.Internal;
 using SteamWebWrapper.SteamGuard;
 
-namespace SteamWebWrapper.Core.Interfaces;
+namespace SteamWebWrapper.Core.Contracts.Interfaces;
 
 public interface ISteamGuardAuthenticator : IAuthenticator
 {
@@ -22,8 +23,6 @@ public interface ISteamGuardAuthenticator : IAuthenticator
     /// Set to true if the authenticator has actually been applied to the account.
     /// </summary>
     bool FullyEnrolled { get; set; }
-
-    SessionData Session { get; set; }
 
     /// <summary>
     /// Remove steam guard from this account

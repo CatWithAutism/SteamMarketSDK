@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
 using SteamKit2;
-using SteamWebWrapper.Contracts.Entities.Authorization;
+using SteamWebWrapper.Core.Contracts.Entities.Authorization;
 
-namespace SteamWebWrapper.Core.Interfaces;
+namespace SteamWebWrapper.Core.Contracts.Interfaces;
 
 public interface ISteamHttpClient
 {

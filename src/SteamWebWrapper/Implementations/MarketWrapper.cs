@@ -18,7 +18,7 @@ using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Contracts.Entities.Market.Search;
 using SteamWebWrapper.Contracts.Interfaces;
-using SteamWebWrapper.Core.Interfaces;
+using SteamWebWrapper.Core.Contracts.Interfaces;
 
 namespace SteamWebWrapper.Implementations;
 

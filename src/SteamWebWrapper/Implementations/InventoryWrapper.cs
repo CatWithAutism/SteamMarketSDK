@@ -1,7 +1,7 @@
 using System.Text.Json;
 using SteamWebWrapper.Contracts.Entities.Inventory;
 using SteamWebWrapper.Contracts.Interfaces;
-using SteamWebWrapper.Core.Interfaces;
+using SteamWebWrapper.Core.Contracts.Interfaces;
 
 namespace SteamWebWrapper.Implementations;
 

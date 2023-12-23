@@ -1,7 +1,7 @@
 using System.Security;
 using System.Text.Json.Serialization;
 
-namespace SteamWebWrapper.Contracts.Entities.Authorization;
+namespace SteamWebWrapper.Core.Contracts.Entities.Authorization;
 
 [SecuritySafeCritical]
 public class SteamAuthCredentials

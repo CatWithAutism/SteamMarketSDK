@@ -1,5 +1,6 @@
+using SteamKit2.Internal;
 using SteamWebWrapper.Common.Utils;
-using SteamWebWrapper.Core.Interfaces;
+using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.SteamGuard;
 
 namespace SteamWebWrapper.Core.Implementations;
@@ -35,5 +36,4 @@ public class SteamGuardAuthenticator : SteamGuardAccount, ISteamGuardAuthenticat
 
         return await AcceptMultipleConfirmations(confirmation);
     }
-    
 }

@@ -3,9 +3,9 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using SteamWebWrapper.Common.Utils;
-using SteamWebWrapper.Contracts.Entities.Authorization;
+using SteamWebWrapper.Core.Contracts.Entities.Authorization;
+using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.Core.Implementations;
-using SteamWebWrapper.Core.Interfaces;
 using SteamWebWrapper.SteamGuard;
 
 namespace SteamWebWrapper.IntegrationTests.Fixtures;

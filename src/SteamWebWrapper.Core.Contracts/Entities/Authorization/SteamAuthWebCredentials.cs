@@ -1,6 +1,6 @@
 using System.Security;
 
-namespace SteamWebWrapper.Contracts.Entities.Authorization;
+namespace SteamWebWrapper.Core.Contracts.Entities.Authorization;
 
 [SecuritySafeCritical]
 public class SteamAuthWebCredentials

@@ -5,9 +5,9 @@ using SteamKit2;
 using SteamKit2.Authentication;
 using SteamKit2.Internal;
 using SteamWebWrapper.Common.Utils;
-using SteamWebWrapper.Contracts.Entities.Authorization;
+using SteamWebWrapper.Core.Contracts.Entities.Authorization;
+using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.Core.Exceptions;
-using SteamWebWrapper.Core.Interfaces;
 
 namespace SteamWebWrapper.Core.Implementations;
 
