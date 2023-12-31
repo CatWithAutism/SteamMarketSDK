@@ -15,20 +15,13 @@ using Xunit.Abstractions;
 
 namespace SteamWebWrapper.IntegrationTests.WebWrapper;
 
-public class MarketIntegrationTests : IClassFixture<SteamHttpClientFixture>
+public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixture) : IClassFixture<SteamHttpClientFixture>
 {
-    private ISteamHttpClient SteamHttpClient { get; set; }
+    private ISteamHttpClient SteamHttpClient { get; set; } = steamHttpClientFixture.SteamHttpClient;
 
-    private IMarketWrapper MarketWrapper { get; set; }
+    private IMarketWrapper MarketWrapper { get; set; } = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
 
-    private IInventoryWrapper InventoryWrapper { get; set; }
-    
-    public MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixture)
-    {
-        SteamHttpClient = steamHttpClientFixture.SteamHttpClient;
-        InventoryWrapper = new InventoryWrapper(steamHttpClientFixture.SteamHttpClient);
-        MarketWrapper = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
-    }
+    private IInventoryWrapper InventoryWrapper { get; set; } = new InventoryWrapper(steamHttpClientFixture.SteamHttpClient);
 
     [Fact]
     public async Task CollectMarketAccountInfoTest()
