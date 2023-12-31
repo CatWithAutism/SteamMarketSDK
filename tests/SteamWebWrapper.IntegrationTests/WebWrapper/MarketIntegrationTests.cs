@@ -1,17 +1,12 @@
-using System.Text;
 using FluentAssertions;
-using Microsoft.Extensions.Primitives;
 using SteamWebWrapper.Contracts.Entities.Market.CreateBuyOrder;
 using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
-using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
-using SteamWebWrapper.Contracts.Entities.Market.Search;
 using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.Implementations;
 using SteamWebWrapper.IntegrationTests.Fixtures;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace SteamWebWrapper.IntegrationTests.WebWrapper;
 

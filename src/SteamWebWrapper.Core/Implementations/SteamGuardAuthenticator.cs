@@ -1,4 +1,3 @@
-using SteamKit2.Internal;
 using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
 using SteamWebWrapper.Core.Contracts.Interfaces;

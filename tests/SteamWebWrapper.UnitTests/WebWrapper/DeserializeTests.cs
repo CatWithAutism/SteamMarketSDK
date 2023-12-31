@@ -6,7 +6,6 @@ using SteamWebWrapper.Contracts.Entities.Market.ItemOrdersActivity;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Entities.Market.MyListings;
 using SteamWebWrapper.Contracts.Entities.Market.PriceHistory;
-using SteamWebWrapper.Contracts.Entities.Market.Search;
 using Xunit;
 
 namespace SteamWebWrapper.UnitTests.WebWrapper;
