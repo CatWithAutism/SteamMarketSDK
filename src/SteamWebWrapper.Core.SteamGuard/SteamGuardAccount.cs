@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SteamWebWrapper.Core.Contracts.Constants;
 using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
+using SteamWebWrapper.Core.Contracts.Entities.SteamGuard.Session;
+using SteamWebWrapper.SteamGuard.Extensions;
 
 namespace SteamWebWrapper.SteamGuard
 {

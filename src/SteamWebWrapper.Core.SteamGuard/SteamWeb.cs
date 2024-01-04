@@ -8,35 +8,30 @@ namespace SteamWebWrapper.SteamGuard
 {
     public class SteamWeb
     {
-        public static string MobileAppUserAgent = "Dalvik/2.1.0 (Linux; U; Android 9; Valve Steam App Version/3)";
+        public const string MobileAppUserAgent = "Dalvik/2.1.0 (Linux; U; Android 9; Valve Steam App Version/3)";
 
         public static async Task<string> GetRequest(string url, CookieContainer cookies)
         {
-            string response;
-            using (CookieAwareWebClient wc = new CookieAwareWebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                wc.CookieContainer = cookies;
-                wc.Headers[HttpRequestHeader.UserAgent] = MobileAppUserAgent;
-                response = await wc.DownloadStringTaskAsync(url);
-            }
+            using var webClient = new CookieAwareWebClient();
+            webClient.Encoding = Encoding.UTF8;
+            webClient.CookieContainer = cookies;
+            webClient.Headers[HttpRequestHeader.UserAgent] = MobileAppUserAgent;
+            
+            var response = await webClient.DownloadStringTaskAsync(url);
             return response;
         }
 
         public static async Task<string> PostRequest(string url, CookieContainer cookies, NameValueCollection body)
         {
-            if (body == null)
-                body = new NameValueCollection();
+            body ??= [];
 
-            string response;
-            using (CookieAwareWebClient wc = new CookieAwareWebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                wc.CookieContainer = cookies;
-                wc.Headers[HttpRequestHeader.UserAgent] = MobileAppUserAgent;
-                byte[] result = await wc.UploadValuesTaskAsync(new Uri(url), "POST", body);
-                response = Encoding.UTF8.GetString(result);
-            }
+            using var webClient = new CookieAwareWebClient();
+            webClient.Encoding = Encoding.UTF8;
+            webClient.CookieContainer = cookies;
+            webClient.Headers[HttpRequestHeader.UserAgent] = MobileAppUserAgent;
+            var result = await webClient.UploadValuesTaskAsync(new Uri(url), "POST", body);
+            
+            var response = Encoding.UTF8.GetString(result);
             return response;
         }
     }
