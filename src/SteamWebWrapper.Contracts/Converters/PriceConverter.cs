@@ -15,7 +15,7 @@ internal class PriceConverter : JsonConverter<float>
         using var jsonDoc = JsonDocument.ParseValue(ref reader);
         var value = jsonDoc.RootElement.GetRawText();
 
-        var result = Regex.Match(value, @"\d[,\.]\d*");
+        var result = Regex.Match(value, @"\d+[,\.]?\d*");
         if (result.Success)
         {
             return float.Parse(result.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
