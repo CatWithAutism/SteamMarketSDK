@@ -37,10 +37,7 @@ public class MarketWrapper : IMarketWrapper
     /// Default constructor
     /// </summary>
     /// <param name="steamHttpClient">Your steam client should be already authorized otherwise you can get errors.</param>
-    public MarketWrapper(ISteamHttpClient steamHttpClient)
-    {
-        SteamHttpClient = steamHttpClient;
-    }
+    public MarketWrapper(ISteamHttpClient steamHttpClient) => SteamHttpClient = steamHttpClient;
 
     public async Task<MyHistoryResponse?> GetMarketHistoryAsync(long offset, long count, CancellationToken cancellationToken)
     {

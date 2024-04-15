@@ -18,9 +18,11 @@ internal class PriceConverter : JsonConverter<float>
         var result = Regex.Match(value, @"\d+[,\.]?\d*");
         if (result.Success)
         {
-            return float.Parse(result.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
+            return float.Parse(NormalizeString(result.Value), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
         throw new InvalidCastException($"We cannot cast this {value} to float");
     }
+
+    private string NormalizeString(string str) => str.Replace(',', '.');
 }
