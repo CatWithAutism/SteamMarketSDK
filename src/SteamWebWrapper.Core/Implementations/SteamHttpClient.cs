@@ -26,8 +26,8 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
         DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
         DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
         DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-        DefaultRequestHeaders.Add("Connection", "keep-alive");
         DefaultRequestHeaders.Add("Origin", "https://steamcommunity.com");
+        DefaultRequestHeaders.ConnectionClose = true;
         DefaultRequestHeaders.Referrer = new Uri($"https://steamcommunity.com/market/");
     }
 
@@ -83,11 +83,7 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
                 
             response = await PostAsync(info.Url, postData);
             response.EnsureSuccessStatusCode();
-            
-            HttpClientHandler.CookieContainer.SetCookies(new Uri(info.Url), $"sessionid={sessionId}");
         }
-        
-        HttpClientHandler.CookieContainer.SetCookies(new Uri("https://steamcommunity.com/"), $"sessionid={sessionId}");
     }
     
     private string? GetCookie(Uri url, string name)

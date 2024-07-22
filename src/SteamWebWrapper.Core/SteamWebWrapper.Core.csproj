@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+        <Version>1.0.2</Version>
     </PropertyGroup>
 
 
@@ -35,14 +36,6 @@
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="SteamKit2" Version="2.5.0" />
-    </ItemGroup>
-
-
-
-
-
-    <ItemGroup>
-      <Folder Include="Exceptions\" />
     </ItemGroup>
 
 
