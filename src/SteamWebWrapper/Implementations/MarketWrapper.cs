@@ -50,7 +50,7 @@ public class MarketWrapper : IMarketWrapper
         return JsonSerializer.Deserialize<MyHistoryResponse>(stringResponse);
     }
     
-    public async Task<AccountInfoResponse?> CollectMarketAccountInfoAsync(CancellationToken cancellationToken)
+    public async Task<AccountInfoResponse?> GetMarketAccountInfoAsync(CancellationToken cancellationToken)
     {
         const string infoPage = "https://steamcommunity.com/market/#";
         
@@ -85,7 +85,7 @@ public class MarketWrapper : IMarketWrapper
     /// <returns></returns>
     public async Task<MyListingsResponse?> GetMyListingsAsync(long offset, long count, CancellationToken cancellationToken)
     {
-        string requestUri = $"https://steamcommunity.com/market/mylistings?count={count}&start={offset}&norender=true";
+        var requestUri = $"https://steamcommunity.com/market/mylistings?count={count}&start={offset}&norender=true";
         
         var response = await SteamHttpClient.GetAsync(requestUri, cancellationToken);
         var stringResponse = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -96,7 +96,7 @@ public class MarketWrapper : IMarketWrapper
     
     public async Task<BuyOrderStatusResponse?> GetBuyOrderStatusAsync(long buyOrderId, CancellationToken cancellationToken)
     {
-        string requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?sessionid={SessionId}&buy_orderid={buyOrderId}";
+        var requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?sessionid={SessionId}&buy_orderid={buyOrderId}";
 
         var request = new HttpRequestMessage
         {
@@ -120,11 +120,11 @@ public class MarketWrapper : IMarketWrapper
     /// <returns>Price overview response</returns>
     public async Task<PriceOverviewResponse?> GetPriceOverviewAsync(PriceOverviewRequest priceRequest, CancellationToken cancellationToken)
     {
-        string requestUri = $"https://steamcommunity.com/market/priceoverview/?" +
-                            $"country={priceRequest.Country}&" +
-                            $"currency={priceRequest.Currency}&" +
-                            $"appid={priceRequest.AppId}&" +
-                            $"market_hash_name={HttpUtility.UrlEncode(priceRequest.MarketHashName)}";
+        var requestUri = $"https://steamcommunity.com/market/priceoverview/?" +
+                         $"country={priceRequest.Country}&" +
+                         $"currency={priceRequest.Currency}&" +
+                         $"appid={priceRequest.AppId}&" +
+                         $"market_hash_name={HttpUtility.UrlEncode(priceRequest.MarketHashName)}";
         
         var response = await SteamHttpClient.GetAsync(requestUri, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -143,7 +143,7 @@ public class MarketWrapper : IMarketWrapper
         
         
         const string requestUri = "https://steamcommunity.com/market/createbuyorder/";
-        string urlEncodedHashName = HttpUtility.UrlEncode(createBuyOrderRequest.MarketHashName); 
+        var urlEncodedHashName = HttpUtility.UrlEncode(createBuyOrderRequest.MarketHashName); 
         
         var content = new FormUrlEncodedContent(new []
         {
@@ -320,8 +320,5 @@ public class MarketWrapper : IMarketWrapper
     }
 
 
-    public void Dispose()
-    {
-        SteamHttpClient.Dispose();
-    }
+    public void Dispose() => SteamHttpClient.Dispose();
 }

@@ -15,7 +15,7 @@ namespace SteamWebWrapper.Contracts.Interfaces;
 public interface IMarketWrapper : IDisposable
 {
     Task<MyHistoryResponse?> GetMarketHistoryAsync(long offset, long count, CancellationToken cancellationToken);
-    Task<AccountInfoResponse?> CollectMarketAccountInfoAsync(CancellationToken cancellationToken);
+    Task<AccountInfoResponse?> GetMarketAccountInfoAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Returns current listings and buy orders.
