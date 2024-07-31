@@ -14,8 +14,8 @@ namespace SteamWebWrapper.Contracts.Interfaces;
 
 public interface IMarketWrapper : IDisposable
 {
-    Task<MyHistoryResponse?> GetMarketHistoryAsync(long offset, long count, CancellationToken cancellationToken);
-    Task<AccountInfoResponse?> GetMarketAccountInfoAsync(CancellationToken cancellationToken);
+    Task<MyHistoryResponse?> GetTradeHistoryAsync(long offset, long count, CancellationToken cancellationToken);
+    Task<AccountInfoResponse?> GetAccountInfoAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Returns current listings and buy orders.
@@ -24,7 +24,7 @@ public interface IMarketWrapper : IDisposable
     /// <param name="count">Count of elements. Max size is 500</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
-    Task<MyListingsResponse?> GetMyListingsAsync(long offset, long count, CancellationToken cancellationToken);
+    Task<MyListingsResponse?> GetListingsAsync(long offset, long count, CancellationToken cancellationToken);
 
     Task<BuyOrderStatusResponse?> GetBuyOrderStatusAsync(long buyOrderId, CancellationToken cancellationToken);
 

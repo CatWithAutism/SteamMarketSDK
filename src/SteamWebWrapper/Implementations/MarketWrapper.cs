@@ -39,7 +39,7 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="steamHttpClient">Your steam client should be already authorized otherwise you can get errors.</param>
     public MarketWrapper(ISteamHttpClient steamHttpClient) => SteamHttpClient = steamHttpClient;
 
-    public async Task<MyHistoryResponse?> GetMarketHistoryAsync(long offset, long count, CancellationToken cancellationToken)
+    public async Task<MyHistoryResponse?> GetTradeHistoryAsync(long offset, long count, CancellationToken cancellationToken)
     {
         var requestUri = $"https://steamcommunity.com/market/myhistory/?query=&count={count}&start={offset}&norender=true";
         
@@ -50,7 +50,7 @@ public class MarketWrapper : IMarketWrapper
         return JsonSerializer.Deserialize<MyHistoryResponse>(stringResponse);
     }
     
-    public async Task<AccountInfoResponse?> GetMarketAccountInfoAsync(CancellationToken cancellationToken)
+    public async Task<AccountInfoResponse?> GetAccountInfoAsync(CancellationToken cancellationToken)
     {
         const string infoPage = "https://steamcommunity.com/market/#";
         
@@ -83,7 +83,7 @@ public class MarketWrapper : IMarketWrapper
     /// <param name="count">Count of elements. Max size is 500</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
-    public async Task<MyListingsResponse?> GetMyListingsAsync(long offset, long count, CancellationToken cancellationToken)
+    public async Task<MyListingsResponse?> GetListingsAsync(long offset, long count, CancellationToken cancellationToken)
     {
         var requestUri = $"https://steamcommunity.com/market/mylistings?count={count}&start={offset}&norender=true";
         

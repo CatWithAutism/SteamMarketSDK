@@ -42,7 +42,7 @@ public class GetMarketHistoryTests
 		const int offset = 5;
 		var cancellationTokenSource = new CancellationTokenSource();
 		
-		var response = await MarketWrapper.GetMarketHistoryAsync(offset, count, cancellationTokenSource.Token);
+		var response = await MarketWrapper.GetTradeHistoryAsync(offset, count, cancellationTokenSource.Token);
 
 		const int totalCount = 11053;
 		const int assetCount = 4;
@@ -72,7 +72,7 @@ public class GetMarketHistoryTests
 		const int offset = 5;
 		var cancellationTokenSource = new CancellationTokenSource();
 		
-		var action = async () => await MarketWrapper.GetMarketHistoryAsync(offset, count, cancellationTokenSource.Token);
+		var action = async () => await MarketWrapper.GetTradeHistoryAsync(offset, count, cancellationTokenSource.Token);
 		var exc = await action.Should()
 			.ThrowAsync<HttpRequestException>();
 		

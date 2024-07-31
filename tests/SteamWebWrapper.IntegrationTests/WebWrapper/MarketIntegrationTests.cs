@@ -21,7 +21,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     [Fact]
     public async Task CollectMarketAccountInfoTest()
     {
-        var accountInfo = await MarketWrapper.GetMarketAccountInfoAsync(CancellationToken.None);
+        var accountInfo = await MarketWrapper.GetAccountInfoAsync(CancellationToken.None);
 
         accountInfo.Should().NotBeNull();
         accountInfo.Success.Should().Be(1);
@@ -43,7 +43,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     {
         const long offset = 0;
         const long count = 150;
-        var marketHistory = await MarketWrapper.GetMarketHistoryAsync(offset, count, CancellationToken.None);
+        var marketHistory = await MarketWrapper.GetTradeHistoryAsync(offset, count, CancellationToken.None);
         
         marketHistory.Should().NotBeNull();
         marketHistory.Assets.Should().NotBeNullOrEmpty();
@@ -58,7 +58,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     {
         const long offset = 0;
         const long count = 150;
-        var marketHistory = await MarketWrapper.GetMyListingsAsync(offset, count, CancellationToken.None);
+        var marketHistory = await MarketWrapper.GetListingsAsync(offset, count, CancellationToken.None);
         
         marketHistory.Should().NotBeNull();
         marketHistory.Success.Should().BeTrue();
@@ -73,7 +73,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     {
         const long offset = 0;
         const long count = 150;
-        var marketHistory = await MarketWrapper.GetMyListingsAsync(offset, count, CancellationToken.None);
+        var marketHistory = await MarketWrapper.GetListingsAsync(offset, count, CancellationToken.None);
 
         marketHistory.Should().NotBeNull();
         marketHistory.Success.Should().BeTrue();
@@ -122,7 +122,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     [Fact]
     public async Task CreateAndCancelBuyOrderTest()
     {
-        var accountInfo = await MarketWrapper.GetMarketAccountInfoAsync(CancellationToken.None);
+        var accountInfo = await MarketWrapper.GetAccountInfoAsync(CancellationToken.None);
 
         accountInfo.Should().NotBeNull();
         accountInfo.Success.Should().Be(1);
@@ -135,7 +135,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
         
         const long offset = 0;
         const long count = 150;
-        var myListings = await MarketWrapper.GetMyListingsAsync(offset, count, CancellationToken.None);
+        var myListings = await MarketWrapper.GetListingsAsync(offset, count, CancellationToken.None);
         
         myListings.Should().NotBeNull();
         myListings.Success.Should().BeTrue();
@@ -173,7 +173,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     [Fact]
     public async Task CreateSellOrderTestFailed()
     {
-        var accountInfo = await MarketWrapper.GetMarketAccountInfoAsync(CancellationToken.None);
+        var accountInfo = await MarketWrapper.GetAccountInfoAsync(CancellationToken.None);
 
         accountInfo.Should().NotBeNull();
         accountInfo.Success.Should().Be(1);
