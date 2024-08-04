@@ -69,6 +69,7 @@ public interface ISteamHttpClient
     TimeSpan Timeout { get; set; }
     string? AccessToken { get; }
     string? RefreshToken { get; }
+    ISteamConverter Converter { get; }
     SteamID? SteamId { get; }
     string? GetSteamCountry(Uri url);
     string? GetSessionId(Uri url);

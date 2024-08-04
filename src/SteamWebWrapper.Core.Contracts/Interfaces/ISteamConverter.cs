@@ -1,4 +1,4 @@
-﻿namespace SteamWebWrapper.Contracts.Interfaces;
+﻿namespace SteamWebWrapper.Core.Contracts.Interfaces;
 
 public interface ISteamConverter
 {
