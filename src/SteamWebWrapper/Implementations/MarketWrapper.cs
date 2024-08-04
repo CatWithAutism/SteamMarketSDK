@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using SteamWebWrapper.Contracts.Entities.Market.AccountInfo;
@@ -15,14 +14,11 @@ using SteamWebWrapper.Contracts.Entities.Market.Search;
 using SteamWebWrapper.Contracts.Exceptions;
 using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Interfaces;
-using SteamWebWrapper.Core.Implementations;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SteamWebWrapper.Implementations;
 
 public partial class MarketWrapper : IMarketWrapper
 {
-	private ISteamConverter Converter { get; }
 	private ISteamHttpClient SteamHttpClient { get; }
 
     private string SessionId
@@ -36,17 +32,7 @@ public partial class MarketWrapper : IMarketWrapper
         }
     }
     
-    public MarketWrapper(HttpClientHandler httpClientHandler, ISteamConverter converter)
-    {
-	    Converter = converter;
-	    SteamHttpClient = new SteamHttpClient(httpClientHandler, converter);
-    }
-    
-    public MarketWrapper(ISteamHttpClient httpClient, ISteamConverter converter)
-    {
-	    Converter = converter;
-	    SteamHttpClient = httpClient;
-    }
+    public MarketWrapper(ISteamHttpClient httpClient) => SteamHttpClient = httpClient;
 
     public async Task<MyHistoryResponse> GetTradeHistoryAsync(long offset, long count, CancellationToken cancellationToken)
     {
@@ -62,7 +48,7 @@ public partial class MarketWrapper : IMarketWrapper
         var stringResponse = await SteamHttpClient.GetStringAsync(infoPage, cancellationToken);
         
         var match = WalletCurrencyRegex().Match(stringResponse);
-        var accountInfo = Converter.DeserializeObject<AccountInfoResponse>(match.Value);
+        var accountInfo = SteamHttpClient.Converter.DeserializeObject<AccountInfoResponse>(match.Value);
         
         match = Regex.Match(stringResponse, @"dateCanUseMarket\s*=\s*new\s*Date\(\""(.+?)\""\)");
         accountInfo.MarketAllowed = !match.Success;

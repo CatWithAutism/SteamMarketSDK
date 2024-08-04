@@ -21,8 +21,8 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     public string? AccessToken { get; private set; }
     public string? RefreshToken { get; private set; }
     public SteamID? SteamId { get; private set; }
+    public ISteamConverter Converter { get; private set; }
     private HttpClientHandler HttpClientHandler { get; set; }
-    private ISteamConverter Converter { get; }
     private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }
 
     public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter) : base(httpClientHandler)
