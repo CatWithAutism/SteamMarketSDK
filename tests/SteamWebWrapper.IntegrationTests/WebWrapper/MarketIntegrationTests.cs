@@ -14,7 +14,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
 {
     private ISteamHttpClient SteamHttpClient { get; set; } = steamHttpClientFixture.SteamHttpClient;
 
-    private IMarketWrapper MarketWrapper { get; set; } = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
+    private IMarketWrapper MarketWrapper { get; set; } = new MarketWrapper(steamHttpClientFixture.SteamHttpClient, new SteamConvertor());
 
     private IInventoryWrapper InventoryWrapper { get; set; } = new InventoryWrapper(steamHttpClientFixture.SteamHttpClient);
 
@@ -196,8 +196,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
     {
         const long expectedValue = 2383847;
         var itemId = await MarketWrapper.GetItemNameIdAsync(730, "P250 | Sand Dune (Field-Tested)", CancellationToken.None);
-
-        itemId.Should().NotBeNull();
+        
         itemId.Should().Be(expectedValue);
     }
     

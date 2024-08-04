@@ -5,6 +5,7 @@ using SteamWebWrapper.Common.Utils;
 using SteamWebWrapper.Core.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.Core.Implementations;
+using SteamWebWrapper.Implementations;
 
 namespace SteamWebWrapper.IntegrationTests.Fixtures;
 
@@ -31,7 +32,7 @@ public class SteamHttpClientFixture : IDisposable
             AutomaticDecompression = DecompressionMethods.All,
         };
 
-        var steamHttpClient = new SteamHttpClient(httpClientHandler);
+        var steamHttpClient = new SteamHttpClient(httpClientHandler, new SteamConvertor());
         if (!Configuration["username"].IsNullOrEmpty() && !Configuration["password"].IsNullOrEmpty())
         {
             var steamAuthCredentials = new SteamAuthCredentials
