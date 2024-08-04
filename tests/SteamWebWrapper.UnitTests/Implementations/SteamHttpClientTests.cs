@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Moq;
 using Moq.Protected;
+using SteamWebWrapper.Contracts.Entities.Inventory;
 using SteamWebWrapper.Contracts.Entities.Market.BuyOrderStatus;
 using SteamWebWrapper.Contracts.Entities.Market.ItemOrdersActivity;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
@@ -33,12 +34,13 @@ public class SteamHttpClientTests
 	public static IEnumerable<object[]> SucceedData()
 	{
 		const string localhost = "https://localhost";
-		yield return new object[] { localhost, File.ReadAllText("Data/MarketHistoryResponse.json"), new MyHistoryResponse() };
-		yield return new object[] { localhost, File.ReadAllText("Data/GetBuyOrderStatusResponse.json"), new BuyOrderStatusResponse() };
-		yield return new object[] { localhost, File.ReadAllText("Data/GetOrderItemActivityResponse.json"), new ItemOrdersActivityResponse() };
-		yield return new object[] { localhost, File.ReadAllText("Data/MyListingsResponse.json"), new MyListingsResponse() };
-		yield return new object[] { localhost, File.ReadAllText("Data/PriceHistoryResponse.json"), new PriceHistoryResponse() };
-		yield return new object[] { localhost, File.ReadAllText("Data/SearchResponse.json"), new SearchResponse() };
+		yield return [localhost, File.ReadAllText("Data/MarketHistoryResponse.json"), new MyHistoryResponse()];
+		yield return [localhost, File.ReadAllText("Data/GetBuyOrderStatusResponse.json"), new BuyOrderStatusResponse()];
+		yield return [localhost, File.ReadAllText("Data/GetOrderItemActivityResponse.json"), new ItemOrdersActivityResponse()];
+		yield return [localhost, File.ReadAllText("Data/MyListingsResponse.json"), new MyListingsResponse()];
+		yield return [localhost, File.ReadAllText("Data/PriceHistoryResponse.json"), new PriceHistoryResponse()];
+		yield return [localhost, File.ReadAllText("Data/SearchResponse.json"), new SearchResponse()];
+		yield return [localhost, File.ReadAllText("Data/InventoryItemsResponse.json"), new InventoryResponse()];
 	}
 
 	[Theory]

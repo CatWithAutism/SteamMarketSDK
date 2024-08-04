@@ -14,7 +14,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
 {
     private ISteamHttpClient SteamHttpClient { get; set; } = steamHttpClientFixture.SteamHttpClient;
 
-    private IMarketWrapper MarketWrapper { get; set; } = new MarketWrapper(steamHttpClientFixture.SteamHttpClient, new SteamConvertor());
+    private IMarketWrapper MarketWrapper { get; set; } = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
 
     private IInventoryWrapper InventoryWrapper { get; set; } = new InventoryWrapper(steamHttpClientFixture.SteamHttpClient);
 

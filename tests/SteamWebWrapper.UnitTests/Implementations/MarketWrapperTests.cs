@@ -36,7 +36,7 @@ public class MarketWrapperTests
 				It.IsAny<CancellationToken>()))
 			.ReturnsAsync(historyObject);
 
-		IMarketWrapper marketWrapper = new MarketWrapper(SteamHttpClientMock.Object, SteamConvertor);
+		IMarketWrapper marketWrapper = new MarketWrapper(SteamHttpClientMock.Object);
 
 		var tradeHistory = await marketWrapper.GetTradeHistoryAsync(offset, count, CancellationToken.None);
 
