@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -5,9 +6,13 @@ using SteamKit2;
 using SteamKit2.Authentication;
 using SteamKit2.Internal;
 using SteamWebWrapper.Common.Utils;
+using SteamWebWrapper.Contracts.Exceptions;
+using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Entities.Authorization;
 using SteamWebWrapper.Core.Contracts.Entities.Exceptions;
 using SteamWebWrapper.Core.Contracts.Interfaces;
+using JsonException = System.Text.Json.JsonException;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SteamWebWrapper.Core.Implementations;
 
@@ -17,11 +22,13 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     public string? RefreshToken { get; private set; }
     public SteamID? SteamId { get; private set; }
     private HttpClientHandler HttpClientHandler { get; set; }
+    private ISteamConverter Converter { get; }
     private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }
 
-    public SteamHttpClient(HttpClientHandler httpClientHandler) : base(httpClientHandler)
+    public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter) : base(httpClientHandler)
     {
         HttpClientHandler = httpClientHandler;
+        Converter = converter;
         DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
         DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
         DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
@@ -96,6 +103,21 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     public string? GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
     public string? GetSessionId(Uri url) => GetCookie(url, "sessionid");
     public string? GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
+
+    public async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken)
+    {
+	    var stringResponse = await GetStringAsync(requestUri, cancellationToken);
+	    return Converter.DeserializeObject<T>(stringResponse);
+    }
+    
+    public async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+    {
+	    var response = await SendAsync(requestMessage, cancellationToken);
+	    response.EnsureSuccessStatusCode();
+
+	    var stringContent = await response.Content.ReadAsStringAsync(cancellationToken);
+	    return Converter.DeserializeObject<T>(stringContent);
+    }
     
     public async Task AuthorizeViaOAuthAsync(SteamAuthCredentials credentials, ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken? cancellationToken)
     {
