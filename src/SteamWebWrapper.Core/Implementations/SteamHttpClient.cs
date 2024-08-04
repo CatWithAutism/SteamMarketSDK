@@ -104,13 +104,13 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
     public string? GetSessionId(Uri url) => GetCookie(url, "sessionid");
     public string? GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
 
-    public async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken)
+    public async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken)  where T : notnull
     {
 	    var stringResponse = await GetStringAsync(requestUri, cancellationToken);
 	    return Converter.DeserializeObject<T>(stringResponse);
     }
     
-    public async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+    public async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken) where T : notnull
     {
 	    var response = await SendAsync(requestMessage, cancellationToken);
 	    response.EnsureSuccessStatusCode();

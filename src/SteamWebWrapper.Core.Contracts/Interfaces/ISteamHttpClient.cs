@@ -73,6 +73,6 @@ public interface ISteamHttpClient
     string? GetSteamCountry(Uri url);
     string? GetSessionId(Uri url);
     string? GetSteamSecureLogin(Uri url);
-    Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken);
-    Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken);
+    Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken) where T : notnull;
+    Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken) where T : notnull;
 }

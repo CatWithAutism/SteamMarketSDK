@@ -55,6 +55,7 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\SteamWebWrapper.Core\SteamWebWrapper.Core.csproj" />
       <ProjectReference Include="..\..\src\SteamWebWrapper\SteamWebWrapper.csproj" />
     </ItemGroup>
 
