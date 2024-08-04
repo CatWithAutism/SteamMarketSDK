@@ -1,46 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <LangVersion>default</LangVersion>
-        <Version>1.0.2</Version>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>default</LangVersion>
+    <Version>1.0.2</Version>
+  </PropertyGroup>
 
 
+  <ItemGroup>
+    <Reference Include="JetBrains.ReSharper.TestRunner.Abstractions">
+      <HintPath>..\..\..\..\..\Library\Application Support\JetBrains\Toolbox\apps\Rider\ch-0\232.9921.83\Rider.app\Contents\lib\ReSharperHost\TestRunner\netcoreapp3.0\JetBrains.ReSharper.TestRunner.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 
-
-    <ItemGroup>
-      <Reference Include="JetBrains.ReSharper.TestRunner.Abstractions">
-        <HintPath>..\..\..\..\..\Library\Application Support\JetBrains\Toolbox\apps\Rider\ch-0\232.9921.83\Rider.app\Contents\lib\ReSharperHost\TestRunner\netcoreapp3.0\JetBrains.ReSharper.TestRunner.Abstractions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-
+  <ItemGroup>
+    <ProjectReference Include="..\SteamWebWrapper.Core.Contracts\SteamWebWrapper.Core.Contracts.csproj"/>
+    <ProjectReference Include="..\SteamWebWrapper.Core.SteamGuard\SteamWebWrapper.Core.SteamGuard.csproj"/>
+    <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj"/>
+    <ProjectReference Include="..\SteamWebWrapper.Contracts\SteamWebWrapper.Contracts.csproj"/>
+  </ItemGroup>
 
 
-
-    <ItemGroup>
-      <ProjectReference Include="..\SteamWebWrapper.Core.Contracts\SteamWebWrapper.Core.Contracts.csproj" />
-      <ProjectReference Include="..\SteamWebWrapper.Core.SteamGuard\SteamWebWrapper.Core.SteamGuard.csproj" />
-      <ProjectReference Include="..\SteamWebWrapper.Common\SteamWebWrapper.Common.csproj" />
-      <ProjectReference Include="..\SteamWebWrapper.Contracts\SteamWebWrapper.Contracts.csproj" />
-    </ItemGroup>
-
-
-
-
-
-    <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-      <PackageReference Include="SteamKit2" Version="2.5.0" />
-    </ItemGroup>
-
-
-
-
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="SteamKit2" Version="2.5.0"/>
+  </ItemGroup>
 
 
 </Project>

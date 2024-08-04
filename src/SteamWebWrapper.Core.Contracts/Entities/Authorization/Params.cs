@@ -4,9 +4,7 @@ namespace SteamWebWrapper.Core.Contracts.Entities.Authorization;
 
 public class Params
 {
-    [JsonPropertyName("nonce")]
-    public string Nonce { get; set; }
+	[JsonPropertyName("auth")] public string Auth { get; set; }
 
-    [JsonPropertyName("auth")]
-    public string Auth { get; set; }
+	[JsonPropertyName("nonce")] public string Nonce { get; set; }
 }

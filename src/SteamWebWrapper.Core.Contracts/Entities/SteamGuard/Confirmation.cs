@@ -1,61 +1,49 @@
 ﻿using System.Text.Json.Serialization;
-namespace SteamWebWrapper.Core.Contracts.Entities.SteamGuard
+
+namespace SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
+
+[JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+public class Confirmation
 {
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-    public class Confirmation
-    {
-        [JsonPropertyName("id")]
-        public ulong Id { get; set; }
+	public enum EMobileConfirmationType
+	{
+		Invalid = 0,
+		Test = 1,
+		Trade = 2,
+		MarketListing = 3,
+		FeatureOptOut = 4,
+		PhoneNumberChange = 5,
+		AccountRecovery = 6
+	}
 
-        [JsonPropertyName("nonce")]
-        public ulong Key { get; set; }
+	[JsonPropertyName("accept")] public string Accept { get; set; }
 
-        [JsonPropertyName("creator_id")]
-        public ulong Creator { get; set; }
-        
-        [JsonPropertyName("headline")]
-        public string Headline { get; set; }
+	[JsonPropertyName("cancel")] public string Cancel { get; set; }
 
-        [JsonPropertyName("summary")]
-        public List<String> Summary { get; set; }
+	[JsonPropertyName("type")]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
+	public EMobileConfirmationType ConfType { get; set; } = EMobileConfirmationType.Invalid;
 
-        [JsonPropertyName("accept")]
-        public string Accept { get; set; }
+	[JsonPropertyName("creator_id")] public ulong Creator { get; set; }
 
-        [JsonPropertyName("cancel")]
-        public string Cancel { get; set; }
+	[JsonPropertyName("headline")] public string Headline { get; set; }
 
-        [JsonPropertyName("icon")]
-        public string Icon { get; set; }
+	[JsonPropertyName("icon")] public string Icon { get; set; }
 
-        [JsonPropertyName("type")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EMobileConfirmationType ConfType { get; set; } = EMobileConfirmationType.Invalid;
+	[JsonPropertyName("id")] public ulong Id { get; set; }
 
-        public enum EMobileConfirmationType
-        {
-            Invalid = 0,
-            Test = 1,
-            Trade = 2,
-            MarketListing = 3,
-            FeatureOptOut = 4,
-            PhoneNumberChange = 5,
-            AccountRecovery = 6
-        }
-    }
+	[JsonPropertyName("nonce")] public ulong Key { get; set; }
 
-    public class ConfirmationsResponse
-    {
-        [JsonPropertyName("success")]
-        public bool Success { get; set; }
+	[JsonPropertyName("summary")] public List<String> Summary { get; set; }
+}
 
-        [JsonPropertyName("message")]
-        public string Message { get; set; }
+public class ConfirmationsResponse
+{
+	[JsonPropertyName("conf")] public Confirmation[] Confirmations { get; set; }
 
-        [JsonPropertyName("needauth")]
-        public bool NeedAuthentication { get; set; }
+	[JsonPropertyName("message")] public string Message { get; set; }
 
-        [JsonPropertyName("conf")]
-        public Confirmation[] Confirmations { get; set; }
-    }
+	[JsonPropertyName("needauth")] public bool NeedAuthentication { get; set; }
+
+	[JsonPropertyName("success")] public bool Success { get; set; }
 }

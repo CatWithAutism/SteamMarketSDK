@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyTitle>SteamAuth</AssemblyTitle>
     <Product>SteamAuth</Product>
-    <Copyright>Copyright ©  2015</Copyright>
+    <Copyright>Copyright © 2015</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>default</LangVersion>
     <RootNamespace>SteamWebWrapper.SteamGuard</RootNamespace>
@@ -16,10 +16,10 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SteamKit2" Version="2.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="SteamKit2" Version="2.5.0"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SteamWebWrapper.Core.Contracts\SteamWebWrapper.Core.Contracts.csproj" />
+    <ProjectReference Include="..\SteamWebWrapper.Core.Contracts\SteamWebWrapper.Core.Contracts.csproj"/>
   </ItemGroup>
 </Project>
