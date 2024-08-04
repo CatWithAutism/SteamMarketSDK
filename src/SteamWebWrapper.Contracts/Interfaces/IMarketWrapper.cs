@@ -14,8 +14,8 @@ namespace SteamWebWrapper.Contracts.Interfaces;
 
 public interface IMarketWrapper : IDisposable
 {
-    Task<MyHistoryResponse?> GetTradeHistoryAsync(long offset, long count, CancellationToken cancellationToken);
-    Task<AccountInfoResponse?> GetAccountInfoAsync(CancellationToken cancellationToken);
+    Task<MyHistoryResponse> GetTradeHistoryAsync(long offset, long count, CancellationToken cancellationToken);
+    Task<AccountInfoResponse> GetAccountInfoAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Returns current listings and buy orders.
@@ -24,9 +24,9 @@ public interface IMarketWrapper : IDisposable
     /// <param name="count">Count of elements. Max size is 500</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
-    Task<MyListingsResponse?> GetListingsAsync(long offset, long count, CancellationToken cancellationToken);
+    Task<MyListingsResponse> GetListingsAsync(long offset, long count, CancellationToken cancellationToken);
 
-    Task<BuyOrderStatusResponse?> GetBuyOrderStatusAsync(long buyOrderId, CancellationToken cancellationToken);
+    Task<BuyOrderStatusResponse> GetBuyOrderStatusAsync(long buyOrderId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Request price overview of specified item.
@@ -34,21 +34,21 @@ public interface IMarketWrapper : IDisposable
     /// <param name="priceRequest">Price request.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Price overview response</returns>
-    Task<PriceOverviewResponse?> GetPriceOverviewAsync(PriceOverviewRequest priceRequest, CancellationToken cancellationToken);
+    Task<PriceOverviewResponse> GetPriceOverviewAsync(PriceOverviewRequest priceRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Request to cancel buy order.
     /// </summary>
     /// <param name="buyOrderId">Buy order id</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<CancelBuyOrderResponse?> CancelBuyOrderAsync(long buyOrderId, CancellationToken cancellationToken);
+    Task<CancelBuyOrderResponse> CancelBuyOrderAsync(long buyOrderId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Request to create buy order.
     /// </summary>
     /// <param name="createBuyOrderRequest">Request.</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<CreateBuyOrderResponse?> CreateBuyOrderAsync(CreateBuyOrderRequest createBuyOrderRequest, CancellationToken cancellationToken);
+    Task<CreateBuyOrderResponse> CreateBuyOrderAsync(CreateBuyOrderRequest createBuyOrderRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Returns price history of the market item.
@@ -57,12 +57,12 @@ public interface IMarketWrapper : IDisposable
     /// <param name="marketHashName">Market hash name.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
-    Task<PriceHistoryResponse?> GetPriceHistoryAsync(long appId, string marketHashName, CancellationToken cancellationToken);
+    Task<PriceHistoryResponse> GetPriceHistoryAsync(long appId, string marketHashName, CancellationToken cancellationToken);
 
     /// <summary>
     /// Request to create sell order.
     /// </summary>
-    Task<CreateSellOrderResponse?> CreateSellOrderAsync(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken);
+    Task<CreateSellOrderResponse> CreateSellOrderAsync(CreateSellOrderRequest createSellOrderRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Request to create sell order.
@@ -72,14 +72,14 @@ public interface IMarketWrapper : IDisposable
     /// <summary>
     /// Do not use it. This method raw as fuck.
     /// </summary>
-    Task<SearchResponse?> SearchItemsAsync(string? query, long offset, long count, string searchData, CancellationToken cancellationToken);
+    Task<SearchResponse> SearchItemsAsync(string? query, long offset, long count, string searchData, CancellationToken cancellationToken);
 
     /// <summary>
     /// Fetch item name id of specified item
     /// </summary>
     /// <param name="appId">AppId of Steam</param>
     /// <param name="marketHashName">Market Hash Name</param>
-    Task<long?> GetItemNameIdAsync(long appId, string marketHashName, CancellationToken cancellationToken);
+    Task<long> GetItemNameIdAsync(long appId, string marketHashName, CancellationToken cancellationToken);
 
-    Task<ItemOrdersActivityResponse?> GetItemOrdersActivityAsync(long itemNameId, long currency, string language = "english", string country = "US", CancellationToken cancellationToken = default);
+    Task<ItemOrdersActivityResponse> GetItemOrdersActivityAsync(long itemNameId, long currency, string language = "english", string country = "US", CancellationToken cancellationToken = default);
 }
