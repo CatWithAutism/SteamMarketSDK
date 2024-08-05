@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using SteamWebWrapper.Contracts.Exceptions;
+﻿using SteamWebWrapper.Contracts.Exceptions;
 using SteamWebWrapper.Core.Contracts.Interfaces;
+using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SteamWebWrapper.Implementations;
