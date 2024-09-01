@@ -4,6 +4,7 @@ using Moq;
 using SteamWebWrapper.Contracts.Entities.Market.MyHistory;
 using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Interfaces;
+using SteamWebWrapper.Core.Implementations;
 using SteamWebWrapper.Implementations;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace SteamWebWrapper.UnitTests.Implementations;
 public class MarketWrapperTests
 {
 	private SteamConvertor SteamConvertor { get; } = new();
-	private Mock<ISteamHttpClient> SteamHttpClientMock { get; } = new();
+	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new();
 
 	[Fact]
 	public async Task GetTradeHistoryAsync_Success()

@@ -1,15 +1,16 @@
 using SteamWebWrapper.Contracts.Entities.Inventory;
 using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Interfaces;
+using SteamWebWrapper.Core.Implementations;
 using System.Text.Json;
 
 namespace SteamWebWrapper.Implementations;
 
 public class InventoryWrapper : IInventoryWrapper
 {
-	private readonly ISteamHttpClient _steamHttpClient;
-
-	public InventoryWrapper(ISteamHttpClient steamHttpClient) => _steamHttpClient = steamHttpClient;
+	private readonly SteamHttpClient _steamHttpClient;
+	
+	public InventoryWrapper(SteamHttpClient steamHttpClient) => _steamHttpClient = steamHttpClient;
 
 	public void Dispose() => _steamHttpClient.Dispose();
 

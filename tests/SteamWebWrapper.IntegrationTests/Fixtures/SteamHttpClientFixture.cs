@@ -43,7 +43,7 @@ public class SteamHttpClientFixture : IDisposable
 		SteamHttpClient = steamHttpClient;
 	}
 
-	public ISteamHttpClient SteamHttpClient { get; }
+	public SteamHttpClient SteamHttpClient { get; }
 
 	private static IConfiguration Configuration { get; } = new ConfigurationBuilder()
 		.AddUserSecrets<SteamHttpClientFixture>()

@@ -12,7 +12,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SteamWebWrapper.Core.Implementations;
 
-public class SteamHttpClient : HttpClient, ISteamHttpClient
+public class SteamHttpClient : HttpClient
 {
 	public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter) : base(httpClientHandler)
 	{
@@ -88,10 +88,10 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
 		return Converter.DeserializeObject<T>(stringContent);
 	}
 
-	public string? GetSessionId(Uri url) => GetCookie(url, "sessionid");
+	public string GetSessionId(Uri url) => GetCookie(url, "sessionid");
 
-	public string? GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
-	public string? GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
+	public string GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
+	public string GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
 
 	#region Private
 
@@ -154,10 +154,10 @@ public class SteamHttpClient : HttpClient, ISteamHttpClient
 		}
 	}
 
-	private string? GetCookie(Uri url, string name)
+	private string GetCookie(Uri url, string name)
 	{
 		var cookies = HttpClientHandler.CookieContainer.GetCookies(url);
-		return cookies[name]?.Value;
+		return cookies[name]?.Value ?? string.Empty;
 	}
 
 	#endregion

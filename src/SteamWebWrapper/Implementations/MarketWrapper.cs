@@ -12,6 +12,7 @@ using SteamWebWrapper.Contracts.Entities.Market.Search;
 using SteamWebWrapper.Contracts.Exceptions;
 using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Interfaces;
+using SteamWebWrapper.Core.Implementations;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -19,7 +20,7 @@ namespace SteamWebWrapper.Implementations;
 
 public partial class MarketWrapper : IMarketWrapper
 {
-	public MarketWrapper(ISteamHttpClient httpClient) => SteamHttpClient = httpClient;
+	public MarketWrapper(SteamHttpClient httpClient) => SteamHttpClient = httpClient;
 
 	private string SessionId
 	{
@@ -32,7 +33,7 @@ public partial class MarketWrapper : IMarketWrapper
 		}
 	}
 
-	private ISteamHttpClient SteamHttpClient { get; }
+	private SteamHttpClient SteamHttpClient { get; }
 
 	/// <summary>
 	///     Request to cancel buy order.

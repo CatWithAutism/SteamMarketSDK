@@ -4,6 +4,7 @@ using SteamWebWrapper.Contracts.Entities.Market.CreateSellOrder;
 using SteamWebWrapper.Contracts.Entities.Market.PriceOverview;
 using SteamWebWrapper.Contracts.Interfaces;
 using SteamWebWrapper.Core.Contracts.Interfaces;
+using SteamWebWrapper.Core.Implementations;
 using SteamWebWrapper.Implementations;
 using SteamWebWrapper.IntegrationTests.Fixtures;
 using Xunit;
@@ -13,7 +14,7 @@ namespace SteamWebWrapper.IntegrationTests.WebWrapper;
 public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixture)
 	: IClassFixture<SteamHttpClientFixture>
 {
-	private ISteamHttpClient SteamHttpClient { get; } = steamHttpClientFixture.SteamHttpClient;
+	private SteamHttpClient SteamHttpClient { get; } = steamHttpClientFixture.SteamHttpClient;
 
 	private IMarketWrapper MarketWrapper { get; } = new MarketWrapper(steamHttpClientFixture.SteamHttpClient);
 

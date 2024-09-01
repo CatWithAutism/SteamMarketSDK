@@ -29,7 +29,7 @@ public class SteamHttpClientTests
 
 	private Mock<HttpClientHandler> MockedHandler { get; }
 	private SteamConvertor SteamConvertor { get; }
-	private ISteamHttpClient SteamHttpClient { get; }
+	private SteamHttpClient SteamHttpClient { get; }
 
 	public static IEnumerable<object[]> SucceedData()
 	{
