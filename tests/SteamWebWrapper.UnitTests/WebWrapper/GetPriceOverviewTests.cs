@@ -15,7 +15,7 @@ public class GetPriceOverviewTests
 	public GetPriceOverviewTests()
 	{
 		MockedHandler = new Mock<HttpClientHandler>();
-		SteamHttpClient = new SteamHttpClient(MockedHandler.Object, new SteamConvertor());
+		SteamHttpClient = new SteamHttpClient(MockedHandler.Object, new SteamConverter());
 		MarketWrapper = new MarketWrapper(SteamHttpClient);
 	}
 

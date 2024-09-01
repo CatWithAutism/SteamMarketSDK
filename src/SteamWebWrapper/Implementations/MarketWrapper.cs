@@ -22,6 +22,8 @@ public partial class MarketWrapper : IMarketWrapper
 {
 	public MarketWrapper(SteamHttpClient httpClient) => SteamHttpClient = httpClient;
 
+	private static ISteamConverter SteamConverter { get; } = new SteamConverter();
+	
 	private string SessionId
 	{
 		get
@@ -146,7 +148,7 @@ public partial class MarketWrapper : IMarketWrapper
 		var stringResponse = await SteamHttpClient.GetStringAsync(infoPage, cancellationToken);
 
 		var match = WalletCurrencyRegex().Match(stringResponse);
-		var accountInfo = SteamHttpClient.Converter.DeserializeObject<AccountInfoResponse>(match.Value);
+		var accountInfo = SteamConverter.DeserializeObject<AccountInfoResponse>(match.Value);
 
 		match = Regex.Match(stringResponse, @"dateCanUseMarket\s*=\s*new\s*Date\(\""(.+?)\""\)");
 		accountInfo.MarketAllowed = !match.Success;

@@ -5,7 +5,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SteamWebWrapper.Implementations;
 
-public class SteamConvertor : ISteamConverter
+public class SteamConverter : ISteamConverter
 {
 	public T DeserializeObject<T>(string content)
 	{

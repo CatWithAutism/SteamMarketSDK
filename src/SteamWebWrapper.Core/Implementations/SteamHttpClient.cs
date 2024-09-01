@@ -28,14 +28,14 @@ public class SteamHttpClient : HttpClient
 		DefaultRequestHeaders.Referrer = new Uri("https://steamcommunity.com/market/");
 	}
 
-	public string? AccessToken { get; private set; }
-	public ISteamConverter Converter { get; }
-	public string? RefreshToken { get; private set; }
-	public SteamID? SteamId { get; private set; }
+	public virtual string? AccessToken { get; private set; }
+	public virtual string? RefreshToken { get; private set; }
+	public virtual SteamID? SteamId { get; private set; }
+	private ISteamConverter Converter { get; }
 	private HttpClientHandler HttpClientHandler { get; }
 	private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }
 
-	public async Task AuthorizeViaOAuthAsync(SteamAuthCredentials credentials,
+	public virtual async Task AuthorizeViaOAuthAsync(SteamAuthCredentials credentials,
 		ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken? cancellationToken)
 	{
 		if (steamGuardAuthenticator != null)
@@ -72,13 +72,15 @@ public class SteamHttpClient : HttpClient
 		await EndAuthSession();
 	}
 
-	public async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken) where T : notnull
+	public virtual async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken)
+		where T : notnull
 	{
 		var stringResponse = await GetStringAsync(requestUri, cancellationToken);
 		return Converter.DeserializeObject<T>(stringResponse);
 	}
 
-	public async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+	public virtual async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage,
+		CancellationToken cancellationToken)
 		where T : notnull
 	{
 		var response = await SendAsync(requestMessage, cancellationToken);
@@ -88,10 +90,10 @@ public class SteamHttpClient : HttpClient
 		return Converter.DeserializeObject<T>(stringContent);
 	}
 
-	public string GetSessionId(Uri url) => GetCookie(url, "sessionid");
+	public virtual string GetSessionId(Uri url) => GetCookie(url, "sessionid");
 
-	public string GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
-	public string GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
+	public virtual string GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
+	public virtual string GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
 
 	#region Private
 

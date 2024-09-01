@@ -23,12 +23,12 @@ public class SteamHttpClientTests
 	public SteamHttpClientTests()
 	{
 		MockedHandler = new Mock<HttpClientHandler>();
-		SteamConvertor = new SteamConvertor();
-		SteamHttpClient = new SteamHttpClient(MockedHandler.Object, SteamConvertor);
+		SteamConverter = new SteamConverter();
+		SteamHttpClient = new SteamHttpClient(MockedHandler.Object, SteamConverter);
 	}
 
 	private Mock<HttpClientHandler> MockedHandler { get; }
-	private SteamConvertor SteamConvertor { get; }
+	private SteamConverter SteamConverter { get; }
 	private SteamHttpClient SteamHttpClient { get; }
 
 	public static IEnumerable<object[]> SucceedData()

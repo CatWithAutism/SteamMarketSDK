@@ -13,8 +13,8 @@ namespace SteamWebWrapper.UnitTests.Implementations;
 [TestSubject(typeof(MarketWrapper))]
 public class MarketWrapperTests
 {
-	private SteamConvertor SteamConvertor { get; } = new();
-	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new();
+	private static ISteamConverter SteamConvertor { get; } = new SteamConverter();
+	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new(MockBehavior.Strict, [new Mock<HttpClientHandler>().Object, SteamConvertor]);
 
 	[Fact]
 	public async Task GetTradeHistoryAsync_Success()
