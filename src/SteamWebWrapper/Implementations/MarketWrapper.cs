@@ -18,24 +18,28 @@ using System.Web;
 
 namespace SteamWebWrapper.Implementations;
 
-public partial class MarketWrapper : IMarketWrapper
+public sealed partial class MarketWrapper(SteamHttpClient httpClient) : IMarketWrapper
 {
-	public MarketWrapper(SteamHttpClient httpClient) => SteamHttpClient = httpClient;
+	[GeneratedRegex(@"{\s*\""wallet_currency\""[A-Za-z0-9:\.\s,\""\\_\-]+}")]
+	private static partial Regex GetWalletCurrencyRegex();
+	
+	[GeneratedRegex(@"dateCanUseMarket\s*=\s*new\s*Date\(\""(.+?)\""\)")]
+	private static partial Regex GetMarketAvailabilityRegex();
 
 	private static ISteamConverter SteamConverter { get; } = new SteamConverter();
-	
+
 	private string SessionId
 	{
 		get
 		{
 			var steamCommunity = new Uri("https://steamcommunity.com/");
-			return SteamHttpClient.GetSessionId(steamCommunity) ??
+			return httpClient.GetSessionId(steamCommunity) ??
 			       throw new InvalidOperationException(
 				       $"Your client is not authorized or do not have session id for domain {steamCommunity.Host}");
 		}
 	}
 
-	private SteamHttpClient SteamHttpClient { get; }
+	public void Dispose() => httpClient.Dispose();
 
 	/// <summary>
 	///     Request to cancel buy order.
@@ -52,15 +56,9 @@ public partial class MarketWrapper : IMarketWrapper
 			new KeyValuePair<string, string>("buy_orderid", buyOrderId.ToString())
 		});
 
-		var request = new HttpRequestMessage
-		{
-			RequestUri = new Uri(requestUri),
-			Method = HttpMethod.Post,
-			Content = content,
-			Headers = { Referrer = new Uri("https://steamcommunity.com/market/") }
-		};
+		var request = GetHttpRequestMessage(requestUri, HttpMethod.Post, content, "https://steamcommunity.com/market/");
 
-		return await SteamHttpClient.GetObjectAsync<CancelBuyOrderResponse>(request, cancellationToken);
+		return await httpClient.GetObjectAsync<CancelBuyOrderResponse>(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -72,7 +70,7 @@ public partial class MarketWrapper : IMarketWrapper
 
 		var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("sessionid", SessionId) });
 
-		var response = await SteamHttpClient.PostAsync(requestUri, content, cancellationToken);
+		var response = await httpClient.PostAsync(requestUri, content, cancellationToken);
 		return response.IsSuccessStatusCode;
 	}
 
@@ -99,15 +97,9 @@ public partial class MarketWrapper : IMarketWrapper
 			new KeyValuePair<string, string>("save_my_address", "0")
 		});
 
-		var request = new HttpRequestMessage
-		{
-			RequestUri = new Uri(requestUri),
-			Method = HttpMethod.Post,
-			Content = content,
-			Headers = { Referrer = new Uri($"https://steamcommunity.com/market/listings/730/{urlEncodedHashName}") }
-		};
+		var request = GetHttpRequestMessage(requestUri, HttpMethod.Post, content, $"https://steamcommunity.com/market/listings/730/{urlEncodedHashName}");
 
-		return await SteamHttpClient.GetObjectAsync<CreateBuyOrderResponse>(request, cancellationToken);
+		return await httpClient.GetObjectAsync<CreateBuyOrderResponse>(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -128,29 +120,21 @@ public partial class MarketWrapper : IMarketWrapper
 			new KeyValuePair<string, string>("price", createSellOrderRequest.Price.ToString())
 		});
 
-		var request = new HttpRequestMessage
-		{
-			RequestUri = new Uri(requestUri),
-			Method = HttpMethod.Post,
-			Content = content,
-			Headers = { Referrer = new Uri($"https://steamcommunity.com/id/{SteamHttpClient.SteamId}/inventory/") }
-		};
+		var request = GetHttpRequestMessage(requestUri, HttpMethod.Post, content, $"https://steamcommunity.com/id/{httpClient.SteamId}/inventory/");
 
-		return await SteamHttpClient.GetObjectAsync<CreateSellOrderResponse>(request, cancellationToken);
+		return await httpClient.GetObjectAsync<CreateSellOrderResponse>(request, cancellationToken);
 	}
-
-	public void Dispose() => SteamHttpClient.Dispose();
 
 	public async Task<AccountInfoResponse> GetAccountInfoAsync(CancellationToken cancellationToken)
 	{
 		const string infoPage = "https://steamcommunity.com/market/#";
 
-		var stringResponse = await SteamHttpClient.GetStringAsync(infoPage, cancellationToken);
+		var stringResponse = await httpClient.GetStringAsync(infoPage, cancellationToken);
 
-		var match = WalletCurrencyRegex().Match(stringResponse);
+		var match = GetWalletCurrencyRegex().Match(stringResponse);
 		var accountInfo = SteamConverter.DeserializeObject<AccountInfoResponse>(match.Value);
 
-		match = Regex.Match(stringResponse, @"dateCanUseMarket\s*=\s*new\s*Date\(\""(.+?)\""\)");
+		match = GetMarketAvailabilityRegex().Match(stringResponse);
 		accountInfo.MarketAllowed = !match.Success;
 
 		if (accountInfo.MarketAllowed)
@@ -158,24 +142,25 @@ public partial class MarketWrapper : IMarketWrapper
 			return accountInfo;
 		}
 
-		accountInfo.DateCanUseMarket = DateTime.Parse(match.Groups[1].Value);
+		if (DateTime.TryParse(match.Groups[1].Value, out var marketAvailableDateTime))
+		{
+			throw new BadSteamResponseDataException($"We can't be able to determine market available date in response: {stringResponse}");
+		}
+		
+		accountInfo.DateCanUseMarket = marketAvailableDateTime; 
 		return accountInfo;
 	}
 
 	public async Task<BuyOrderStatusResponse> GetBuyOrderStatusAsync(long buyOrderId,
 		CancellationToken cancellationToken)
 	{
-		var requestUri =
-			$"https://steamcommunity.com/market/getbuyorderstatus?sessionid={SessionId}&buy_orderid={buyOrderId}";
+		var requestUri = $"https://steamcommunity.com/market/getbuyorderstatus?" +
+		                 $"sessionid={SessionId}&" +
+		                 $"buy_orderid={buyOrderId}";
 
-		var request = new HttpRequestMessage
-		{
-			RequestUri = new Uri(requestUri),
-			Method = HttpMethod.Get,
-			Headers = { Referrer = new Uri($"https://steamcommunity.com/id/{SteamHttpClient.SteamId}/inventory/") }
-		};
+		var request = GetHttpRequestMessage(requestUri, HttpMethod.Get, null, "https://steamcommunity.com/market/");
 
-		return await SteamHttpClient.GetObjectAsync<BuyOrderStatusResponse>(request, cancellationToken);
+		return await httpClient.GetObjectAsync<BuyOrderStatusResponse>(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -183,12 +168,13 @@ public partial class MarketWrapper : IMarketWrapper
 	/// </summary>
 	/// <param name="appId">AppId of Steam</param>
 	/// <param name="marketHashName">Market Hash Name</param>
+	/// <param name="cancellationToken">Cancellation token</param>
 	public async Task<long> GetItemNameIdAsync(long appId, string marketHashName, CancellationToken cancellationToken)
 	{
 		const string searchPattern = @"Market_LoadOrderSpread\(\s*(\d+)\s*\)";
 		var requestUri = $"https://steamcommunity.com/market/listings/{appId}/{marketHashName}";
 
-		var stringResponse = await SteamHttpClient.GetStringAsync(requestUri, cancellationToken);
+		var stringResponse = await httpClient.GetStringAsync(requestUri, cancellationToken);
 
 		var match = Regex.Match(stringResponse, searchPattern);
 		if (match.Success)
@@ -196,17 +182,21 @@ public partial class MarketWrapper : IMarketWrapper
 			return long.Parse(match.Groups[1].Value);
 		}
 
-		throw new BadSteamResponseDataException(
-			$"We cannot get item name id because it doesn't exist in the response. Response: {stringResponse}");
+		throw new BadSteamResponseDataException($"We cannot get item name id because it doesn't exist in the response: {stringResponse}");
 	}
 
 	public async Task<ItemOrdersActivityResponse> GetItemOrdersActivityAsync(long itemNameId, long currency,
 		string language = "english", string country = "US", CancellationToken cancellationToken = default)
 	{
 		var requestUri = $"https://steamcommunity.com/market/itemordersactivity?" +
-		                 $"item_nameid={itemNameId}&currency={currency}&country={country}&language={language}&two_factor=0&norender=true";
+		                 $"item_nameid={itemNameId}&" +
+		                 $"currency={currency}&" +
+		                 $"country={country}&" +
+		                 $"language={language}&" +
+		                 $"two_factor=0&" +
+		                 $"norender=true";
 
-		return await SteamHttpClient.GetObjectAsync<ItemOrdersActivityResponse>(requestUri, cancellationToken);
+		return await httpClient.GetObjectAsync<ItemOrdersActivityResponse>(requestUri, cancellationToken);
 	}
 
 	/// <summary>
@@ -218,9 +208,12 @@ public partial class MarketWrapper : IMarketWrapper
 	/// <returns></returns>
 	public async Task<MyListingsResponse> GetListingsAsync(long offset, long count, CancellationToken cancellationToken)
 	{
-		var requestUri = $"https://steamcommunity.com/market/mylistings?count={count}&start={offset}&norender=true";
+		var requestUri = $"https://steamcommunity.com/market/mylistings?" +
+		                 $"count={count}&" +
+		                 $"start={offset}&" +
+		                 $"norender=true";
 
-		return await SteamHttpClient.GetObjectAsync<MyListingsResponse>(requestUri, cancellationToken);
+		return await httpClient.GetObjectAsync<MyListingsResponse>(requestUri, cancellationToken);
 	}
 
 	/// <summary>
@@ -233,10 +226,11 @@ public partial class MarketWrapper : IMarketWrapper
 	public async Task<PriceHistoryResponse> GetPriceHistoryAsync(long appId, string marketHashName,
 		CancellationToken cancellationToken)
 	{
-		var requestUri =
-			$"https://steamcommunity.com/market/pricehistory?appid={appId}&market_hash_name={HttpUtility.UrlEncode(marketHashName)}";
+		var requestUri = $"https://steamcommunity.com/market/pricehistory?" +
+		                 $"appid={appId}&" +
+		                 $"market_hash_name={HttpUtility.UrlEncode(marketHashName)}";
 
-		return await SteamHttpClient.GetObjectAsync<PriceHistoryResponse>(requestUri, cancellationToken);
+		return await httpClient.GetObjectAsync<PriceHistoryResponse>(requestUri, cancellationToken);
 	}
 
 	/// <summary>
@@ -254,16 +248,18 @@ public partial class MarketWrapper : IMarketWrapper
 		                 $"appid={priceRequest.AppId}&" +
 		                 $"market_hash_name={HttpUtility.UrlEncode(priceRequest.MarketHashName)}";
 
-		return await SteamHttpClient.GetObjectAsync<PriceOverviewResponse>(requestUri, cancellationToken);
+		return await httpClient.GetObjectAsync<PriceOverviewResponse>(requestUri, cancellationToken);
 	}
 
 	public async Task<MyHistoryResponse> GetTradeHistoryAsync(long offset, long count,
 		CancellationToken cancellationToken)
 	{
-		var requestUri =
-			$"https://steamcommunity.com/market/myhistory/?query=&count={count}&start={offset}&norender=true";
+		var requestUri = $"https://steamcommunity.com/market/myhistory/?" +
+		                 $"query=&count={count}&" +
+		                 $"start={offset}&" +
+		                 $"norender=true";
 
-		return await SteamHttpClient.GetObjectAsync<MyHistoryResponse>(requestUri, cancellationToken);
+		return await httpClient.GetObjectAsync<MyHistoryResponse>(requestUri, cancellationToken);
 	}
 
 	/// <summary>
@@ -272,12 +268,24 @@ public partial class MarketWrapper : IMarketWrapper
 	public async Task<SearchResponse> SearchItemsAsync(string? query, long offset, long count, string searchData,
 		CancellationToken cancellationToken)
 	{
-		var requestUri =
-			$"https://steamcommunity.com/market/search/render/?query={query}&start={offset}&count={count}&{searchData}&norender=true";
+		var requestUri = $"https://steamcommunity.com/market/search/render/?" +
+		                 $"query={query}&" +
+		                 $"start={offset}&" +
+		                 $"count={count}&{searchData}" +
+		                 $"&norender=true";
 
-		return await SteamHttpClient.GetObjectAsync<SearchResponse>(requestUri, cancellationToken);
+		return await httpClient.GetObjectAsync<SearchResponse>(requestUri, cancellationToken);
 	}
-
-	[GeneratedRegex(@"{\s*\""wallet_currency\""[A-Za-z0-9:\.\s,\""\\_\-]+}")]
-	private static partial Regex WalletCurrencyRegex();
+	
+	private static HttpRequestMessage GetHttpRequestMessage(string requestUri, HttpMethod httpMethod, HttpContent? content, string referer)
+	{
+		var request = new HttpRequestMessage
+		{
+			RequestUri = new Uri(requestUri),
+			Method = httpMethod,
+			Content = content,
+			Headers = { Referrer =  string.IsNullOrEmpty(referer) ? null : new Uri(referer) }
+		};
+		return request;
+	}
 }
