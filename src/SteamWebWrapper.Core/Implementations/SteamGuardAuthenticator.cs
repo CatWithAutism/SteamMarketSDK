@@ -1,38 +1,38 @@
-using SteamWebWrapper.Core.Interfaces;
+using SteamWebWrapper.Common.Utils;
+using SteamWebWrapper.Core.Contracts.Entities.SteamGuard;
+using SteamWebWrapper.Core.Contracts.Interfaces;
 using SteamWebWrapper.SteamGuard;
 
 namespace SteamWebWrapper.Core.Implementations;
 
 public class SteamGuardAuthenticator : SteamGuardAccount, ISteamGuardAuthenticator
 {
-    private const int AuthenticatorDelay = 20 * 1000;
-    
-    public async Task<string> GetDeviceCodeAsync(bool previousCodeWasIncorrect)
-    {
-        if (previousCodeWasIncorrect)
-        {
-            await Task.Delay(AuthenticatorDelay);
-        }
+	private const int AuthenticatorDelay = 20 * 1000;
 
-        return await GenerateSteamGuardCodeAsync();
-    }
+	public async Task<bool> AcceptDeviceConfirmationAsync()
+	{
+		var confirmations = await FetchConfirmationsAsync();
 
-    public async Task<string> GetEmailCodeAsync(string email, bool previousCodeWasIncorrect)
-    {
-        throw new NotImplementedException();
-    }
+		var confirmation = confirmations?.Where(t => t.ConfType == Confirmation.EMobileConfirmationType.MarketListing)
+			.ToArray();
+		if (confirmation.IsNullOrEmpty())
+		{
+			return false;
+		}
 
-    public async Task<bool> AcceptDeviceConfirmationAsync()
-    {
-        var confirmations = await FetchConfirmationsAsync();
+		return await AcceptMultipleConfirmations(confirmation);
+	}
 
-        var confirmation = confirmations?.FirstOrDefault(t => t.ConfType == Confirmation.EMobileConfirmationType.FeatureOptOut);
-        if (confirmation == null)
-        {
-            return false;
-        }
+	public async Task<string> GetDeviceCodeAsync(bool previousCodeWasIncorrect)
+	{
+		if (previousCodeWasIncorrect)
+		{
+			await Task.Delay(AuthenticatorDelay);
+		}
 
-        return await AcceptConfirmation(confirmation);
-    }
-    
+		return await GenerateSteamGuardCodeAsync();
+	}
+
+	public async Task<string> GetEmailCodeAsync(string email, bool previousCodeWasIncorrect) =>
+		throw new NotImplementedException();
 }
