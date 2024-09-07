@@ -186,7 +186,8 @@ public class SteamGuardAccount
 			return null; //Change later, catch-alls are bad!
 		}
 
-		return Encoding.UTF8.GetString(codeArray);
+		var code = Encoding.UTF8.GetString(codeArray);
+		return code;
 	}
 
 	/// <summary>

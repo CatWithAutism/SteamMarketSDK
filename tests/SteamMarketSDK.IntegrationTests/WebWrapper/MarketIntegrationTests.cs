@@ -143,9 +143,7 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
 		myListings.Should().NotBeNull();
 		myListings.Success.Should().BeTrue();
 
-		const long appId = 730;
-		const long priceTotal = 300;
-		const long quantity = 1;
+
 		const string marketHashName = "P250 | Sand Dune (Field-Tested)";
 		if (myListings.BuyOrders.Count > 0)
 		{
@@ -162,6 +160,19 @@ public class MarketIntegrationTests(SteamHttpClientFixture steamHttpClientFixtur
 			}
 		}
 
+		const long appId = 730;
+		var priceOverviewResponse = await MarketWrapper.GetPriceOverviewAsync(
+			new PriceOverviewRequest(appId, marketHashName, SteamHttpClient.SteamCountry, accountInfo.WalletCurrency),
+			CancellationToken.None);
+
+		if (priceOverviewResponse.LowestPrice <= 0.05)
+		{
+			throw new InvalidOperationException("We cannot set lower price for this item");
+		}
+		
+		const long quantity = 1;
+		var priceTotal = (int)(priceOverviewResponse.LowestPrice * 100) - 1 * quantity;
+		
 		var createBuyOrderRequest =
 			new CreateBuyOrderRequest(appId, marketHashName, accountInfo.WalletCurrency, priceTotal, quantity);
 		var buyOrder = await MarketWrapper.CreateBuyOrderAsync(createBuyOrderRequest, CancellationToken.None);
