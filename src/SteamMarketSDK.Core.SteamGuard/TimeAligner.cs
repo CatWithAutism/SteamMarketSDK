@@ -26,7 +26,7 @@ public class TimeAligner
 			client.Encoding = Encoding.UTF8;
 			try
 			{
-				var response = client.UploadString(SteamEndpoints.TwoFactorTimeQuery, "steamid=0");
+				var response = client.UploadString(SteamEndpoints.TwoFactorTimeQueryUrl, "steamid=0");
 				var query = JsonConvert.DeserializeObject<TimeQuery>(response);
 				_timeDifference = (int) (query.Response.ServerTime - currentTime);
 				_aligned = true;
@@ -44,7 +44,7 @@ public class TimeAligner
 		try
 		{
 			client.Encoding = Encoding.UTF8;
-			var response = await client.UploadStringTaskAsync(new Uri(SteamEndpoints.TwoFactorTimeQuery), "steamid=0");
+			var response = await client.UploadStringTaskAsync(new Uri(SteamEndpoints.TwoFactorTimeQueryUrl), "steamid=0");
 			var query = JsonConvert.DeserializeObject<TimeQuery>(response);
 			_timeDifference = (int) (query.Response.ServerTime - currentTime);
 			_aligned = true;

@@ -2,6 +2,7 @@ using SteamKit2;
 using SteamKit2.Authentication;
 using SteamKit2.Internal;
 using SteamMarketSDK.Common.Utils;
+using SteamMarketSDK.Core.Contracts.Constants;
 using SteamMarketSDK.Core.Contracts.Entities.Authorization;
 using SteamMarketSDK.Core.Contracts.Entities.Exceptions;
 using SteamMarketSDK.Core.Contracts.Interfaces;
@@ -14,7 +15,7 @@ namespace SteamMarketSDK.Core.Implementations;
 
 public class SteamHttpClient : HttpClient
 {
-	public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter) : base(httpClientHandler)
+	public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter, bool closeConnection) : base(httpClientHandler)
 	{
 		HttpClientHandler = httpClientHandler;
 		Converter = converter;
@@ -23,20 +24,46 @@ public class SteamHttpClient : HttpClient
 		DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
 		DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
 		DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-		DefaultRequestHeaders.Add("Origin", "https://steamcommunity.com");
-		DefaultRequestHeaders.ConnectionClose = true;
-		DefaultRequestHeaders.Referrer = new Uri("https://steamcommunity.com/market/");
+		DefaultRequestHeaders.Add("Origin", SteamEndpoints.CommunityBaseUrl);
+		DefaultRequestHeaders.ConnectionClose = closeConnection;
+		DefaultRequestHeaders.Referrer = new Uri(SteamEndpoints.SteamMarketUrl);
 	}
 
 	public virtual string? AccessToken { get; protected set; }
 	public virtual string? RefreshToken { get; protected set; }
 	public virtual SteamID? SteamId { get; protected set; }
+
+	public virtual string SessionId
+	{
+		get
+		{
+			return GetCookie(SteamCommunityUri, "sessionid");
+		}
+	}
+
+	public virtual string SecureLogin
+	{
+		get
+		{
+			return GetCookie(SteamCommunityUri, "steamLoginSecure");
+		}
+	}
+
+	public virtual string SteamCountry
+	{
+		get
+		{
+			return GetCookie(SteamCommunityUri, "steamCountry");
+		}
+	}
+
 	private ISteamConverter Converter { get; init; }
+	private Uri SteamCommunityUri { get; } = new Uri(SteamEndpoints.CommunityBaseUrl);
 	private HttpClientHandler HttpClientHandler { get; init; }
 	private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }
 
 	public virtual async Task AuthorizeViaOAuthAsync(SteamAuthCredentials credentials,
-		ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken? cancellationToken)
+		ISteamGuardAuthenticator? steamGuardAuthenticator, CancellationToken cancellationToken)
 	{
 		if (steamGuardAuthenticator != null)
 		{
@@ -63,24 +90,23 @@ public class SteamHttpClient : HttpClient
 			ClientOSType = EOSType.Macos1014
 		});
 
-		var pollResponse = await authSession.PollingWaitForResultAsync();
+		var pollResponse = await authSession.PollingWaitForResultAsync(cancellationToken);
 
 		AccessToken = pollResponse.AccessToken;
 		RefreshToken = pollResponse.RefreshToken;
 		SteamId = authSession.SteamID;
 
-		await EndAuthSession();
+		await EndAuthSession(cancellationToken);
 	}
 
-	public async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken)
+	public virtual async Task<T> GetObjectAsync<T>(string requestUri, CancellationToken cancellationToken)
 		where T : notnull
 	{
 		var stringResponse = await GetStringAsync(requestUri, cancellationToken);
 		return Converter.DeserializeObject<T>(stringResponse);
 	}
 
-	public async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage,
-		CancellationToken cancellationToken)
+	public virtual async Task<T> GetObjectAsync<T>(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
 		where T : notnull
 	{
 		var response = await SendAsync(requestMessage, cancellationToken);
@@ -89,11 +115,6 @@ public class SteamHttpClient : HttpClient
 		var stringContent = await response.Content.ReadAsStringAsync(cancellationToken);
 		return Converter.DeserializeObject<T>(stringContent);
 	}
-
-	public virtual string GetSessionId(Uri url) => GetCookie(url, "sessionid");
-
-	public virtual string GetSteamCountry(Uri url) => GetCookie(url, "steamCountry");
-	public virtual string GetSteamSecureLogin(Uri url) => GetCookie(url, "steamLoginSecure");
 
 	#region Private
 
@@ -124,7 +145,7 @@ public class SteamHttpClient : HttpClient
 		return rsaJson;
 	}
 
-	private async Task EndAuthSession()
+	private async Task EndAuthSession(CancellationToken cancellationToken)
 	{
 		const string finalizeAuthPath = "https://login.steampowered.com/jwt/finalizelogin";
 
@@ -138,10 +159,10 @@ public class SteamHttpClient : HttpClient
 		postData.Add(new StringContent(sessionId), "sessionid");
 		postData.Add(new StringContent("https://steamcommunity.com/login/home/?goto="), "redir");
 
-		var response = await PostAsync(finalizeAuthPath, postData);
+		var response = await PostAsync(finalizeAuthPath, postData, cancellationToken);
 		response.EnsureSuccessStatusCode();
 
-		var responseData = await response.Content.ReadAsStringAsync();
+		var responseData = await response.Content.ReadAsStringAsync(cancellationToken);
 		var finalizeResponse = JsonSerializer.Deserialize<FinalizeLoginResponse>(responseData) ??
 		                       throw new InvalidDataException($"We cannot deserialize response from {responseData}");
 		foreach (var info in finalizeResponse.TransferInfo)
@@ -151,7 +172,7 @@ public class SteamHttpClient : HttpClient
 			postData.Add(new StringContent(info.Params.Auth), "auth");
 			postData.Add(new StringContent(finalizeResponse.SteamId.ToString()), "steamID");
 
-			response = await PostAsync(info.Url, postData);
+			response = await PostAsync(info.Url, postData, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 	}

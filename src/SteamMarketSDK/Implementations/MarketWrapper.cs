@@ -32,10 +32,13 @@ public partial class MarketWrapper(SteamHttpClient httpClient) : IMarketWrapper
 	{
 		get
 		{
-			var steamCommunity = new Uri("https://steamcommunity.com/");
-			return httpClient.GetSessionId(steamCommunity) ??
-			       throw new InvalidOperationException(
-				       $"Your client is not authorized or do not have session id for domain {steamCommunity.Host}");
+			if (string.IsNullOrEmpty(httpClient.SessionId))
+			{
+				throw new InvalidOperationException(
+					$"Your client is not authorized or do not have session id for domain {httpClient.BaseAddress}");
+			}
+
+			return httpClient.SessionId;
 		}
 	}
 

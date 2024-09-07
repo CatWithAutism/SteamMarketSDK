@@ -136,7 +136,7 @@ public class SteamGuardAccount
 
 	public string GenerateConfirmationUrl(string tag = "conf")
 	{
-		var endpoint = SteamEndpoints.CommunityBase + "/mobileconf/getlist?";
+		var endpoint = SteamEndpoints.CommunityBaseUrl + "/mobileconf/getlist?";
 		var queryString = GenerateConfirmationQueryParams(tag);
 		return endpoint + queryString;
 	}
@@ -257,7 +257,7 @@ public class SteamGuardAccount
 
 	private async Task<bool> _sendConfirmationAjax(Confirmation conf, string op)
 	{
-		var url = SteamEndpoints.CommunityBase + "/mobileconf/ajaxop";
+		var url = SteamEndpoints.CommunityBaseUrl + "/mobileconf/ajaxop";
 		var queryString = "?op=" + op + "&";
 		// tag is different from op now
 		var tag = op == "allow" ? "accept" : "reject";
@@ -277,7 +277,7 @@ public class SteamGuardAccount
 
 	private async Task<bool> _sendMultiConfirmationAjax(Confirmation[] confs, string op)
 	{
-		var url = SteamEndpoints.CommunityBase + "/mobileconf/multiajaxop";
+		var url = SteamEndpoints.CommunityBaseUrl + "/mobileconf/multiajaxop";
 		// tag is different from op now
 		var tag = op == "allow" ? "accept" : "reject";
 		var query = "op=" + op + "&" + GenerateConfirmationQueryParams(tag);
