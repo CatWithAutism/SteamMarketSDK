@@ -78,7 +78,7 @@ public partial class MarketWrapper(SteamHttpClient httpClient) : IMarketWrapper
 	}
 
 	/// <summary>
-	///     Request to create buy order.
+	///     Request to create a buy order.
 	/// </summary>
 	/// <param name="createBuyOrderRequest">Request.</param>
 	/// <param name="cancellationToken">Cancellation token</param>
