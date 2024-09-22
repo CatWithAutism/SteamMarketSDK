@@ -6,6 +6,15 @@
     <Nullable>enable</Nullable>
     <LangVersion>default</LangVersion>
     <Version>1.0.0</Version>
+    <Title>SteamMarketSDK</Title>
+    <Authors>CatWithAut1sm</Authors>
+    <Description>Here is the library which you can use to interact with your Steam Account on SteamCommunity.
+Get your inventory, prices on market, create a purschase request etc</Description>
+    <Copyright>@CatWithAut1sm 2024</Copyright>
+    <RepositoryUrl>https://github.com/CatWithAutism/SteamMarketSDK</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>Steam;SteamMarket;SteamTrade;Trading;SteamAPI;STEAM API</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,9 +22,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SteamMarketSDK.Contracts\SteamMarketSDK.Contracts.csproj" />
-    <ProjectReference Include="..\SteamMarketSDK.Core.Contracts\SteamMarketSDK.Core.Contracts.csproj" />
-    <ProjectReference Include="..\SteamMarketSDK.Core\SteamMarketSDK.Core.csproj" />
+    <ProjectReference Include="..\SteamMarketSDK.Contracts\SteamMarketSDK.Contracts.csproj"/>
+    <ProjectReference Include="..\SteamMarketSDK.Core.Contracts\SteamMarketSDK.Core.Contracts.csproj"/>
+    <ProjectReference Include="..\SteamMarketSDK.Core\SteamMarketSDK.Core.csproj"/>
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

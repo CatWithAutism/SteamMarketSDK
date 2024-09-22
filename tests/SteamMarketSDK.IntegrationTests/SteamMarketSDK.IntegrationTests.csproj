@@ -30,6 +30,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\SteamMarketSDK.Contracts\SteamMarketSDK.Contracts.csproj" />
     <ProjectReference Include="..\..\src\SteamMarketSDK.Core.SteamGuard\SteamMarketSDK.Core.SteamGuard.csproj" />
     <ProjectReference Include="..\..\src\SteamMarketSDK.Core\SteamMarketSDK.Core.csproj" />
     <ProjectReference Include="..\..\src\SteamMarketSDK\SteamMarketSDK.csproj" />

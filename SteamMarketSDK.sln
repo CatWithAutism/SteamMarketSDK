@@ -29,7 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamMarketSDK.Core.Contrac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A19BCCAF-7084-4D9B-98E1-4993636FC121}"
 	ProjectSection(SolutionItems) = preProject
-		ReadMe.md = ReadMe.md
+		README.md = README.md
+		LICENSE = LICENSE
 	EndProjectSection
 EndProject
 Global

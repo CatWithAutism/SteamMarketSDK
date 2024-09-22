@@ -1,21 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{5AD0934E-F6C4-4AE5-83AF-C788313B2A87}</ProjectGuid>
     <TargetFramework>net8.0</TargetFramework>
-    <AssemblyTitle>SteamAuth</AssemblyTitle>
-    <Product>SteamAuth</Product>
-    <Copyright>Copyright © 2015</Copyright>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>default</LangVersion>
-    <RootNamespace>SteamMarketSDK.SteamGuard</RootNamespace>
     <Version>1.0.0</Version>
+    <Title>SteamMarketSDK</Title>
+    <Authors>CatWithAut1sm</Authors>
+    <Description>Here is the library which you can use to interact with your Steam Account on SteamCommunity.
+      Get your inventory, prices on market, create a purschase request etc</Description>
+    <Copyright>@CatWithAut1sm 2024</Copyright>
+    <RepositoryUrl>https://github.com/CatWithAutism/SteamMarketSDK</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>Steam;SteamMarket;SteamTrade;Trading;SteamAPI;STEAM API</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
+  
+  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
     <PackageReference Include="SteamKit2" Version="2.5.0"/>
@@ -23,4 +22,15 @@
   <ItemGroup>
     <ProjectReference Include="..\SteamMarketSDK.Core.Contracts\SteamMarketSDK.Core.Contracts.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
 </Project>
