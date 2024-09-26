@@ -14,7 +14,7 @@ namespace SteamMarketSDK.UnitTests.Implementations;
 public class MarketWrapperTests
 {
 	private static ISteamConverter SteamConvertor { get; } = new SteamConverter();
-	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new(MockBehavior.Strict, [new Mock<HttpClientHandler>().Object, SteamConvertor, true]);
+	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new(MockBehavior.Strict, [new Mock<HttpClientHandler>().Object, SteamConvertor]);
 
 	[Fact]
 	public async Task GetTradeHistoryAsync_Success()

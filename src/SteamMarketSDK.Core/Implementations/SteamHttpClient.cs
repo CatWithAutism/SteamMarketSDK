@@ -15,7 +15,7 @@ namespace SteamMarketSDK.Core.Implementations;
 
 public class SteamHttpClient : HttpClient
 {
-	public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter, bool closeConnection) : base(httpClientHandler)
+	public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter) : base(httpClientHandler)
 	{
 		HttpClientHandler = httpClientHandler;
 		Converter = converter;
@@ -25,7 +25,6 @@ public class SteamHttpClient : HttpClient
 		DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
 		DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 		DefaultRequestHeaders.Add("Origin", SteamEndpoints.CommunityBaseUrl);
-		DefaultRequestHeaders.ConnectionClose = closeConnection;
 		DefaultRequestHeaders.Referrer = new Uri(SteamEndpoints.SteamMarketUrl);
 	}
 
