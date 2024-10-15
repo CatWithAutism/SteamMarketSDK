@@ -13,7 +13,7 @@ public class GetMarketHistoryTests
 	public GetMarketHistoryTests()
 	{
 		MockedHandler = new Mock<HttpClientHandler>();
-		SteamHttpClient = new SteamHttpClient(MockedHandler.Object, new SteamConverter());
+		SteamHttpClient = new SteamHttpClient(MockedHandler.Object);
 		MarketWrapper = new MarketWrapper(SteamHttpClient);
 	}
 

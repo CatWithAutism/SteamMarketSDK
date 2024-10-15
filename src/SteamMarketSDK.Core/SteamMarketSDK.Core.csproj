@@ -18,6 +18,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\SteamMarketSDK.Contracts\SteamMarketSDK.Contracts.csproj" />
     <ProjectReference Include="..\SteamMarketSDK.Core.Contracts\SteamMarketSDK.Core.Contracts.csproj" />
     <ProjectReference Include="..\SteamMarketSDK.Core.SteamGuard\SteamMarketSDK.Core.SteamGuard.csproj" />
     <ProjectReference Include="..\SteamMarketSDK.Common\SteamMarketSDK.Common.csproj" />

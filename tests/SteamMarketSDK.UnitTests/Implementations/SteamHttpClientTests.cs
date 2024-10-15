@@ -23,8 +23,7 @@ public class SteamHttpClientTests
 	public SteamHttpClientTests()
 	{
 		MockedHandler = new Mock<HttpClientHandler>();
-		SteamConverter = new SteamConverter();
-		SteamHttpClient = new SteamHttpClient(MockedHandler.Object, SteamConverter);
+		SteamHttpClient = new SteamHttpClient(MockedHandler.Object);
 	}
 
 	private Mock<HttpClientHandler> MockedHandler { get; }

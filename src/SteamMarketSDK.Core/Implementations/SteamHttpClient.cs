@@ -6,6 +6,7 @@ using SteamMarketSDK.Core.Contracts.Constants;
 using SteamMarketSDK.Core.Contracts.Entities.Authorization;
 using SteamMarketSDK.Core.Contracts.Entities.Exceptions;
 using SteamMarketSDK.Core.Contracts.Interfaces;
+using SteamMarketSDK.Implementations;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -15,10 +16,9 @@ namespace SteamMarketSDK.Core.Implementations;
 
 public class SteamHttpClient : HttpClient
 {
-	public SteamHttpClient(HttpClientHandler httpClientHandler, ISteamConverter converter) : base(httpClientHandler)
+	public SteamHttpClient(HttpClientHandler httpClientHandler) : base(httpClientHandler)
 	{
 		HttpClientHandler = httpClientHandler;
-		Converter = converter;
 		DefaultRequestHeaders.Add("User-Agent",
 			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0");
 		DefaultRequestHeaders.Add("Accept", "text/javascript, text/html, application/xml, text/xml, */*");
@@ -56,7 +56,7 @@ public class SteamHttpClient : HttpClient
 		}
 	}
 
-	private ISteamConverter Converter { get; init; }
+	private ISteamConverter Converter = new SteamConverter();
 	private Uri SteamCommunityUri { get; } = new Uri(SteamEndpoints.CommunityBaseUrl);
 	private HttpClientHandler HttpClientHandler { get; init; }
 	private ISteamGuardAuthenticator? SteamGuardAuthenticator { get; set; }

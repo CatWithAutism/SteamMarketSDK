@@ -25,7 +25,7 @@ public class SteamHttpClientFixture : IDisposable
 			AutomaticDecompression = DecompressionMethods.All
 		};
 
-		var steamHttpClient = new SteamHttpClient(httpClientHandler, new SteamConverter());
+		var steamHttpClient = new SteamHttpClient(httpClientHandler);
 		if (!Configuration["username"].IsNullOrEmpty() && !Configuration["password"].IsNullOrEmpty())
 		{
 			var steamAuthCredentials = new SteamAuthCredentials

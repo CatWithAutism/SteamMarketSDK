@@ -13,8 +13,7 @@ namespace SteamMarketSDK.UnitTests.Implementations;
 [TestSubject(typeof(MarketWrapper))]
 public class MarketWrapperTests
 {
-	private static ISteamConverter SteamConvertor { get; } = new SteamConverter();
-	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new(MockBehavior.Strict, [new Mock<HttpClientHandler>().Object, SteamConvertor]);
+	private Mock<SteamHttpClient> SteamHttpClientMock { get; } = new(MockBehavior.Strict, [new Mock<HttpClientHandler>().Object]);
 
 	[Fact]
 	public async Task GetTradeHistoryAsync_Success()
@@ -25,7 +24,7 @@ public class MarketWrapperTests
 		var requestUri = GetMyHistoryUri(offset, count);
 
 		var responseContent = await File.ReadAllTextAsync("Data/MarketHistoryResponse.json");
-		var historyObject = SteamConvertor.DeserializeObject<MyHistoryResponse>(responseContent);
+		var historyObject = (new SteamConverter()).DeserializeObject<MyHistoryResponse>(responseContent);
 
 		SteamHttpClientMock.Setup(t => t.GetObjectAsync<MyHistoryResponse>(
 				It.Is<string>(reqUri => reqUri.Equals(requestUri, StringComparison.InvariantCultureIgnoreCase)),
